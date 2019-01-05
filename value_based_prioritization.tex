@@ -1,0 +1,242 @@
+\title{Value-Based Prioritization\cite{SourceCode}}
+
+\author{Kevin Grigorenko\cite{Author1}}
+
+\newcommand{\abstractText}{\noindent
+A method is proposed to use value theory to quantitatively prioritize
+potential actions to accomplish a goal. This method is applied to the
+example of choosing meaningful work using an example value system based
+in the desire to reduce suffering.
+}
+
+%%%%%%%%%%%%%%%%%
+% Configuration %
+%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt, a4paper, twocolumn]{article}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{xurl}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
+\usepackage[super,comma,sort&compress]{natbib}
+\usepackage{abstract}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\itshape}
+\usepackage{lipsum}
+\usepackage{geometry}
+\geometry{top=1cm,bottom=1.5cm,left=2cm,right=2cm,includehead,includefoot}
+\setlength{\columnsep}{7mm} % Column separation width
+
+%%%%%%%%%%%%%%
+% References %
+%%%%%%%%%%%%%%
+
+\begin{filecontents}{value_based_prioritization.bib}
+
+@misc{SourceCode,
+  author       = {Grigorenko, Kevin},
+  title        = {Value-Based Prioritization: Source Code},
+  howpublished = {\url{https://github.com/freeradical13/ValueBasedPrioritization}},
+}
+
+@misc{Author1,
+  author       = {Grigorenko, Kevin},
+  howpublished = {\url{mailto:kevin@myplaceonline.com}},
+}
+
+@InCollection{scientific-method,
+  author       = {Andersen, Hanne and Hepburn, Brian},
+  title        = {Scientific Method},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/sum2016/entries/scientific-method/}},
+  year         = {2016},
+  edition      = {Summer 2016},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@article{martela2016three,
+  title        = {The three meanings of meaning in life: Distinguishing coherence, purpose, and significance},
+  author       = {Martela, Frank and Steger, Michael F},
+  journal      = {The Journal of Positive Psychology},
+  volume       = {11},
+  number       = {5},
+  pages        = {531--545},
+  year         = {2016},
+  publisher    = {Taylor \& Francis},
+  note         = {\url{https://dx.doi.org/10.1080/17439760.2015.1137623}}
+}
+
+@book{huemer2007ethical,
+  title        = {Ethical intuitionism},
+  author       = {Huemer, Michael},
+  year         = {2007},
+  publisher    = {Springer}
+}
+
+@InCollection{value-theory,
+  author       = {Schroeder, Mark},
+  title        = {Value Theory},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/fall2016/entries/value-theory/}},
+  year         = {2016},
+  edition      = {Fall 2016},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{consequentialism,
+  author       = {Sinnott-Armstrong, Walter},
+  title        = {Consequentialism},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/win2015/entries/consequentialism/}},
+  year         = {2015},
+  edition      = {Winter 2015},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{ayn-rand,
+  author       = {Badhwar, Neera K. and Long, Roderick T.},
+  title        = {Ayn Rand},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/fall2017/entries/ayn-rand/}},
+  year         = {2017},
+  edition      = {Fall 2017},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{religion-morality,
+  author       = {Hare, John},
+  title        = {Religion and Morality},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/win2014/entries/religion-morality/}},
+  year         = {2014},
+  edition      = {Winter 2014},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{morality-biology,
+  author       = {FitzPatrick, William},
+  title        = {Morality and Evolutionary Biology},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/spr2016/entries/morality-biology/}},
+  year         = {2016},
+  edition      = {Spring 2016},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{epicurus,
+  author       = {Konstan, David},
+  title        = {Epicurus},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/sum2018/entries/epicurus/}},
+  year         = {2018},
+  edition      = {Summer 2018},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{stoicism,
+  author       = {Baltzly, Dirk},
+  title        = {Stoicism},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/sum2018/entries/stoicism/}},
+  year         = {2018},
+  edition      = {Summer 2018},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{rawls,
+  author       = {Wenar, Leif},
+  title        = {John Rawls},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  howpublished = {\url{https://plato.stanford.edu/archives/spr2017/entries/rawls/}},
+  year         = {2017},
+  edition      = {Spring 2017},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+@InCollection{communitarianism,
+  author       = {Bell, Daniel},
+  title        = {Communitarianism},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  howpublished = {\url{https://plato.stanford.edu/archives/sum2016/entries/communitarianism/}},
+  year         = {2016},
+  edition      = {Summer 2016},
+  publisher    = {Metaphysics Research Lab, Stanford University}
+}
+
+\end{filecontents}
+
+% Configuration that goes at the end of the preamble:
+\renewcommand*{\bibfont}{\raggedright}
+
+\begin{document}
+
+%%%%%%%%%%%%
+% Abstract %
+%%%%%%%%%%%%
+
+\twocolumn[
+  \begin{@twocolumnfalse}
+    \maketitle
+    \begin{abstract}
+      \abstractText
+      \newline
+      \newline
+    \end{abstract}
+  \end{@twocolumnfalse}
+]
+
+%%%%%%%%%%%
+% Article %
+%%%%%%%%%%%
+
+\section{Introduction}
+
+Why should a particular goal be pursued (``Why")? Given a goal, what actions should be pursued to best accomplish said goal (``What")? Given an action, how should said action be pursued (``How")?
+
+This article proposes that value theory usually best scopes ``Why" and ``What" and the scientific method usually best answers ``How". A method called Value-Based Prioritization \eqref{article-equation} is developed to answer the ``What" question:
+
+\begin{equation}\label{article-equation}
+  \begin{gathered}
+    \textrm{Why: } \textit{Value Theory} \\
+    \downarrow \\
+    \textrm{What: } \textit{\textbf{Value-Based Prioritization}} \\
+    \downarrow \\
+    \textrm{How: } \textit{Scientific Method}
+  \end{gathered}
+\end{equation}
+
+\section{Why a Goal?}
+
+``Why a Goal?" is usually best scoped using a value system because value systems are evaluative by nature\cite{value-theory}. Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc. Evaluating different value systems is left as an (lifelong) exercise for the reader.
+
+\section{What Actions?}
+
+``What Actions?" is usually best scoped by prioritizing actions because actions usually have differing effect sizes. It follows from the value system used to answer ``Why" that the same value system is used to evaluate the priority of each action. This article proposes a method called Value-Based Prioritization which builds a quantitative prioritization model based on predicted effect sizes. Raw prioritization scores are further refined by contextual factors such as implementation time, cost, risk, and other judgments.
+
+\section{How to do an Action?}
+
+Given answers to ``Why?" and ``What?", how to implement actions is usually best answered with the scientific method\cite{scientific-method}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
+
+%%%%%%%%%%%%%%
+% References %
+%%%%%%%%%%%%%%
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{value_based_prioritization}
+
+\end{document}
+
+% Create PDF on Linux:
+% FILE=value_based_prioritization; pkill -9 -f ${FILE} &>/dev/null; rm -f ${FILE}*aux ${FILE}*bbl ${FILE}*bib ${FILE}*blg ${FILE}*log ${FILE}*out ${FILE}*pdf &>/dev/null; pdflatex -halt-on-error ${FILE}; bibtex ${FILE} && pdflatex ${FILE} && pdflatex ${FILE} && (xdg-open ${FILE}.pdf &)
