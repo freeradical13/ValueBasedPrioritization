@@ -6,7 +6,7 @@
 A method is proposed to use value theory to quantitatively prioritize
 potential actions to accomplish a goal. This method is applied to the
 example of choosing meaningful work using an example value system based
-in the desire to reduce suffering.
+on the desire to reduce suffering.
 }
 
 %%%%%%%%%%%%%%%%%
@@ -15,6 +15,7 @@ in the desire to reduce suffering.
 
 \documentclass[12pt, a4paper, twocolumn]{article}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{xurl}
 \usepackage{hyperref}
@@ -27,6 +28,7 @@ in the desire to reduce suffering.
 \usepackage{geometry}
 \geometry{top=1cm,bottom=1.5cm,left=2cm,right=2cm,includehead,includefoot}
 \setlength{\columnsep}{7mm} % Column separation width
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}} % Use symbols for footnotes
 
 %%%%%%%%%%%%%%
 % References %
@@ -72,6 +74,15 @@ in the desire to reduce suffering.
   title        = {Ethical intuitionism},
   author       = {Huemer, Michael},
   year         = {2007},
+  publisher    = {Springer}
+}
+
+@incollection{huemer2013problem,
+  title        = {The problem of political authority},
+  author       = {Huemer, Michael},
+  booktitle    = {The Problem of Political Authority},
+  pages        = {3--19},
+  year         = {2013},
   publisher    = {Springer}
 }
 
@@ -218,22 +229,103 @@ This article proposes that value theory usually best scopes ``Why" and ``What" a
 
 \section{Why a Goal?}
 
-``Why a Goal?" is usually best scoped using a value system because value systems are evaluative by nature\cite{value-theory}. Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc. Evaluating different value systems is left as an (lifelong) exercise for the reader.
+``Why a Goal?" is usually best scoped using a value system because value systems are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, objectivism\cite{ayn-rand}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, communitarianism\cite{communitarianism}, anarcho-capitalism\cite{huemer2013problem}, etc.}.
 
 \section{What Actions?}
 
-``What Actions?" is usually best scoped by prioritizing actions because actions usually have differing effect sizes. It follows from the value system used to answer ``Why" that the same value system is used to evaluate the priority of each action. This article proposes a method called Value-Based Prioritization which builds a quantitative prioritization model based on predicted effect sizes. Raw prioritization scores are further refined by contextual factors such as implementation time, cost, risk, and other judgments.
+``What Actions?" is usually best scoped by prioritizing actions because actions usually have differing effect sizes. It follows from the value system used to answer ``Why" that the same value system is used primarily to evaluate the priority of each action.
+
+This article proposes a method called Value-Based Prioritization which builds a quantitative prioritization model based on predicted effect sizes. Raw prioritization scores are further scaled by contextual factors such as implementation time, cost, risk, and other judgments.
 
 \section{How to do an Action?}
 
 Given answers to ``Why?" and ``What?", how to implement actions is usually best answered with the scientific method\cite{scientific-method}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
+
+\section{Value-Based Prioritization}
+
+A \textbf{value system} $V$ generates a \textbf{goal} $G(t)$ (for some future time $t$) and a set of \textbf{mutually exclusive potential future actions} $A(t) = \{A_1(t), \ldots, A_N(t)\}$.
+
+An action's \textbf{estimated relative accomplishment amount} $B(A(t))$ \eqref{action-amount} is an action's expected \textit{relative} (i.e. with respect to other actions) contribution towards accomplishing $G$(t):
+
+\begin{equation}\label{action-amount}
+  \begin{gathered}
+B(A(t)) = \mathbb{R}, \\
+0 \leq \mathbb{R} \leq 1
+  \end{gathered}
+\end{equation}
+
+Thus, $G(t)$ is fully accomplished if all actions are accomplished:
+
+\begin{equation}\label{goal-accomplished}
+G(t) = \sum_{i=1}^{N} B(A_i(t)) = 1
+\end{equation}
+
+A \textbf{value-based prioritization score} $P(A(t))$ \eqref{prioritization-score} is the result of the product of a set of \textbf{value-based prioritization scale functions} $S = \{S_1, \ldots, S_N\}$ multiplied by \eqref{action-amount}:
+
+\begin{equation}\label{prioritization-score}
+  \begin{gathered}
+P(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
+0 \leq S_j(B(A(t))) \leq 1
+  \end{gathered}
+\end{equation}
+
+The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{N} P(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$. Example scale functions include cost, risk, etc.
+
+% \begin{itemize}
+% \item Implementation time
+% \item Cost
+% \item Risk
+% \item Likelihood of success
+% \item Plays into Strengths
+% \item Achieves passions/environmental needs
+% \item Achieves flow
+% \item Supports life and family
+% \item Return on investment
+% \item Initialization time (learning, starting, etc.)
+% \item Interest
+% \item Market demand
+% \end{itemize}
+
+A \textbf{value-based prioritization} $\beta(t)$ \eqref{vbp} is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
+
+\begin{equation}\label{vbp}
+  \begin{gathered}
+\beta(t) = (A_1(t), \ldots, A_N(t)), \\
+P(A_1(t)) \geq \ldots \geq P(A_N(t))
+  \end{gathered}
+\end{equation}
+
+The first $j$ actions in $\beta(t)$ should be executed in descending priority/proportion where $j$ is chosen based on available concurrency.
+
+\section{Modeled Value-Based Prioritization}
+
+Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount}.
+
+If an action has historical data $D(t)$ \eqref{action-predictors}:
+
+\begin{equation}\label{action-predictors}
+D(t) = ((t_1, D(t_1)), \ldots, (t_N, D(t_N)))
+\end{equation}
+
+Then, a set of \textbf{comparable prediction models} $R(t) = \{R_1(t), \ldots, R_N(t)\}$ (e.g. linear regression) is applied to each $D(t)$. The models are compared and the \textbf{best fitting model} $M(t)$ is selected (e.g. using ANOVA).
+
+Next, the model $M(t)$ is used to predict each $A(t_F)$ for some time in the future $t_F$ (e.g. the average time an action will take to ramp up implementation). Note that each $D(t)$ may have a different $M(t)$.
+
+Finally, $B(A(t_F))$ is calculated for all $A$ and value-based prioritization is applied to generate \textbf{modeled value-based prioritization} $\beta(t_F)$ \eqref{vbp-modeled}:
+
+\begin{equation}\label{vbp-modeled}
+  \begin{gathered}
+\beta(t_F) = (A_1(t_F), \ldots, A_N(t_F)), \\
+P(A_1(t_F)) \geq \ldots \geq P(A_N(t_F))
+  \end{gathered}
+\end{equation}
 
 %%%%%%%%%%%%%%
 % References %
 %%%%%%%%%%%%%%
 
 \nocite{*}
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{value_based_prioritization}
 
 \end{document}
