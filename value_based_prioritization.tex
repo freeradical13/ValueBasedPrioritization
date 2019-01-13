@@ -29,6 +29,7 @@ on the desire to reduce suffering.
 \geometry{top=1cm,bottom=1.5cm,left=2cm,right=2cm,includehead,includefoot}
 \setlength{\columnsep}{7mm} % Column separation width
 \renewcommand*{\thefootnote}{\fnsymbol{footnote}} % Use symbols for footnotes
+\renewcommand*{\bibfont}{\raggedright}
 
 %%%%%%%%%%%%%%
 % References %
@@ -187,9 +188,6 @@ on the desire to reduce suffering.
 
 \end{filecontents}
 
-% Configuration that goes at the end of the preamble:
-\renewcommand*{\bibfont}{\raggedright}
-
 \begin{document}
 
 %%%%%%%%%%%%
@@ -229,11 +227,11 @@ This article proposes that value theory usually best scopes ``Why" and ``What" a
 
 \section{Why a Goal?}
 
-``Why a Goal?" is usually best scoped using a value system because value systems are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, objectivism\cite{ayn-rand}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, communitarianism\cite{communitarianism}, anarcho-capitalism\cite{huemer2013problem}, etc.}.
+``Why a Goal?" is usually best scoped using a value system because value systems are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
 
 \section{What Actions?}
 
-``What Actions?" is usually best scoped by prioritizing actions because actions usually have differing effect sizes. It follows from the value system used to answer ``Why" that the same value system is used primarily to evaluate the priority of each action.
+``What Actions?" is usually best scoped by prioritizing actions because actions usually have differing effect sizes and time is limited. It follows from the value system used to answer ``Why" that the same value system is used primarily to evaluate the priority of each action.
 
 This article proposes a method called Value-Based Prioritization which builds a quantitative prioritization model based on predicted effect sizes. Raw prioritization scores are further scaled by contextual factors such as implementation time, cost, risk, and other judgments.
 
@@ -260,16 +258,16 @@ Thus, $G(t)$ is fully accomplished if all actions are accomplished:
 G(t) = \sum_{i=1}^{N} B(A_i(t)) = 1
 \end{equation}
 
-A \textbf{value-based prioritization score} $P(A(t))$ \eqref{prioritization-score} is the result of the product of a set of \textbf{value-based prioritization scale functions} $S = \{S_1, \ldots, S_N\}$ multiplied by \eqref{action-amount}:
+A \textbf{value-based prioritization score} $C(A(t))$ \eqref{prioritization-score} is the result of the product of a set of \textbf{value-based prioritization scale functions} $S = \{S_1, \ldots, S_N\}$ multiplied by \eqref{action-amount}:
 
 \begin{equation}\label{prioritization-score}
   \begin{gathered}
-P(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
+C(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
 0 \leq S_j(B(A(t))) \leq 1
   \end{gathered}
 \end{equation}
 
-The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{N} P(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$. Example scale functions include cost, risk, etc.
+Example scale functions include cost, risk, etc. The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{N} C(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$.
 
 % \begin{itemize}
 % \item Implementation time
@@ -286,39 +284,44 @@ The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{
 % \item Market demand
 % \end{itemize}
 
-A \textbf{value-based prioritization} $\beta(t)$ \eqref{vbp} is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
+A \textbf{value-based prioritization} $Z(t)$ \eqref{vbp} is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
 
 \begin{equation}\label{vbp}
   \begin{gathered}
-\beta(t) = (A_1(t), \ldots, A_N(t)), \\
-P(A_1(t)) \geq \ldots \geq P(A_N(t))
+Z(t) = (A_1(t), \ldots, A_N(t)), \\
+C(A_1(t)) \geq \ldots \geq C(A_N(t))
   \end{gathered}
 \end{equation}
 
-The first $j$ actions in $\beta(t)$ should be executed in descending priority/proportion where $j$ is chosen based on available concurrency.
+The first $j$ actions in $Z(t)$ should be executed in descending priority/proportion where $j$ is chosen based on available concurrency.
 
 \section{Modeled Value-Based Prioritization}
 
 Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount}.
 
-If an action has historical data $D(t)$ \eqref{action-predictors}:
+If each action has historical data $D(A)$ \eqref{action-predictors}:
 
 \begin{equation}\label{action-predictors}
-D(t) = ((t_1, D(t_1)), \ldots, (t_N, D(t_N)))
+\begin{multlined}
+D(A) = \\
+\shoveleft[0.5cm]{((t_1, D(A,t_1)), \ldots, (t_N, D(A,t_N)))}
+\end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(t) = \{R_1(t), \ldots, R_N(t)\}$ (e.g. linear regression) is applied to each $D(t)$. The models are compared and the \textbf{best fitting model} $M(t)$ is selected (e.g. using ANOVA).
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ \eqref{prediction-models} is applied to each $D(A)$ (e.g. linear regression) :
 
-Next, the model $M(t)$ is used to predict each $A(t_F)$ for some time in the future $t_F$ (e.g. the average time an action will take to ramp up implementation). Note that each $D(t)$ may have a different $M(t)$.
-
-Finally, $B(A(t_F))$ is calculated for all $A$ and value-based prioritization is applied to generate \textbf{modeled value-based prioritization} $\beta(t_F)$ \eqref{vbp-modeled}:
-
-\begin{equation}\label{vbp-modeled}
-  \begin{gathered}
-\beta(t_F) = (A_1(t_F), \ldots, A_N(t_F)), \\
-P(A_1(t_F)) \geq \ldots \geq P(A_N(t_F))
-  \end{gathered}
+\begin{equation}\label{prediction-models}
+\begin{multlined}
+R(D(A)) =\\
+\{R_1(D(A)), \ldots, R_N(D(A))\}
+\end{multlined}
 \end{equation}
+
+The models are compared (e.g. using ANOVA) and the \textbf{best fitting model} $M(R(D(A)))$ is selected. Note that $M(R(D(A)))$ may be different for each action.
+
+Next, the model $M(R(D(A)))$ is used to predict each $B(A(t_F))$ for some time in the future $t_F$ (e.g. the average time actions will take to ramp up implementation).
+
+Finally, value-based prioritization \eqref{vbp} is run with $Z(t_F)$.
 
 %%%%%%%%%%%%%%
 % References %
