@@ -1,14 +1,3 @@
-\title{Value-Based Prioritization\cite{SourceCode}}
-
-\author{Kevin Grigorenko\cite{Author1}}
-
-\newcommand{\abstractText}{\noindent
-A method is proposed to use value theory to quantitatively prioritize
-potential actions to accomplish a goal. This method is applied to the
-example of choosing meaningful work using an example value system based
-on the desire to reduce suffering.
-}
-
 %%%%%%%%%%%%%%%%%
 % Configuration %
 %%%%%%%%%%%%%%%%%
@@ -20,7 +9,9 @@ on the desire to reduce suffering.
 \usepackage{xurl}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
+\urlstyle{rm}
 \usepackage[super,comma,sort&compress]{natbib}
+\bibliographystyle{plainnat}
 \usepackage{abstract}
 \renewcommand{\abstractnamefont}{\normalfont\bfseries}
 \renewcommand{\abstracttextfont}{\normalfont\itshape}
@@ -28,7 +19,7 @@ on the desire to reduce suffering.
 \usepackage{geometry}
 \geometry{top=1cm,bottom=1.5cm,left=2cm,right=2cm,includehead,includefoot}
 \setlength{\columnsep}{7mm} % Column separation width
-\renewcommand*{\thefootnote}{\fnsymbol{footnote}} % Use symbols for footnotes
+\renewcommand*{\thefootnote}{\roman{footnote}} % Use symbols for footnotes
 \renewcommand*{\bibfont}{\raggedright}
 
 %%%%%%%%%%%%%%
@@ -36,17 +27,6 @@ on the desire to reduce suffering.
 %%%%%%%%%%%%%%
 
 \begin{filecontents}{value_based_prioritization.bib}
-
-@misc{SourceCode,
-  author       = {Grigorenko, Kevin},
-  title        = {Value-Based Prioritization: Source Code},
-  howpublished = {\url{https://github.com/freeradical13/ValueBasedPrioritization}},
-}
-
-@misc{Author1,
-  author       = {Grigorenko, Kevin},
-  howpublished = {\url{mailto:kevin@myplaceonline.com}},
-}
 
 @InCollection{scientific-method,
   author       = {Andersen, Hanne and Hepburn, Brian},
@@ -72,17 +52,15 @@ on the desire to reduce suffering.
 }
 
 @book{huemer2007ethical,
-  title        = {Ethical intuitionism},
+  title        = {Ethical Intuitionism},
   author       = {Huemer, Michael},
   year         = {2007},
   publisher    = {Springer}
 }
 
-@incollection{huemer2013problem,
-  title        = {The problem of political authority},
+@book{huemer2013problem,
+  title        = {The Problem of Political Authority},
   author       = {Huemer, Michael},
-  booktitle    = {The Problem of Political Authority},
-  pages        = {3--19},
   year         = {2013},
   publisher    = {Springer}
 }
@@ -169,7 +147,7 @@ on the desire to reduce suffering.
   title        = {John Rawls},
   booktitle    = {The Stanford Encyclopedia of Philosophy},
   editor       = {Edward N. Zalta},
-  howpublished = {\url{https://plato.stanford.edu/archives/spr2017/entries/rawls/}},
+  note         = {\url{https://plato.stanford.edu/archives/spr2017/entries/rawls/}},
   year         = {2017},
   edition      = {Spring 2017},
   publisher    = {Metaphysics Research Lab, Stanford University}
@@ -180,7 +158,7 @@ on the desire to reduce suffering.
   title        = {Communitarianism},
   booktitle    = {The Stanford Encyclopedia of Philosophy},
   editor       = {Edward N. Zalta},
-  howpublished = {\url{https://plato.stanford.edu/archives/sum2016/entries/communitarianism/}},
+  note         = {\url{https://plato.stanford.edu/archives/sum2016/entries/communitarianism/}},
   year         = {2016},
   edition      = {Summer 2016},
   publisher    = {Metaphysics Research Lab, Stanford University}
@@ -189,6 +167,17 @@ on the desire to reduce suffering.
 \end{filecontents}
 
 \begin{document}
+
+\title{Value-Based Prioritization\thanks{\url{https://github.com/freeradical13/ValueBasedPrioritization}}}
+
+\author{Kevin Grigorenko\thanks{\href{mailto:kevin@myplaceonline.com}{kevin@myplaceonline.com}}}
+
+\newcommand{\abstractText}{\noindent
+A method is proposed to use value theory to quantitatively prioritize
+potential actions to accomplish a goal. This method is applied to the
+example of choosing meaningful work using an example value system based
+on the desire to reduce suffering.
+}
 
 %%%%%%%%%%%%
 % Abstract %
@@ -204,6 +193,8 @@ on the desire to reduce suffering.
     \end{abstract}
   \end{@twocolumnfalse}
 ]
+
+\saythanks
 
 %%%%%%%%%%%
 % Article %
@@ -241,7 +232,7 @@ Given answers to ``Why?" and ``What?", how to implement actions is usually best 
 
 \section{Value-Based Prioritization}
 
-A \textbf{value system} $V$ generates a \textbf{goal} $G(t)$ (for some future time $t$) and a set of \textbf{mutually exclusive potential future actions} $A(t) = \{A_1(t), \ldots, A_N(t)\}$.
+A \textbf{value system} $V$ generates a \textbf{goal} $G(t)$ (for some future time $t$) and a set of \textbf{mutually exclusive potential future actions} $A(t) = \{A_1(t), \ldots, A_N(t)\}$ where $N > 1$.
 
 An action's \textbf{estimated relative accomplishment amount} $B(A(t))$ \eqref{action-amount} is an action's expected \textit{relative} (i.e. with respect to other actions) contribution towards accomplishing $G$(t):
 
@@ -317,7 +308,7 @@ R(D(A)) =\\
 \end{multlined}
 \end{equation}
 
-The models are compared (e.g. using ANOVA) and the \textbf{best fitting model} $M(R(D(A)))$ is selected. Note that $M(R(D(A)))$ may be different for each action.
+The models are compared (e.g. using adjusted $r^2$) and the \textbf{best fitting model} $M(R(D(A)))$ is selected. Note that $M(R(D(A)))$ may be different for each action.
 
 Next, the model $M(R(D(A)))$ is used to predict each $B(A(t_F))$ for some time in the future $t_F$ (e.g. the average time actions will take to ramp up implementation).
 
@@ -328,7 +319,6 @@ Finally, value-based prioritization \eqref{vbp} is run with $Z(t_F)$.
 %%%%%%%%%%%%%%
 
 \nocite{*}
-\bibliographystyle{plainnat}
 \bibliography{value_based_prioritization}
 
 \end{document}
