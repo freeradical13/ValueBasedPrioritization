@@ -22,6 +22,29 @@
 \renewcommand*{\thefootnote}{\roman{footnote}} % Use symbols for footnotes
 \renewcommand*{\bibfont}{\raggedright}
 
+% Inline equations: https://tex.stackexchange.com/a/78582/178803
+\makeatletter
+\newcommand*{\inlineequation}[2][]{%
+  \begingroup
+    % Put \refstepcounter at the beginning, because
+    % package `hyperref' sets the anchor here.
+    \refstepcounter{equation}%
+    \ifx\\#1\\%
+    \else
+      \label{#1}%
+    \fi
+    % prevent line breaks inside equation
+    \relpenalty=10000 %
+    \binoppenalty=10000 %
+    \ensuremath{%
+      % \displaystyle % larger fractions, ...
+      #2%
+    }%
+    ~\@eqnnum
+  \endgroup
+}
+\makeatother
+
 %%%%%%%%%%%%%%
 % References %
 %%%%%%%%%%%%%%
@@ -164,6 +187,41 @@
   publisher    = {Metaphysics Research Lab, Stanford University}
 }
 
+@article{weinstein2009qalys,
+  title        = {QALYs: the basics},
+  author       = {Weinstein, Milton C and Torrance, George and McGuire, Alistair},
+  journal      = {Value in health},
+  volume       = {12},
+  pages        = {S5--S9},
+  year         = {2009},
+  publisher    = {Wiley Online Library},
+  note         = {\url{https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1524-4733.2009.00515.x}}
+}
+
+@article{zucchini2000introduction,
+  title        = {An introduction to model selection},
+  author       = {Zucchini, Walter},
+  journal      = {Journal of mathematical psychology},
+  volume       = {44},
+  number       = {1},
+  pages        = {41--61},
+  year         = {2000},
+  publisher    = {Academic Press},
+  note         = {\url{http://www.indiana.edu/~clcl/Q550/Papers/Zucchini_JMP_2000.pdf}}
+}
+
+@article{wit2012all,
+  title        = {‘All models are wrong...’: an introduction to model uncertainty},
+  author       = {Wit, Ernst and Heuvel, Edwin van den and Romeijn, Jan-Willem},
+  journal      = {Statistica Neerlandica},
+  volume       = {66},
+  number       = {3},
+  pages        = {217--236},
+  year         = {2012},
+  publisher    = {Wiley Online Library},
+  note         = {\url{https://www.rug.nl/research/portal/files/13270992/2012StatistNeerlWit.pdf}}
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -232,9 +290,16 @@ Given answers to ``Why?" and ``What?", how to implement actions is usually best 
 
 \section{Value-Based Prioritization}
 
-A \textbf{value system} $V$ generates a \textbf{goal} $G(t)$ (for some future time $t$) and a set of \textbf{mutually exclusive potential future actions} $A(t) = \{A_1(t), \ldots, A_N(t)\}$ where $N > 1$.
+A \textbf{value system} \inlineequation[value-system]{V} generates a \textbf{goal} \inlineequation[goal]{G(t)} (for some future time $t$) and a set of \textbf{mutually exclusive potential future actions} $A(t)$:
 
-An action's \textbf{estimated relative accomplishment amount} $B(A(t))$ \eqref{action-amount} is an action's expected \textit{relative} (i.e. with respect to other actions) contribution towards accomplishing $G$(t):
+\begin{equation}\label{potential-actions}
+  \begin{gathered}
+A(t) = \{A_1(t), \ldots, A_N(t)\}, \\
+N > 1
+  \end{gathered}
+\end{equation}
+
+An action's \textbf{estimated relative accomplishment amount} $B(A(t))$ is an action's expected \textit{relative} (i.e. with respect to other actions) contribution towards accomplishing $G$(t):
 
 \begin{equation}\label{action-amount}
   \begin{gathered}
@@ -249,7 +314,7 @@ Thus, $G(t)$ is fully accomplished if all actions are accomplished:
 G(t) = \sum_{i=1}^{N} B(A_i(t)) = 1
 \end{equation}
 
-A \textbf{value-based prioritization score} $C(A(t))$ \eqref{prioritization-score} is the result of the product of a set of \textbf{value-based prioritization scale functions} $S = \{S_1, \ldots, S_N\}$ multiplied by \eqref{action-amount}:
+A \textbf{value-based prioritization score} $C(A(t))$ is the result of the product of a set of \textbf{value-based prioritization scale functions} \inlineequation[scale-functions]{S = \{S_1, \ldots, S_N\}} multiplied by \eqref{action-amount}:
 
 \begin{equation}\label{prioritization-score}
   \begin{gathered}
@@ -258,7 +323,7 @@ C(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
   \end{gathered}
 \end{equation}
 
-Example scale functions include cost, risk, etc. The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{N} C(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$.
+Example scale functions include implementation time, cost, risk, and other judgments. Ideally, scale functions should be defined before running the model to reduce bias. The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{N} C(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$.
 
 % \begin{itemize}
 % \item Implementation time
@@ -275,7 +340,7 @@ Example scale functions include cost, risk, etc. The set $S$ always includes the
 % \item Market demand
 % \end{itemize}
 
-A \textbf{value-based prioritization} $Z(t)$ \eqref{vbp} is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
+A \textbf{value-based prioritization} $Z(t)$ is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
 
 \begin{equation}\label{vbp}
   \begin{gathered}
@@ -284,11 +349,11 @@ C(A_1(t)) \geq \ldots \geq C(A_N(t))
   \end{gathered}
 \end{equation}
 
-The first $j$ actions in $Z(t)$ should be executed in descending priority/proportion where $j$ is chosen based on available concurrency.
+The first $k$ actions in $Z(t)$ should be executed in descending priority/proportion where \inlineequation[how-many-actions]{k} is chosen based on factors such as available concurrency, time, resources, etc.
 
 \section{Modeled Value-Based Prioritization}
 
-Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount}.
+Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F}  (e.g. the average time actions will take to ramp up implementation).
 
 If each action has historical data $D(A)$ \eqref{action-predictors}:
 
@@ -299,7 +364,7 @@ D(A) = \\
 \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ \eqref{prediction-models} is applied to each $D(A)$ (e.g. linear regression) :
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ \eqref{prediction-models} is applied to each $D(A)$ (e.g. linear regression with different degrees):
 
 \begin{equation}\label{prediction-models}
 \begin{multlined}
@@ -308,11 +373,26 @@ R(D(A)) =\\
 \end{multlined}
 \end{equation}
 
-The models are compared (e.g. using adjusted $r^2$) and the \textbf{best fitting model} $M(R(D(A)))$ is selected. Note that $M(R(D(A)))$ may be different for each action.
+The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. adjusted $r^2$, AIC, ANOVA, cross-validation, etc.) and the \textbf{best fitting model} $M(R(D(A)))$ is selected. Note that $M(R(D(A)))$ may be different for each action.
 
-Next, the model $M(R(D(A)))$ is used to predict each $B(A(t_F))$ for some time in the future $t_F$ (e.g. the average time actions will take to ramp up implementation).
+Next, the model $M(R(D(A)))$ is used to predict each $B(A(t_F))$.
 
 Finally, value-based prioritization \eqref{vbp} is run with $Z(t_F)$.
+
+\section{Choosing Meaningful Work}
+
+Applying modeled value based prioritization to the example of choosing meaningful work, we first outline the parameters:
+
+\begin{itemize}
+\item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" where suffering is defined as maximal human suffering: death. Alternatives include disease burden (e.g. Quality-Adjusted Life Years\cite{weinstein2009qalys}), non-human suffering, etc.
+\item \eqref{goal} $G(t) = $ eliminate human death.
+\item \eqref{potential-actions} $A(t) = $ the set of actions to eliminate human death for each cause.
+\item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
+\item \eqref{modeled-future-time} $t_F = $ 5 years; a normal amount of time to switch careers to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
+\item \eqref{action-predictors} $D(A) = $ time-series data on human death by cause.
+\item \eqref{prediction-models} $R(D(A)) = $ linear regression with one, two, and three degrees.
+\item \eqref{model-selection} $L(R(D(A))) = $ adjusted $r^2$.
+\end{itemize}
 
 %%%%%%%%%%%%%%
 % References %
