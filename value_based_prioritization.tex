@@ -222,6 +222,22 @@
   note         = {\url{https://www.rug.nl/research/portal/files/13270992/2012StatistNeerlWit.pdf}}
 }
 
+@misc{centers2017underlying,
+  title        = {\textit{Underlying Cause of Death 1999-2017 on CDC WONDER Online Database, released December, 2018. Data are from the Multiple Cause of Death Files, 1999-2017, as compiled from data provided by the 57 vital statistics jurisdictions through the Vital Statistics Cooperative Program}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
+  howpublished = {\url{https://wonder.cdc.gov/ucd-icd10.html}},
+  note         = {Accessed: 2019-01-31},
+}
+
+@book{icd10,
+  title={International statistical classification of diseases and related health problems},
+  author={World Health Organization},
+  year={2016},
+  publisher={World Health Organization},
+  edition={10th},
+  note={\url{https://apps.who.int/iris/bitstream/handle/10665/246208/9789241549165-V1-eng.pdf}}
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -373,26 +389,43 @@ R(D(A)) =\\
 \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. adjusted $r^2$, AIC, ANOVA, cross-validation, etc.) and the \textbf{best fitting model} $M(R(D(A)))$ is selected. Note that $M(R(D(A)))$ may be different for each action.
+The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. adjusted $r^2$, AIC, ANOVA, cross-validation, etc.).
+
+The \textbf{best fitting model} $M(R(D(A)))$ is selected for each action.
 
 Next, the model $M(R(D(A)))$ is used to predict each $B(A(t_F))$.
 
-Finally, value-based prioritization \eqref{vbp} is run with $Z(t_F)$.
+Finally, \textbf{modeled value-based prioritization} \inlineequation[modeled-vbp]{Z(t_F)} is simply \eqref{vbp} with $t_F$.
 
 \section{Choosing Meaningful Work}
 
-Applying modeled value based prioritization to the example of choosing meaningful work, we first outline the parameters:
+Applying modeled value based prioritization \eqref{modeled-vbp} to an example: choosing meaningful work.
+
+First, outline the parameters:
 
 \begin{itemize}
 \item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" where suffering is defined as maximal human suffering: death. Alternatives include disease burden (e.g. Quality-Adjusted Life Years\cite{weinstein2009qalys}), non-human suffering, etc.
 \item \eqref{goal} $G(t) = $ eliminate human death.
-\item \eqref{potential-actions} $A(t) = $ the set of actions to eliminate human death for each cause.
+\item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
 \item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
-\item \eqref{modeled-future-time} $t_F = $ 5 years; a normal amount of time to switch careers to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
+\item \eqref{modeled-future-time} $t_F = $ 5 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
 \item \eqref{action-predictors} $D(A) = $ time-series data on human death by cause.
 \item \eqref{prediction-models} $R(D(A)) = $ linear regression with one, two, and three degrees.
 \item \eqref{model-selection} $L(R(D(A))) = $ adjusted $r^2$.
 \end{itemize}
+
+$A(t)$ is the set of 113 actions which would eliminate the 113 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By ``Year" And By ``ICD Sub-Chapter"; Check ``Export Results"; Uncheck ``Show Totals"}:
+
+\begin{equation*}
+\begin{gathered}
+A(t) =\\
+\{\\
+\textrm{Eliminate: Intestinal infectious diseases},\\
+\textrm{Eliminate: Tuberculosis},\\
+\textrm{...}\\
+\}
+\end{gathered}
+\end{equation*}
 
 %%%%%%%%%%%%%%
 % References %
