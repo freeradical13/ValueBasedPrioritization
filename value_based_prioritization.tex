@@ -16,6 +16,7 @@
 \renewcommand{\abstractnamefont}{\normalfont\bfseries}
 \renewcommand{\abstracttextfont}{\normalfont\itshape}
 \usepackage{lipsum}
+\usepackage{booktabs}
 \usepackage{geometry}
 \geometry{top=1cm,bottom=1.5cm,left=2cm,right=2cm,includehead,includefoot}
 \setlength{\columnsep}{7mm} % Column separation width
@@ -278,7 +279,7 @@ on the desire to reduce suffering.
 
 Why should a particular goal be pursued (``Why")? Given a goal, what actions should be pursued to best accomplish said goal (``What")? Given an action, how should said action be pursued (``How")?
 
-This article proposes that value theory usually best scopes ``Why" and ``What" and the scientific method usually best answers ``How". A method called Value-Based Prioritization \eqref{article-equation} is developed to answer the ``What" question:
+This article proposes that value theory usually best scopes ``Why" and ``What" and the scientific method usually best answers ``How". A method called Value-Based Prioritization is developed to answer the ``What" question:
 
 \begin{equation}\label{article-equation}
   \begin{gathered}
@@ -292,7 +293,7 @@ This article proposes that value theory usually best scopes ``Why" and ``What" a
 
 \section{Why a Goal?}
 
-``Why a Goal?" is usually best scoped using a value system because value systems are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
+``Why a Goal?" is usually best scoped using value systems because they are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
 
 \section{What Actions?}
 
@@ -339,22 +340,7 @@ C(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
   \end{gathered}
 \end{equation}
 
-Example scale functions include implementation time, cost, risk, and other judgments. Ideally, scale functions should be defined before running the model to reduce bias. The set $S$ always includes the element $S_0(A(t)) = 1$. Note that $\sum_{i=1}^{N} C(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$.
-
-% \begin{itemize}
-% \item Implementation time
-% \item Cost
-% \item Risk
-% \item Likelihood of success
-% \item Plays into Strengths
-% \item Achieves passions/environmental needs
-% \item Achieves flow
-% \item Supports life and family
-% \item Return on investment
-% \item Initialization time (learning, starting, etc.)
-% \item Interest
-% \item Market demand
-% \end{itemize}
+Example scale functions include implementation time, cost, risk, and other judgments. Ideally, scale functions should be defined before running the model to reduce bias. The set $S$ always includes the element $S_1(A(t)) = 1$. Note that $\sum_{i=1}^{N} C(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$.
 
 A \textbf{value-based prioritization} $Z(t)$ is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
 
@@ -399,33 +385,76 @@ Finally, \textbf{modeled value-based prioritization} \inlineequation[modeled-vbp
 
 \section{Choosing Meaningful Work}
 
-Applying modeled value based prioritization \eqref{modeled-vbp} to an example: choosing meaningful work.
+The following example applies modeled value based prioritization \eqref{modeled-vbp} to the goal of choosing meaningful work. Every aspect is an example and should be reconsidered.
 
 First, outline the parameters:
 
 \begin{itemize}
-\item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" where suffering is defined as maximal human suffering: death. Alternatives include disease burden (e.g. Quality-Adjusted Life Years\cite{weinstein2009qalys}), non-human suffering, etc.
+\item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" which is defined as maximal human suffering: death\footnote{The term suffering is ambiguous because some consider that there is no suffering after death; however, the intent is to encapsulate something like the potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs/DALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
 \item \eqref{goal} $G(t) = $ eliminate human death.
 \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
 \item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
 \item \eqref{modeled-future-time} $t_F = $ 5 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
-\item \eqref{action-predictors} $D(A) = $ time-series data on human death by cause.
+\item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
 \item \eqref{prediction-models} $R(D(A)) = $ linear regression with one, two, and three degrees.
 \item \eqref{model-selection} $L(R(D(A))) = $ adjusted $r^2$.
 \end{itemize}
 
-$A(t)$ is the set of 113 actions which would eliminate the 113 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By ``Year" And By ``ICD Sub-Chapter"; Check ``Export Results"; Uncheck ``Show Totals"}:
+$A(t)$ is the set of 176 actions which would eliminate the 176 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By ``Year" And By ``ICD Sub-Chapter"; Check ``Export Results"; Uncheck ``Show Totals"}:
 
 \begin{equation*}
 \begin{gathered}
-A(t) =\\
-\{\\
-\textrm{Eliminate: Intestinal infectious diseases},\\
-\textrm{Eliminate: Tuberculosis},\\
-\textrm{...}\\
+A(t) = \{\\
+A_1(t) = \textrm{Eliminate: Malignant neoplasms},\\
+A_2(t) = \textrm{Eliminate: Ischaemic heart diseases},\\
+\textrm{\ldots}\\
+A_{176}(t) = \textrm{Eliminate: Other disorders of ear}\\
 \}
 \end{gathered}
 \end{equation*}
+
+Review the list of actions and hypothesize scale functions. Examples:
+
+\begin{itemize}
+\item $S_1(A(t)) = 1$: Required scale function.
+\item $S_2(A(t))$: Likelihood of Success. If primarily political then 0.1, else 1.
+\item $S_3(A(t)) = ScaleAge(A(t))$: Scale towards younger people as they have more to lose.\newline $ScaleAge(A(t)) = \left(1 - \frac{AvgAge(A(t))}{MaxAge}\right)$
+\end{itemize}
+
+Create a table listing all actions as rows and all scale functions as columns, and fill any non-$1$ values. For example:
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{cccc}
+\toprule
+Action & $S_1$  & \ldots & $S_N$  \\
+\midrule
+$A_1$  & 0.1    &        &        \\
+$A_2$  &        &        & 0.25   \\
+\ldots &        &        &        \\
+$A_N$  & 0.99   &        & 0.9    \\
+\bottomrule
+\end{tabular}
+\caption{Example scale function table}
+\label{table:scaletable}
+\end{table}
+
+$D(A)$ for each action is the time-series data of number of deaths per year. For example, for $A_1(t)$:
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{ccc}
+\toprule
+Year    & Deaths \\
+\midrule
+1999    & 549838 \\
+\ldots  & \ldots \\
+2017    & 599108 \\
+\bottomrule
+\end{tabular}
+\caption{Deaths per year for $A_1(t)$: Malignant neoplasms}
+\label{table:daa1}
+\end{table}
 
 %%%%%%%%%%%%%%
 % References %
