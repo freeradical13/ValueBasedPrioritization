@@ -11,7 +11,7 @@ import statsmodels.formula.api
 
 def load_codus(file):
   df = pandas.read_csv(
-         "Underlying Cause of Death, 1999-2017.txt",
+         file,
          sep="\t",
          usecols=["Year", "ICD Sub-Chapter", "ICD Sub-Chapter Code", "Deaths", "Population", "Crude Rate"],
          na_values=["Unreliable"],
