@@ -417,19 +417,19 @@ A_{176}(t) = \textrm{Eliminate: Other disorders of ear}\\
 Review the list of actions and hypothesize scale functions. Examples:
 
 \begin{itemize}
-\item $S_1(A) = 1$: Required scale function.
-\item $S_2(A)$: Likelihood of Success. If primarily political then 0.1, else 1 (i.e. unpredictable).
-\item $S_3(A) = \left(1 - \frac{AvgAge(A)}{MaxAge}\right)$
+\item $S_1(A_i) = 1$: Required scale function.
+\item $S_2(A_i)$: Likelihood of Success. If primarily political then 0.1, else 1.
+\item $S_3(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
-\item $S_4(A) = \begin{cases}\text{0} & \mbox{if } L(R(D(A))) < 0.1 \\ \text{1} & \mbox{if } L(R(D(A))) \ge 0.1 \\ \end{cases}$
+\item $S_4(A_i) = \begin{cases}\text{0} & \mbox{if } L(R(D(A_i))) < 0.1 \\ \text{1} & \mbox{if } L(R(D(A_i))) \ge 0.1 \\ \end{cases}$
                 \newline\newline
-                Remove actions with poorly predicted $B(A(t_F))$.
-\item $S_5(A) = \frac{f(A)-f_{min}}{f_{max}-f_{min}}$
+                Remove actions with poorly predicted $B(A_i(t_F))$.
+\item $S_5(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
                 \newline\newline
-                $f(A) = M'(A(t_F))$
+                $f(A) = M'(A(t_F)), a=0.5, b=1$
                 \newline\newline
-                Scale by the relative rate of change of an action's predicted rate of death; take the derivative of $M(A)$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Feature_scaling}} into $[0,1]$.
+                Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A)$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$.
 \end{itemize}
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
