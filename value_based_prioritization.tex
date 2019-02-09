@@ -22,6 +22,7 @@
 \setlength{\columnsep}{7mm} % Column separation width
 \renewcommand*{\thefootnote}{\roman{footnote}} % Use symbols for footnotes
 \renewcommand*{\bibfont}{\raggedright}
+\usepackage{float}
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -435,7 +436,7 @@ The list does not include common scale functions such as implementation time, co
 
 Create a table listing all actions as rows and all manually calculated scale functions as columns, and fill any non-$1$ values. For example:
 
-\begin{table}[htb]
+\begin{table}[H]
 \centering
 \begin{tabular}{cccc}
 \toprule
@@ -453,7 +454,7 @@ $A_N$  & 0.99   &        & 0.9    \\
 
 $D(A)$ for each action is the time-series data of number of deaths per year. For example, for $A_1(t)$:
 
-\begin{table}[htb]
+\begin{table}[H]
 \centering
 \begin{tabular}{ccc}
 \toprule
