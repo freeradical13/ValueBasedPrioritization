@@ -1,3 +1,15 @@
+# usage: python ucodus.py "Malignant neoplasms"
+#        -h for options
+#
+# Run linear regressions on Underlying Cause of Death statistics
+# https://wonder.cdc.gov/ucd-icd10.html
+# Group Results By “Year” And By “ICD Sub-Chapter”; Check
+# “Export Results”; Uncheck “Show Totals”
+#
+# Notes:
+#   * Designed for Python3, so might require python3/pip3 commands.
+#   * Install: pip install numpy pandas matplotlib statsmodels
+
 import sys
 import math
 import numpy
@@ -56,7 +68,7 @@ def create_plot(df, cause, predict, degree=1):
   model = model_linear_regression(df, "ScaledYear", "Crude Rate", degree)
   print(model.summary())
 
-  ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(cause), color = 'red')
+  ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(cause), color = "red")
 
   func = numpy.polynomial.Polynomial(model.params)
   matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), color="blue")
