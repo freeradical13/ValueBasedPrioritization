@@ -357,7 +357,7 @@ The first $k$ actions in $Z(t)$ should be executed in descending priority/propor
 
 Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F}  (e.g. the average time actions will take to ramp up implementation).
 
-If each action has historical data $D(A)$ \eqref{action-predictors}:
+If each action has historical data $D(A)$:
 
 \begin{equation}\label{action-predictors}
 \begin{multlined}
@@ -366,7 +366,7 @@ D(A) = \\
 \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ \eqref{prediction-models} is applied to each $D(A)$ (e.g. linear regression with different degrees):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. linear regression with different degrees):
 
 \begin{equation}\label{prediction-models}
 \begin{multlined}
@@ -377,20 +377,20 @@ R(D(A)) =\\
 
 The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. adjusted $r^2$, AIC, ANOVA, cross-validation, etc.).
 
-The \textbf{best fitting model} $M(R(D(A)))$ is selected for each action.
+For each action, the \textbf{best fitting model} $M(A(t))$ is selected from $R(D(A))$ using $L(R(D(A)))$.
 
-Next, the model $M(R(D(A)))$ is used to predict each $B(A(t_F))$.
+Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
 Finally, \textbf{modeled value-based prioritization} \inlineequation[modeled-vbp]{Z(t_F)} is simply \eqref{vbp} with $t_F$.
 
 \section{Choosing Meaningful Work}
 
-The following example applies modeled value based prioritization \eqref{modeled-vbp} to the goal of choosing meaningful work. Every aspect is an example and should be reconsidered.
+The following example applies modeled value-based prioritization \eqref{modeled-vbp} to the goal of choosing meaningful work. Every aspect is an example and should be reconsidered.
 
 First, outline the parameters:
 
 \begin{itemize}
-\item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" which is defined as maximal human suffering: death\footnote{The term suffering is ambiguous because some consider that there is no suffering after death; however, the intent is to encapsulate something like the potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs/DALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
+\item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs/DALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
 \item \eqref{goal} $G(t) = $ eliminate human death.
 \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
 \item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
@@ -416,12 +416,24 @@ A_{176}(t) = \textrm{Eliminate: Other disorders of ear}\\
 Review the list of actions and hypothesize scale functions. Examples:
 
 \begin{itemize}
-\item $S_1(A(t)) = 1$: Required scale function.
-\item $S_2(A(t))$: Likelihood of Success. If primarily political then 0.1, else 1.
-\item $S_3(A(t)) = ScaleAge(A(t))$: Scale towards younger people as they have more to lose.\newline $ScaleAge(A(t)) = \left(1 - \frac{AvgAge(A(t))}{MaxAge}\right)$
+\item $S_1(A) = 1$: Required scale function.
+\item $S_2(A)$: Likelihood of Success. If primarily political then 0.1, else 1 (i.e. unpredictable).
+\item $S_3(A) = \left(1 - \frac{AvgAge(A)}{MaxAge}\right)$
+                \newline\newline
+                Scale towards younger people as they have more to lose.
+\item $S_4(A) = \begin{cases}\text{0} & \mbox{if } L(R(D(A))) < 0.1 \\ \text{1} & \mbox{if } L(R(D(A))) \ge 0.1 \\ \end{cases}$
+                \newline\newline
+                Remove actions with poorly predicted $B(A(t_F))$.
+\item $S_5(A) = \frac{f(A)-f_{min}}{f_{max}-f_{min}}$
+                \newline\newline
+                $f(A) = M'(A(t_F))$
+                \newline\newline
+                Scale by the relative rate of change of an action's predicted rate of death; take the derivative of $M(A)$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Feature_scaling}} into $[0,1]$.
 \end{itemize}
 
-Create a table listing all actions as rows and all scale functions as columns, and fill any non-$1$ values. For example:
+The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
+
+Create a table listing all actions as rows and all manually calculated scale functions as columns, and fill any non-$1$ values. For example:
 
 \begin{table}[htb]
 \centering
@@ -452,7 +464,7 @@ Year    & Deaths \\
 2017    & 599108 \\
 \bottomrule
 \end{tabular}
-\caption{Deaths per year for $A_1(t)$: Malignant neoplasms}
+\caption{Deaths per year for $A_1(t)$}
 \label{table:daa1}
 \end{table}
 
