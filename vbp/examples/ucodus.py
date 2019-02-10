@@ -18,4 +18,6 @@ import vbp.ucod.us
 
 if __name__ == "__main__":
   ds = vbp.ucod.us.UnderlyingCausesOfDeathUnitedStates()
-  ds.predict(sys.argv[1:])
+  ds.load(sys.argv[1:])
+  ds.predict()
+  print(numpy.sort(ds.get_possible_actions()))

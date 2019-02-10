@@ -10,29 +10,33 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource): 
-  def predict(self, args):
-    parser = self.create_parser()
+class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
+  def initialize_parser(self, parser):
     parser.add_argument("cause", help="ICD Sub-Chapter")
     parser.add_argument("-f", "--file", help="path to file", default="data/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
     parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
-    self.options = parser.parse_args(args)
-    self.load()
-    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-      self.create_plot(self.options.cause, i, self.options.predict)
+    parser.add_argument("-d", "--hide", action="store_true", help="hide graphs", default=False)
 
-  def load(self):
-    self.data = pandas.read_csv(
+  def run_load(self):
+    df = pandas.read_csv(
           self.options.file,
           sep="\t",
           usecols=["Year", "ICD Sub-Chapter", "ICD Sub-Chapter Code", "Deaths", "Population", "Crude Rate"],
           na_values=["Unreliable"],
           parse_dates=[0]
         ).dropna(how="all")
-    self.data.rename(columns = {"Year": "Date"}, inplace=True)
-    self.data["Year"] = self.data["Date"].dt.year
+    df.rename(columns = {"Year": "Date"}, inplace=True)
+    df["Year"] = df["Date"].dt.year
+    return df
+
+  def run_predict(self):
+    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
+      self.create_plot(self.options.cause, i, self.options.predict)
+
+  def run_get_possible_actions(self):
+    return self.data["ICD Sub-Chapter"].unique()
 
   def create_plot(self, action, degree, predict):
     df = self.data[self.data["ICD Sub-Chapter"] == action]
@@ -84,7 +88,5 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     cleaned_title = action.replace(" ", "_").replace("(", "").replace(")", "")
     matplotlib.pyplot.savefig("{}_{}.png".format(cleaned_title, degree), dpi=100)
     df.to_csv("{}.csv".format(cleaned_title))
-    matplotlib.pyplot.show()
-
-  def possible_actions(self):
-    return self.data["ICD Sub-Chapter"].unique()
+    if not self.options.hide:
+      matplotlib.pyplot.show()

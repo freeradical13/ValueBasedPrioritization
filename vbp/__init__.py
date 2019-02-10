@@ -17,13 +17,48 @@ def linear_regression(df, x, y, degree=1):
   return statsmodels.formula.api.ols(formula, data).fit()
 
 class DataSource(object, metaclass=abc.ABCMeta):
+  #######################
+  # Main Public Methods #
+  #######################
+  def load(self, args):
+    self.prepare(args)
+    return self
+
+  def predict(self):
+    return self.run_predict()
+
+  def get_possible_actions(self):
+    return self.run_get_possible_actions()
+
+  #################
+  # Other Methods #
+  #################
   @abc.abstractmethod
-  def predict(self, args):
+  def run_load(self):
     raise NotImplementedError()
 
   @abc.abstractmethod
-  def possible_actions(self):
+  def run_predict(self):
     raise NotImplementedError()
 
-  def create_parser(self):
-    return argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  @abc.abstractmethod
+  def run_get_possible_actions(self):
+    raise NotImplementedError()
+
+  @abc.abstractmethod
+  def initialize_parser(self, parser):
+    raise NotImplementedError()
+
+  def prepare(self, args):
+    self.ensure_options(args)
+    self.ensure_loaded()
+
+  def ensure_options(self, args):
+    if not hasattr(self, "options"):
+      parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+      self.initialize_parser(parser)
+      self.options = parser.parse_args(args)
+
+  def ensure_loaded(self):
+    if not hasattr(self, "data"):
+      self.data = self.run_load()
