@@ -9,13 +9,9 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-def linear_regression(df, x, y, degree=1):
-  data = {"x": df[x].values, "y": df[y].values}
-  formula = "y ~ " + " + ".join("I(x**{})".format(i) for i in range(1, degree+1))
-  print("Formula: {}".format(formula))
-  return statsmodels.formula.api.ols(formula, data).fit()
+import vbp
 
-def load_underlying_causes_of_death(file):
+def load(file):
   df = pandas.read_csv(
          file,
          sep="\t",
@@ -53,7 +49,7 @@ def create_plot(df, cause, predict, degree=1):
   
   print(df)
 
-  model = linear_regression(df, "ScaledYear", "Crude Rate", degree)
+  model = vbp.linear_regression(df, "ScaledYear", "Crude Rate", degree)
   print(model.summary())
 
   ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(cause), color = "red")
@@ -78,4 +74,3 @@ def create_plot(df, cause, predict, degree=1):
   matplotlib.pyplot.savefig("{}_{}.png".format(cleaned_title, degree), dpi=100)
   df.to_csv("{}.csv".format(cleaned_title))
   matplotlib.pyplot.show()
-
