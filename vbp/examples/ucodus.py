@@ -14,7 +14,6 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-import vbp
 import vbp.ucod.us
 
 def run_regressions(args):
@@ -26,9 +25,10 @@ def run_regressions(args):
   parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
   options = parser.parse_args(args)
   
-  df = vbp.ucod.us.load(options.file)
+  ds = vbp.ucod.us.UnderyingCausesOfDeathUnitedStates()
+  ds.load(file=options.file)
   for i in range(options.min_degrees, options.max_degrees + 1):
-    vbp.ucod.us.create_plot(df, options.cause, options.predict, i)
+    ds.create_plot(options.cause, options.predict, degree=i)
 
 if __name__ == "__main__":
   run_regressions(sys.argv[1:])
