@@ -11,8 +11,13 @@ Prerequisites:
 
     pip3 install numpy pandas matplotlib statsmodels
 
-### Running the Example
+### Usage
 
-    python3 -m vbp.examples.ucodus "Malignant neoplasms"
+    python3 -m vbp.run -h
 
-Use the `-h` flag for options.
+### Underlying causes of death in the United States
+
+Example:
+
+    python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"
+
