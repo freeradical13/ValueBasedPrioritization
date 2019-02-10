@@ -5,7 +5,7 @@ import numpy
 import argparse
 
 # Import all subclasses of DataSource so that they are options
-import vbp.ucod.us
+import vbp.ucod.united_states
 
 def add_data_source_arg(parser, data_source_names):
   parser.add_argument("data_source", choices=data_source_names, help="Data source")
