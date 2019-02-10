@@ -18,7 +18,7 @@ def linear_regression(df, x, y, degree=1):
 
 class DataSource(object, metaclass=abc.ABCMeta):
   @abc.abstractmethod
-  def predict(self, *args):
+  def predict(self, args):
     raise NotImplementedError()
 
   @abc.abstractmethod

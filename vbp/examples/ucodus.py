@@ -17,4 +17,5 @@ import statsmodels.formula.api
 import vbp.ucod.us
 
 if __name__ == "__main__":
-  vbp.ucod.us.UnderlyingCausesOfDeathUnitedStates().predict(*sys.argv[1:])
+  ds = vbp.ucod.us.UnderlyingCausesOfDeathUnitedStates()
+  ds.predict(sys.argv[1:])

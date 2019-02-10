@@ -11,7 +11,7 @@ import statsmodels.tools
 import statsmodels.formula.api
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource): 
-  def predict(self, *args):
+  def predict(self, args):
     parser = self.create_parser()
     parser.add_argument("cause", help="ICD Sub-Chapter")
     parser.add_argument("-f", "--file", help="path to file", default="data/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
