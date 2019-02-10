@@ -17,16 +17,24 @@ def linear_regression(df, x, y, degree=1):
   return statsmodels.formula.api.ols(formula, data).fit()
 
 class DataSource(object, metaclass=abc.ABCMeta):
-  def load(self, **kwargs):
-    self.df = self.perform_load(**kwargs)
+  def create_parser(self):
+    return argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+  def load(self):
+    self.df = self.perform_load()
+    return self.df
 
   @abc.abstractmethod
-  def perform_load(self, **kwargs):
+  def perform_load(self):
     raise NotImplementedError()
 
   def df():
     return self.df
 
   @abc.abstractmethod
-  def create_plot(self, action, predict=None, **kwargs):
+  def possible_actions(self):
+    raise NotImplementedError()
+
+  @abc.abstractmethod
+  def predict(self, *args):
     raise NotImplementedError()
