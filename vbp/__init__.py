@@ -10,11 +10,22 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
+VERSION = "0.1.0"
+
 def linear_regression(df, x, y, degree=1):
   data = {"x": df[x].values, "y": df[y].values}
   formula = "y ~ " + " + ".join("I(x**{})".format(i) for i in range(1, degree+1))
   print("Formula: {}".format(formula))
   return statsmodels.formula.api.ols(formula, data).fit()
+
+class DetailedErrorArgumentParser(argparse.ArgumentParser):
+  def error(self, message):
+    sys.stderr.write("error: {}\n\n".format(message))
+    self.print_help()
+    sys.exit(1)
+
+def create_parser():
+  return DetailedErrorArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 class DataSource(object, metaclass=abc.ABCMeta):
   #######################
@@ -55,7 +66,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def ensure_options(self, args):
     if not hasattr(self, "options"):
-      parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+      parser = create_parser()
       self.initialize_parser(parser)
       self.options = parser.parse_args(args)
 
