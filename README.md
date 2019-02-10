@@ -7,14 +7,12 @@
 
 ## Source Code
 
-Designed for Python3, so commands may need to be named python3/pip3.
-
 Prerequisites:
 
-    pip install numpy pandas matplotlib statsmodels
+    pip3 install numpy pandas matplotlib statsmodels
 
 ### Running the Example
 
-    python -m vbp.examples.ucodus "Malignant neoplasms"
+    python3 -m vbp.examples.ucodus "Malignant neoplasms"
 
 Use the `-h` flag for options.
