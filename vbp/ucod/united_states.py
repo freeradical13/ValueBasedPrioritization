@@ -12,7 +12,7 @@ import statsmodels.formula.api
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def initialize_parser(self, parser):
-    parser.add_argument("cause", help="ICD Sub-Chapter")
+    parser.add_argument("cause", nargs="?", help="ICD Sub-Chapter")
     parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
@@ -32,6 +32,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     return df
 
   def run_predict(self):
+    if self.options.cause is None:
+      raise ValueError("Cause must be supplied. See -h for usage.")
     for i in range(self.options.min_degrees, self.options.max_degrees + 1):
       self.create_plot(self.options.cause, i, self.options.predict)
 

@@ -1,6 +1,7 @@
 value_based_prioritization.bib
 *.png
 *.csv
+*xslx*
 *.pyc
 __pycache__
 
