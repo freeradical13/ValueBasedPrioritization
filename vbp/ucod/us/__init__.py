@@ -11,20 +11,31 @@ import statsmodels.tools
 import statsmodels.formula.api
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource): 
-  def perform_load(self):
-    df = pandas.read_csv(
+  def predict(self, *args):
+    parser = self.create_parser()
+    parser.add_argument("cause", help="ICD Sub-Chapter")
+    parser.add_argument("-f", "--file", help="path to file", default="data/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
+    parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
+    parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
+    parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
+    self.options = parser.parse_args(args)
+    self.load()
+    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
+      self.create_plot(self.options.cause, i, self.options.predict)
+
+  def load(self):
+    self.data = pandas.read_csv(
           self.options.file,
           sep="\t",
           usecols=["Year", "ICD Sub-Chapter", "ICD Sub-Chapter Code", "Deaths", "Population", "Crude Rate"],
           na_values=["Unreliable"],
           parse_dates=[0]
         ).dropna(how="all")
-    df.rename(columns = {"Year": "Date"}, inplace=True)
-    df["Year"] = df["Date"].dt.year
-    return df
+    self.data.rename(columns = {"Year": "Date"}, inplace=True)
+    self.data["Year"] = self.data["Date"].dt.year
 
   def create_plot(self, action, degree, predict):
-    df = self.df[self.df["ICD Sub-Chapter"] == action]
+    df = self.data[self.data["ICD Sub-Chapter"] == action]
     max_year = df.Year.values[-1]
     
     min_scaled_domain = -1
@@ -76,16 +87,4 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     matplotlib.pyplot.show()
 
   def possible_actions(self):
-    return self.df["ICD Sub-Chapter"].unique()
-
-  def predict(self, *args):
-    parser = self.create_parser()
-    parser.add_argument("cause", help="ICD Sub-Chapter")
-    parser.add_argument("-f", "--file", help="path to file", default="data/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
-    parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
-    parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
-    parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
-    self.options = parser.parse_args(args)
-    self.load()
-    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-      self.create_plot(self.options.cause, i, self.options.predict)
+    return self.data["ICD Sub-Chapter"].unique()
