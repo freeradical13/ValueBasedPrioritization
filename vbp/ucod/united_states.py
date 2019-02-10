@@ -13,7 +13,7 @@ import statsmodels.formula.api
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def initialize_parser(self, parser):
     parser.add_argument("cause", help="ICD Sub-Chapter")
-    parser.add_argument("-f", "--file", help="path to file", default="data/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
+    parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
     parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
