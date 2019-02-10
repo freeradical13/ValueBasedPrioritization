@@ -54,6 +54,7 @@ if __name__ == "__main__":
   subparser.add_argument("-t", "--type", choices=["csv", "excel"], help="Output type", default="csv")
   subparser.add_argument("-p", "--prefix", help="Action prefix")
   subparser.add_argument("-s", "--suffix", help="Action suffix")
+  subparser.add_argument("-n", "--sheet_name", help="Excel sheet name", default="Sheet1")
   subparser.add_argument("column", help="Column", nargs="+")
   add_remainder_arg(subparser)
 
@@ -94,7 +95,7 @@ if __name__ == "__main__":
     elif options.type == "excel":
       output = io.BytesIO()
       writer = pandas.ExcelWriter(output, engine="xlsxwriter")
-      df.to_excel(writer, sheet_name="Sheet1")
+      df.to_excel(writer, sheet_name=options.sheet_name)
       writer.save()
       xlsx_data = output.getvalue()
       options.output.write(xlsx_data)
