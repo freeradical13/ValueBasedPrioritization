@@ -1,2 +1,3 @@
 __all__ = ["vbp"]
-from vbp import *
+
+from vbp.vbp import *

@@ -5,8 +5,11 @@
 
 ## Source Code
 
-* Designed for Python3, so might require python3/pip3 commands.
-* Install: pip install numpy pandas matplotlib statsmodels
+Designed for Python3, so commands may need to be named python3/pip3.
+
+Prerequisites:
+
+    pip install numpy pandas matplotlib statsmodels
 
 ### Running the Example
 

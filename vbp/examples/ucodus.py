@@ -14,10 +14,10 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-from vbp import vbp
+from vbp import *
 
 def run_regressions(args):
-  parser = argparse.ArgumentParser()
+  parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument("cause", help="ICD Sub-Chapter")
   parser.add_argument("-f", "--file", help="path to file", default="data/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
   parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
