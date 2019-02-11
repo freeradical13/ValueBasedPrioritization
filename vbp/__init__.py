@@ -40,6 +40,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def get_possible_actions(self):
     return self.run_get_possible_actions()
+  
+  def get_action_data(self, action):
+    return self.run_get_action_data(action)
 
   #################
   # Other Methods #
@@ -54,6 +57,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   @abc.abstractmethod
   def run_get_possible_actions(self):
+    raise NotImplementedError()
+
+  @abc.abstractmethod
+  def run_get_action_data(self, action):
     raise NotImplementedError()
 
   @abc.abstractmethod

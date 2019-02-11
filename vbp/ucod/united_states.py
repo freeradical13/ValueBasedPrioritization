@@ -40,8 +40,11 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def run_get_possible_actions(self):
     return self.data["ICD Sub-Chapter"].unique()
 
+  def run_get_action_data(self, action):
+    return self.data[self.data["ICD Sub-Chapter"] == action]
+    
   def create_plot(self, action, degree, predict):
-    df = self.data[self.data["ICD Sub-Chapter"] == action]
+    df = self.run_get_action_data(action)
     max_year = df.Year.values[-1]
     
     min_scaled_domain = -1

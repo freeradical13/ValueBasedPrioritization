@@ -52,6 +52,11 @@ if __name__ == "__main__":
   add_data_source_arg(subparser, data_source_names)
   add_remainder_arg(subparser)
   
+  subparser = subparsers.add_parser("action_data", help="Print data for an action")
+  add_data_source_arg(subparser, data_source_names)
+  subparser.add_argument("action", help="Action")
+  add_remainder_arg(subparser)
+  
   subparser = subparsers.add_parser("scale_functions", help="Generate scale functions table")
   add_data_source_arg(subparser, data_source_names)
   add_output_arg(subparser)
@@ -111,5 +116,9 @@ if __name__ == "__main__":
       raise NotImplementedError()
     
     options.output.close()
+  elif options.command_name == "action_data":
+    ds = create_data_source(data_source_classes, options)
+    ds.load(options.args)
+    print(ds.get_action_data(options.action))
   else:
     raise NotImplementedError()
