@@ -48,7 +48,11 @@ if __name__ == "__main__":
   add_output_arg(subparser)
   add_remainder_arg(subparser)
   
-  subparser = subparsers.add_parser("scale_functions_table", help="Generate scale functions table")
+  subparser = subparsers.add_parser("count_actions", help="Count unique actions")
+  add_data_source_arg(subparser, data_source_names)
+  add_remainder_arg(subparser)
+  
+  subparser = subparsers.add_parser("scale_functions", help="Generate scale functions table")
   add_data_source_arg(subparser, data_source_names)
   add_output_arg(subparser)
   subparser.add_argument("-t", "--type", choices=["csv", "excel"], help="Output type", default="csv")
@@ -69,7 +73,11 @@ if __name__ == "__main__":
     options.output.write(os.linesep.join(numpy.sort(ds.get_possible_actions()).tolist()))
     options.output.write(os.linesep)
     options.output.close()
-  elif options.command_name == "scale_functions_table":
+  elif options.command_name == "count_actions":
+    ds = create_data_source(data_source_classes, options)
+    ds.load(options.args)
+    print(len(ds.get_possible_actions()))
+  elif options.command_name == "scale_functions":
     ds = create_data_source(data_source_classes, options)
     ds.load(options.args)
     

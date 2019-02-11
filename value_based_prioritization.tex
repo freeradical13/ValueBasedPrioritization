@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{csquotes}
 \usepackage{xurl}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
@@ -278,9 +279,9 @@ on the desire to reduce suffering.
 
 \section{Introduction}
 
-Why should a particular goal be pursued (``Why")? Given a goal, what actions should be pursued to best accomplish said goal (``What")? Given an action, how should said action be pursued (``How")?
+Why should a particular goal be pursued (\enquote{Why})? Given a goal, what actions should be pursued to best accomplish said goal (\enquote{What})? Given an action, how should said action be pursued (\enquote{How})?
 
-This article proposes that value theory usually best scopes ``Why" and ``What" and the scientific method usually best answers ``How". A method called Value-Based Prioritization is developed to answer the ``What" question:
+This article proposes that value theory usually best scopes \enquote{Why} and \enquote{What} and the scientific method usually best answers \enquote{How}. A method called Value-Based Prioritization is developed to answer the \enquote{What} question:
 
 \begin{equation}\label{article-equation}
   \begin{gathered}
@@ -294,17 +295,17 @@ This article proposes that value theory usually best scopes ``Why" and ``What" a
 
 \section{Why a Goal?}
 
-``Why a Goal?" is usually best scoped using value systems because they are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
+\enquote{Why a Goal?} is usually best scoped using value systems because they are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
 
 \section{What Actions?}
 
-``What Actions?" is usually best scoped by prioritizing actions because actions usually have differing effect sizes and time is limited. It follows from the value system used to answer ``Why" that the same value system is used primarily to evaluate the priority of each action.
+\enquote{What Actions?} is usually best scoped by prioritizing actions because actions usually have differing effect sizes and time is limited. It follows from the value system used to answer \enquote{Why} that the same value system is used primarily to evaluate the priority of each action.
 
 This article proposes a method called Value-Based Prioritization which builds a quantitative prioritization model based on predicted effect sizes. Raw prioritization scores are further scaled by contextual factors such as implementation time, cost, risk, and other judgments.
 
 \section{How to do an Action?}
 
-Given answers to ``Why?" and ``What?", how to implement actions is usually best answered with the scientific method\cite{scientific-method}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
+Given answers to \enquote{Why?} and \enquote{What?}, how to implement actions is usually best answered with the scientific method\cite{scientific-method}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
 
 \section{Value-Based Prioritization}
 
@@ -391,7 +392,7 @@ The following example applies modeled value-based prioritization \eqref{modeled-
 First, outline the parameters:
 
 \begin{itemize}
-\item \eqref{value-system} $V = $ a value system which answers ``Why work?" with ``To reduce suffering" which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs/DALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
+\item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs/DALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
 \item \eqref{goal} $G(t) = $ eliminate human death.
 \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
 \item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
@@ -401,7 +402,7 @@ First, outline the parameters:
 \item \eqref{model-selection} $L(R(D(A))) = $ adjusted $r^2$.
 \end{itemize}
 
-$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By ``Year" And By ``ICD Sub-Chapter"; Check ``Export Results"; Uncheck ``Show Totals"}:
+$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
 
 \begin{equation*}
 \begin{gathered}
@@ -434,7 +435,7 @@ Review the list of actions and hypothesize scale functions. Examples:
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
 
-Create a table listing all actions as rows and all manually calculated scale functions as columns. For example:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns. For example\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S2}}:
 
 \begin{table}[H]
 \centering
@@ -442,8 +443,8 @@ Create a table listing all actions as rows and all manually calculated scale fun
 \toprule
 Action & $S_1$  & \ldots & $S_N$  \\
 \midrule
-$A_1$  & 0.1    &        &        \\
-$A_2$  &        &        & 0.25   \\
+$A_1$  & 0.1    &        & 1      \\
+$A_2$  & 1      &        & 0.25   \\
 \ldots &        &        &        \\
 $A_N$  & 0.99   &        & 0.9    \\
 \bottomrule
