@@ -16,7 +16,40 @@ def linear_regression(df, x, y, degree=1):
   data = {"x": df[x].values, "y": df[y].values}
   formula = "y ~ " + " + ".join("I(x**{})".format(i) for i in range(1, degree+1))
   print("Formula: {}".format(formula))
-  return statsmodels.formula.api.ols(formula, data).fit()
+  ols_result = statsmodels.formula.api.ols(formula, data).fit()
+  
+  # http://www.statsmodels.org/dev/regression.html
+  #
+  # aic, bic, bse, centered_tss, compare_f_test, compare_lm_test,
+  # compare_lr_test, condition_number, conf_int, conf_int_el, cov_HC0,
+  # cov_HC1, cov_HC2, cov_HC3, cov_kwds, cov_params, cov_type,
+  # df_model, df_resid, diagn, eigenvals, el_test, ess, f_pvalue,
+  # f_test, fittedvalues, fvalue, get_influence, get_prediction,
+  # get_robustcov_results, het_scale, initialize, k_constant, llf,
+  # load, model, mse_model, mse_resid, mse_total, nobs,
+  # normalized_cov_params, outlier_test, params, predict, pvalues,
+  # remove_data, resid, resid_pearson, rsquared, rsquared_adj, save,
+  # scale, ssr, summary, summary2, t_test, t_test_pairwise, tvalues,
+  # uncentered_tss, use_t, wald_test, wald_test_terms, wresid
+  
+  return ols_result
+
+# https://en.wikipedia.org/wiki/Normalization_(statistics)
+def normalize(nparray, min, max):
+  # (((element - min(nparray)) * (max - min)) / (max(nparray) - min(nparray))) + min
+  min_nparray = nparray.min()
+  max_nparray = nparray.max()
+  minmax_nparray_diff = max_nparray - min_nparray
+  minmaxdiff = max - min
+  # (((element - min_nparray) * minmaxdiff) / minmax_nparray_diff) + min
+  #return numpy.vectorize(lambda x: ((x - min_nparray) * minmaxdiff) / minmax_nparray_diff)(nparray) + min
+  # =>
+  # ((element * minmaxdiff) - (min_nparray * minmaxdiff)) / minmax_nparray_diff) + min
+  min_nparray_minmaxdiff = min_nparray * minmaxdiff
+  return numpy.vectorize(lambda x: (((x * minmaxdiff) - min_nparray_minmaxdiff) / minmax_nparray_diff) + min)(nparray)
+
+def normalize0to1(nparray):
+  return normalize(nparray, 0, 1)
 
 class DetailedErrorArgumentParser(argparse.ArgumentParser):
   def error(self, message):

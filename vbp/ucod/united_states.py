@@ -2,12 +2,16 @@ import sys
 import vbp
 import math
 import numpy
+import scipy
 import pandas
 import argparse
 import datetime
 import matplotlib
+import matplotlib.pyplot
 import matplotlib.offsetbox
 import statsmodels.tools
+import statsmodels.stats.api
+import statsmodels.stats.diagnostic
 import statsmodels.formula.api
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
@@ -65,12 +69,38 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       new_row["Year"] = i
       df = df.append(new_row, ignore_index=True)
     
-    df["ScaledYear"] = df["Year"].transform(lambda x: numpy.interp(x, (x.min(), x.max()), (min_scaled_domain, max_scaled_domain)))
+    df["ScaledYear"] = df["Year"].transform(vbp.normalize0to1)
     
-    print(df)
+    dfnoNaNs = df.dropna()
+    print(dfnoNaNs)
 
-    model = vbp.linear_regression(df, "ScaledYear", "Crude Rate", degree)
+    model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", degree)
     print(model.summary())
+    
+    predicted = model.fittedvalues.copy()
+    actual = dfnoNaNs["Crude Rate"].values.copy()
+    residuals = actual - predicted
+    
+    # Linearity hypothesis test
+    # http://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.linear_harvey_collier.html
+    #tvalue, pvalue = statsmodels.stats.api.linear_harvey_collier(model)
+    #print("tvalue={}, pvalue={}".format(tvalue, pvalue))
+    
+    # Residuals plot
+    #fig, ax = matplotlib.pyplot.subplots()
+    #ax.scatter(predicted, residuals)
+    #matplotlib.pyplot.show()
+    
+    # Normal probability plot
+    # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.probplot.html
+    #fig, ax = matplotlib.pyplot.subplots()
+    #(osm, osr), (slope, intercept, r) = scipy.stats.probplot(residuals, plot=ax, fit=True)
+    #print(r*r)
+    #matplotlib.pyplot.show()
+    
+    # https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html
+    lm, lm_pvalue, fvalue, f_pvalue = statsmodels.stats.diagnostic.het_breuschpagan(model.resid, model.model.exog)
+    print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
 
     ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(action), color = "red")
 
