@@ -9,7 +9,7 @@
 
 Prerequisites:
 
-    pip3 install numpy pandas matplotlib statsmodels
+    pip3 install numpy pandas matplotlib statsmodels scipy
 
 ### Usage
 

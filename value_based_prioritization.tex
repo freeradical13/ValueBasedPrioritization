@@ -399,10 +399,10 @@ First, outline the parameters:
 \item \eqref{modeled-future-time} $t_F = $ 5 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
 \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
 \item \eqref{prediction-models} $R(D(A)) = $ linear regression with one, two, and three degrees.
-\item \eqref{model-selection} $L(R(D(A))) = $ highest adjusted $r^2$, lowest log-likelihood, highest AIC, and highest BIC.
+\item \eqref{model-selection} $L(R(D(A))) = $ highest adjusted $r^2$ ($\bar{R^2}$), lowest log-likelihood, highest AIC, and highest BIC.
 \end{itemize}
 
-$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
 \begin{gathered}
@@ -418,12 +418,16 @@ A_{179}(t) = \textrm{Eliminate: Other disorders of ear}\\
 Review the list of actions and hypothesize scale functions. Examples:
 
 \begin{itemize}
-\item $S_1(A_i) = 1$: Required scale function.
-\item $S_2(A_i)$: Likelihood of Success. If primarily political then 0.1, else 1.
+\item $S_1(A_i) = 1$
+                \newline\newline
+                Required scale function.
+\item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+                \newline\newline
+                Essentially remove actions that are primarily political.
 \item $S_3(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
-\item $S_4(A_i) = \begin{cases}\text{0} & \mbox{if } L(R(D(A_i))) < 0.1 \\ \text{1} & \mbox{if } L(R(D(A_i))) \ge 0.1 \\ \end{cases}$
+\item $S_4(A_i) = \begin{cases}\text{0} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{if } \bar{R^2} \ge 0.1 \\ \end{cases}$
                 \newline\newline
                 Remove actions with poorly predicted $B(A_i(t_F))$.
 \item $S_5(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
@@ -435,7 +439,7 @@ Review the list of actions and hypothesize scale functions. Examples:
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns. For example\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S2}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns. For example\footnote{\texttt{python -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S2}}:
 
 \begin{table}[H]
 \centering

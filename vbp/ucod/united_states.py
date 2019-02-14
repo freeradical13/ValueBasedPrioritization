@@ -77,9 +77,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", degree)
     print(model.summary())
     
-    predicted = model.fittedvalues.copy()
-    actual = dfnoNaNs["Crude Rate"].values.copy()
-    residuals = actual - predicted
+    #predicted = model.fittedvalues.copy()
+    #actual = dfnoNaNs["Crude Rate"].values.copy()
+    #residuals = actual - predicted
     
     # Linearity hypothesis test
     # http://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.linear_harvey_collier.html
@@ -98,6 +98,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     #print(r*r)
     #matplotlib.pyplot.show()
     
+    # Breusch-Pagan Lagrange Multiplier test for heteroscedasticity
     # https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html
     lm, lm_pvalue, fvalue, f_pvalue = statsmodels.stats.diagnostic.het_breuschpagan(model.resid, model.model.exog)
     print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
