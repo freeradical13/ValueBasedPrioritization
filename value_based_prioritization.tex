@@ -428,25 +428,28 @@ Review the list of actions and hypothesize scale functions. Examples:
 \item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{if } \bar{R^2} \ge 0.1 \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions with poorly predicted $B(A_i(t_F))$.
-\item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
+\item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if } p(F) > 0.05 \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
-                Essentially remove actions with heteroscedastic $M(A(t))$ (using the Breusch-Pagan Lagrange Multiplier test).
-\item $S_4(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
+                Essentially remove actions whose $M(A_i(t))$ p-value of the F-statistic of the fully specified model is not statistically significant. Calculated as the mean squared error of the model divided by the mean squared error of the residuals\footnote{\url{https://www.statsmodels.org/devel/generated/statsmodels.regression.linear_model.RegressionResults.html}}.
+\item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
+                \newline\newline
+                Essentially remove actions with heteroscedastic $M(A_i(t))$: Heteroscedastic if the p-value of the Breusch-Pagan Lagrange Multiplier test is $< 0.05$\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html}}.
+\item $S_5(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
-\item $S_5(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
+\item $S_6(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
                 \newline\newline
-                $f(A) = M'(A(t_F)), a=0.5, b=1$
+                $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
                 \newline\newline
-                Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A)$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$.
-\item $S_6(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+                Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$.
+\item $S_7(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions that are primarily political.
 \end{itemize}
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_6(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S6}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_7(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S7}}:
 
 \begin{table}[H]
 \centering
@@ -464,7 +467,7 @@ $A_N$  & 0.99   &        & 0.9    \\
 \label{table:scaletable}
 \end{table}
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}). For example, for \textit{Malignant neoplasms}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}). For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
 
 \begin{table}[H]
 \centering
@@ -484,31 +487,31 @@ Year    & Crude Rate \\
 Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{fig:neoplasmregs} for ordinary least squares linear regressions with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms" -d -m 1 -x 4 --do-not-obfuscate -p 5}}.
 
 \begin{figure}
-    \centering
-    \begin{subfigure}[b]{0.4\textwidth}
-        \includegraphics[width=\textwidth]{Malignant_neoplasms_1.png}
-        \caption{1 degree}
-        \label{fig:deg1}
-    \end{subfigure}
-    ~
-    \begin{subfigure}[b]{0.4\textwidth}
-        \includegraphics[width=\textwidth]{Malignant_neoplasms_2.png}
-        \caption{2 degrees}
-        \label{fig:deg2}
-    \end{subfigure}
+  \centering
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_1.png}
+    \caption{1 degree}
+    \label{fig:deg1}
+  \end{subfigure}
 
-    \begin{subfigure}[b]{0.4\textwidth}
-        \includegraphics[width=\textwidth]{Malignant_neoplasms_3.png}
-        \caption{3 degrees}
-        \label{fig:deg3}
-    \end{subfigure}
-    ~
-    \begin{subfigure}[b]{0.4\textwidth}
-        \includegraphics[width=\textwidth]{Malignant_neoplasms_4.png}
-        \caption{4 degrees}
-        \label{fig:deg4}
-    \end{subfigure}
-    \caption{Ordinary least squares linear regression with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_2.png}
+    \caption{2 degrees}
+    \label{fig:deg2}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_3.png}
+    \caption{3 degrees}
+    \label{fig:deg3}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.4\textwidth}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_4.png}
+    \caption{4 degrees}
+    \label{fig:deg4}
+  \end{subfigure}
+  \caption{Ordinary least squares linear regression with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
 \end{figure}
 
 %%%%%%%%%%%%%%
