@@ -428,7 +428,7 @@ Review the list of actions and hypothesize scale functions. Examples:
                 Essentially remove actions with poorly predicted $B(A_i(t_F))$.
 \item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
                 \newline\newline
-                Essentially remove actions with heteroscedastic $M(A(t))$.
+                Essentially remove actions with heteroscedastic $M(A(t))$ (using the Breusch-Pagan Lagrange Multiplier test).
 \item $S_4(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
@@ -462,20 +462,20 @@ $A_N$  & 0.99   &        & 0.9    \\
 \label{table:scaletable}
 \end{table}
 
-$D(A)$ for each action is the time-series data of number of deaths per year. For example, for \textit{Malignant neoplasms}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}). For example, for \textit{Malignant neoplasms}:
 
 \begin{table}[H]
 \centering
 \begin{tabular}{ccc}
 \toprule
-Year    & Deaths \\
+Year    & Crude Rate \\
 \midrule
-1999    & 549838 \\
-\ldots  & \ldots \\
-2017    & 599108 \\
+1999    &      197.0 \\
+\ldots  & \ldots     \\
+2017    &      183.9 \\
 \bottomrule
 \end{tabular}
-\caption{Deaths per year for \textit{Malignant neoplasms}}
+\caption{Crude rate of deaths per year for \textit{Malignant neoplasms}}
 \label{table:daa1}
 \end{table}
 
