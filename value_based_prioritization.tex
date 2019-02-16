@@ -419,13 +419,13 @@ A_{179}(t) = \textrm{Eliminate: Other disorders of ear}\\
 \end{gathered}
 \end{equation*}
 
-Review the list of actions and hypothesize scale functions. Examples:
+Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_actions UnderlyingCausesOfDeathUnitedStates}} and hypothesize scale functions. Examples:
 
 \begin{itemize}
 \item $S_1(A_i) = 1$
                 \newline\newline
                 Required scale function.
-\item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{if } \bar{R^2} \ge 0.1 \\ \end{cases}$
+\item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions with poorly predicted $B(A_i(t_F))$.
 \item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if } p(F) > 0.05 \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
@@ -441,7 +441,7 @@ Review the list of actions and hypothesize scale functions. Examples:
                 \newline\newline
                 $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
                 \newline\newline
-                Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$.
+                Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$ relative to other actions.
 \item $S_7(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions that are primarily political.
@@ -467,7 +467,7 @@ $A_N$  & 0.99   &        & 0.9    \\
 \label{table:scaletable}
 \end{table}
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}). For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
 
 \begin{table}[H]
 \centering

@@ -16,32 +16,36 @@ import statsmodels.formula.api
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def initialize_parser(self, parser):
-    parser.add_argument("cause", nargs="?", help="ICD Sub-Chapter")
+    parser.add_argument("cause", nargs="*", help="ICD Sub-Chapter")
     parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
     parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
-    parser.add_argument("-d", "--hide", action="store_true", help="hide graphs", default=False)
+    parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
+    parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
+    parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
+    parser.set_defaults(
+      show_graphs=False,
+    )
 
   def run_load(self):
     df = pandas.read_csv(
           self.options.file,
           sep="\t",
-          usecols=["Year", "ICD Sub-Chapter", "ICD Sub-Chapter Code", "Deaths", "Population", "Crude Rate"],
+          usecols=["Year", "ICD Sub-Chapter", "ICD Sub-Chapter Code", "Deaths", "Population"],
           na_values=["Unreliable"],
           parse_dates=[0]
         ).dropna(how="all")
     df.rename(columns = {"Year": "Date"}, inplace=True)
     df["Year"] = df["Date"].dt.year
+    # https://wonder.cdc.gov/wonder/help/cmf.html#Frequently%20Asked%20Questions%20about%20Death%20Rates
+    df["Crude Rate"] = (df.Deaths / df.Population) * 100000.0
     return df
 
   def get_action_column_name(self):
     return "ICD Sub-Chapter"
   
   def run_predict(self):
-    if self.options.cause is None:
-      raise ValueError("Cause must be supplied. See -h for usage.")
-    
     r_data = {
       "AdjustedR2": {},
       "ProbFStatistic": {},
@@ -52,8 +56,18 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       "Formula": {},
     }
     
-    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-      self.create_plot(self.options.cause, i, self.options.predict, r_data)
+    causes = self.options.cause
+    if causes is None or len(causes) == 0:
+      causes = self.get_possible_actions()
+    
+    for cause in causes:
+      try:
+        for i in range(self.options.min_degrees, self.options.max_degrees + 1):
+          self.create_plot(cause, i, self.options.predict, r_data)
+      except:
+        e = sys.exc_info()[0]
+        print("Error {} processing {}".format(e, cause))
+        break
     
     r = pandas.DataFrame(r_data)
     r.index.rename(["Action", "Degree"], inplace=True)
@@ -85,11 +99,13 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     df["ScaledYear"] = df["Year"].transform(vbp.normalize0to1)
     
     dfnoNaNs = df.dropna()
-    print(dfnoNaNs)
+    if self.options.verbose:
+      print(dfnoNaNs)
 
     formula = vbp.linear_regression_formula(degree)
     model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", formula)
-    print(model.summary())
+    if self.options.verbose:
+      print(model.summary())
     
     r_data["AdjustedR2"][(self.get_obfuscated_name(action), degree)] = model.rsquared_adj
     r_data["ProbFStatistic"][(self.get_obfuscated_name(action), degree)] = model.f_pvalue
@@ -105,7 +121,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     # Linearity hypothesis test
     # http://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.linear_harvey_collier.html
     #tvalue, pvalue = statsmodels.stats.api.linear_harvey_collier(model)
-    #print("tvalue={}, pvalue={}".format(tvalue, pvalue))
+    #if self.options.verbose:
+    #  print("tvalue={}, pvalue={}".format(tvalue, pvalue))
     
     # Residuals plot
     #fig, ax = matplotlib.pyplot.subplots()
@@ -116,13 +133,15 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.probplot.html
     #fig, ax = matplotlib.pyplot.subplots()
     #(osm, osr), (slope, intercept, r) = scipy.stats.probplot(residuals, plot=ax, fit=True)
-    #print(r*r)
+    #if self.options.verbose:
+    #  print(r*r)
     #matplotlib.pyplot.show()
     
     # Breusch-Pagan Lagrange Multiplier test for heteroscedasticity
     # https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html
     lm, lm_pvalue, fvalue, f_pvalue = statsmodels.stats.diagnostic.het_breuschpagan(model.resid, model.model.exog)
-    print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
+    if self.options.verbose:
+      print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
     r_data["BreuschPagan"][(self.get_obfuscated_name(action), degree)] = f_pvalue
 
     ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), color = "red")
@@ -132,7 +151,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     end -= 1
     predicted = func(max_scaled_domain)
-    print("Predicted in {} years ({}): {}".format(predict, end, predicted))
+    if self.options.verbose:
+      print("Predicted in {} years ({}): {}".format(predict, end, predicted))
     matplotlib.pyplot.plot([end], [predicted], "cD") # https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html
     
     ax.add_artist(matplotlib.offsetbox.AnchoredText("$x^{}$; $\\barR^2$ = {:0.3f}".format(degree, model.rsquared_adj), loc="upper center"))
@@ -146,5 +166,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     cleaned_title = self.get_obfuscated_name(action).replace(" ", "_").replace("(", "").replace(")", "")
     matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(cleaned_title, degree)), dpi=100)
     df.to_csv(self.create_output_name("{}.csv").format(cleaned_title))
-    if not self.options.hide:
+    
+    if self.options.show_graphs:
       matplotlib.pyplot.show()
+      
+    matplotlib.pyplot.close(fig)
