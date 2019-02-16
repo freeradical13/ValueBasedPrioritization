@@ -35,19 +35,32 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     df["Year"] = df["Date"].dt.year
     return df
 
+  def get_action_column_name(self):
+    return "ICD Sub-Chapter"
+  
   def run_predict(self):
     if self.options.cause is None:
       raise ValueError("Cause must be supplied. See -h for usage.")
-    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-      self.create_plot(self.options.cause, i, self.options.predict)
-
-  def run_get_possible_actions(self):
-    return self.data["ICD Sub-Chapter"].unique()
-
-  def run_get_action_data(self, action):
-    return self.data[self.data["ICD Sub-Chapter"] == action]
     
-  def create_plot(self, action, degree, predict):
+    r_data = {
+      "AdjustedR2": {},
+      "ProbFStatistic": {},
+      "LogLikelihood": {},
+      "AIC": {},
+      "BIC": {},
+      "BreuschPagan": {},
+      "Formula": {},
+    }
+    
+    for i in range(self.options.min_degrees, self.options.max_degrees + 1):
+      self.create_plot(self.options.cause, i, self.options.predict, r_data)
+    
+    r = pandas.DataFrame(r_data)
+    r.index.rename(["Action", "Degree"], inplace=True)
+    print(r)
+    r.to_csv(self.create_output_name("r.csv"))
+
+  def create_plot(self, action, degree, predict, r_data):
     df = self.run_get_action_data(action)
     max_year = df.Year.values[-1]
     
@@ -74,8 +87,16 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     dfnoNaNs = df.dropna()
     print(dfnoNaNs)
 
-    model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", degree)
+    formula = vbp.linear_regression_formula(degree)
+    model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", formula)
     print(model.summary())
+    
+    r_data["AdjustedR2"][(self.get_obfuscated_name(action), degree)] = model.rsquared_adj
+    r_data["ProbFStatistic"][(self.get_obfuscated_name(action), degree)] = model.f_pvalue
+    r_data["LogLikelihood"][(self.get_obfuscated_name(action), degree)] = model.llf
+    r_data["AIC"][(self.get_obfuscated_name(action), degree)] = model.aic
+    r_data["BIC"][(self.get_obfuscated_name(action), degree)] = model.bic
+    r_data["Formula"][(self.get_obfuscated_name(action), degree)] = vbp.linear_regression_modeled_formula(model, degree)
     
     #predicted = model.fittedvalues.copy()
     #actual = dfnoNaNs["Crude Rate"].values.copy()
@@ -102,8 +123,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     # https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html
     lm, lm_pvalue, fvalue, f_pvalue = statsmodels.stats.diagnostic.het_breuschpagan(model.resid, model.model.exog)
     print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
+    r_data["BreuschPagan"][(self.get_obfuscated_name(action), degree)] = f_pvalue
 
-    ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(action), color = "red")
+    ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), color = "red")
 
     func = numpy.polynomial.Polynomial(model.params)
     matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), color="blue")
@@ -121,8 +143,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%d"))
     #fig.set_size_inches(10, 5)
     matplotlib.pyplot.tight_layout()
-    cleaned_title = action.replace(" ", "_").replace("(", "").replace(")", "")
-    matplotlib.pyplot.savefig("{}_{}.png".format(cleaned_title, degree), dpi=100)
-    df.to_csv("{}.csv".format(cleaned_title))
+    cleaned_title = self.get_obfuscated_name(action).replace(" ", "_").replace("(", "").replace(")", "")
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(cleaned_title, degree)), dpi=100)
+    df.to_csv(self.create_output_name("{}.csv").format(cleaned_title))
     if not self.options.hide:
       matplotlib.pyplot.show()

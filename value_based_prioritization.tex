@@ -24,6 +24,8 @@
 \renewcommand*{\thefootnote}{\roman{footnote}} % Use symbols for footnotes
 \renewcommand*{\bibfont}{\raggedright}
 \usepackage{float}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -392,17 +394,17 @@ The following example applies modeled value-based prioritization \eqref{modeled-
 First, outline the parameters:
 
 \begin{itemize}
-\item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs/DALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
+\item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
 \item \eqref{goal} $G(t) = $ eliminate human death.
 \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
 \item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
 \item \eqref{modeled-future-time} $t_F = $ 5 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
 \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
-\item \eqref{prediction-models} $R(D(A)) = $ linear regression with one, two, and three degrees.
+\item \eqref{prediction-models} $R(D(A)) = $ ordinary least squares linear regression with one, two, three, and four degrees.
 \item \eqref{model-selection} $L(R(D(A))) = $ highest adjusted $r^2$ ($\bar{R^2}$), lowest log-likelihood, highest AIC, and highest BIC.
 \end{itemize}
 
-$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
+$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
 \begin{gathered}
@@ -421,25 +423,28 @@ Review the list of actions and hypothesize scale functions. Examples:
 \item $S_1(A_i) = 1$
                 \newline\newline
                 Required scale function.
-\item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+\item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{if } \bar{R^2} \ge 0.1 \\ \end{cases}$
                 \newline\newline
-                Essentially remove actions that are primarily political.
-\item $S_3(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
+                Essentially remove actions with poorly predicted $B(A_i(t_F))$.
+\item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
+                \newline\newline
+                Essentially remove actions with heteroscedastic $M(A(t))$.
+\item $S_4(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
-\item $S_4(A_i) = \begin{cases}\text{0} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{if } \bar{R^2} \ge 0.1 \\ \end{cases}$
-                \newline\newline
-                Remove actions with poorly predicted $B(A_i(t_F))$.
 \item $S_5(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
                 \newline\newline
                 $f(A) = M'(A(t_F)), a=0.5, b=1$
                 \newline\newline
                 Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A)$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$.
+\item $S_6(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+                \newline\newline
+                Essentially remove actions that are primarily political.
 \end{itemize}
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns. For example\footnote{\texttt{python -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S2}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the scale functions above, this is only $S_6(A_i)$}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S6}}:
 
 \begin{table}[H]
 \centering
@@ -453,11 +458,11 @@ $A_2$  & 1      &        & 0.25   \\
 $A_N$  & 0.99   &        & 0.9    \\
 \bottomrule
 \end{tabular}
-\caption{Example scale function table}
+\caption{Theoretical scale function table}
 \label{table:scaletable}
 \end{table}
 
-$D(A)$ for each action is the time-series data of number of deaths per year. For example, for $A_1(t)$:
+$D(A)$ for each action is the time-series data of number of deaths per year. For example, for \textit{Malignant neoplasms}:
 
 \begin{table}[H]
 \centering
@@ -470,9 +475,39 @@ Year    & Deaths \\
 2017    & 599108 \\
 \bottomrule
 \end{tabular}
-\caption{Deaths per year for $A_1(t)$}
+\caption{Deaths per year for \textit{Malignant neoplasms}}
 \label{table:daa1}
 \end{table}
+
+Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{fig:neoplasmregs} for ordinary least squares linear regressions with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms" -d -m 1 -x 4 --do-not-obfuscate -p 5}}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{Malignant_neoplasms_1.png}
+        \caption{1 degree}
+        \label{fig:deg1}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{Malignant_neoplasms_2.png}
+        \caption{2 degrees}
+        \label{fig:deg2}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{Malignant_neoplasms_3.png}
+        \caption{3 degrees}
+        \label{fig:deg3}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{Malignant_neoplasms_4.png}
+        \caption{4 degrees}
+        \label{fig:deg4}
+    \end{subfigure}
+    \caption{Ordinary least squares linear regression with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
+\end{figure}
 
 %%%%%%%%%%%%%%
 % References %

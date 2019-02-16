@@ -1,10 +1,9 @@
 value_based_prioritization.bib
-*.png
-*.csv
 *xslx*
 *.pyc
 __pycache__
 work
+/output
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
