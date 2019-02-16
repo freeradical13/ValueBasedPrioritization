@@ -154,3 +154,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def create_output_name(self, name):
     return os.path.join(self.options.output_dir, name)
+
+def print_full_columns(df):
+  with pandas.option_context("display.max_columns", None):
+    with pandas.option_context("display.max_colwidth", sys.maxsize):
+      print(df)
+

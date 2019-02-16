@@ -57,7 +57,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     r = pandas.DataFrame(r_data)
     r.index.rename(["Action", "Degree"], inplace=True)
-    print(r)
+    vbp.print_full_columns(r)
     r.to_csv(self.create_output_name("r.csv"))
 
   def create_plot(self, action, degree, predict, r_data):
