@@ -10,11 +10,12 @@ import datetime
 import traceback
 import matplotlib
 import matplotlib.pyplot
-import matplotlib.offsetbox
 import statsmodels.tools
+import matplotlib.offsetbox
 import statsmodels.stats.api
-import statsmodels.stats.diagnostic
 import statsmodels.formula.api
+import statsmodels.stats.diagnostic
+import statsmodels.tools.eval_measures
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def initialize_parser(self, parser):
@@ -26,6 +27,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
     parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
     parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
+    parser.add_argument("-l", "--model", choices=["lowest_aic", "lowest_aicc", "lowest_bic", "highest_log_likelihood"], help="Best fitting model algorithm", default="lowest_aicc")
     parser.add_argument("--debug", action="store_true", help="Debus", default=False)
     parser.set_defaults(
       show_graphs=False,
@@ -54,6 +56,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       "ProbFStatistic": {},
       "LogLikelihood": {},
       "AIC": {},
+      "AICc": {},
       "BIC": {},
       "BreuschPagan": {},
       "Formula": {},
@@ -120,37 +123,18 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     if self.options.debug:
       r.to_pickle(self.create_output_name("data.pkl"))
-  
+      
   def best_fitting_model(self, df):
     if self.options.verbose:
       print("Incoming:\n{}\n".format(df))
       
-    found = False
-
-    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
-    if not tmp.empty:
-      df = tmp
-      tmp = df[(df.LogLikelihood == df.LogLikelihood.min()) & (df.AIC == df.AIC.max()) & (df.BIC == df.BIC.max())]
-      if not tmp.empty:
-        df = tmp
-        found = True
-    
-    # If we didn't find anything, then be a bit more lenient on
-    # ProbFStatistic and BreuschPagan (we'll scale down by those
-    # later)
-    if not found:
-      tmp = df[(df.LogLikelihood == df.LogLikelihood.min()) & (df.AIC == df.AIC.max()) & (df.BIC == df.BIC.max())]
-      if not tmp.empty:
-        df = tmp
-        found = True
-    
-    if not found:
-      # If there is no row which has the lowest LogLikelihood, highest
-      # AIC and highest BIC, then just take the linear model
+    fit_result = getattr(self, "best_fitting_model_{}".format(self.options.model))(df)
+    if fit_result is not None and len(fit_result) == 1:
+      df = fit_result
+      df["S5"] = 1.0
+    else:
       df = df[df.index.get_level_values(1) == 1]
       df["S5"] = 0.1
-    else:
-      df["S5"] = 1.0
       
     df.reset_index(level=0, drop=True, inplace=True)
     
@@ -159,6 +143,66 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       
     return df
 
+  def best_fitting_model_lowest_aic(self, df):
+    result = None
+
+    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
+    if not tmp.empty:
+      tmp = tmp[tmp.AIC == tmp.AIC.min()]
+      if not tmp.empty:
+        result = tmp
+    
+    if result is None:
+      tmp = df[df.AIC == df.AIC.min()]
+      if not tmp.empty:
+        result = tmp
+        
+    return result
+  
+  def best_fitting_model_lowest_aicc(self, df):
+    result = None
+
+    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
+    if not tmp.empty:
+      tmp = tmp[tmp.AICc == tmp.AICc.min()]
+      if not tmp.empty:
+        result = tmp
+    
+    if result is None:
+      tmp = df[df.AICc == df.AICc.min()]
+      if not tmp.empty:
+        result = tmp
+        
+    return result
+  
+  def best_fitting_model_lowest_bic(self, df):
+    result = None
+
+    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
+    if not tmp.empty:
+      tmp = tmp[tmp.BIC == tmp.BIC.min()]
+      if not tmp.empty:
+        result = tmp
+    
+    if result is None:
+      tmp = df[df.BIC == df.BIC.min()]
+      if not tmp.empty:
+        result = tmp
+        
+    return result
+  
+  def best_fitting_model_highest_log_likelihood(self, df):
+    result = None
+
+    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
+    if not tmp.empty:
+      result = tmp[tmp.LogLikelihood == tmp.LogLikelihood.max()]
+    
+    if result is None:
+      result = df[df.LogLikelihood == df.LogLikelihood.max()]
+        
+    return result
+    
   def create_model(self, action, degree, predict, r_data, i, count):
     df = self.run_get_action_data(action)
     df = df.reset_index()
@@ -198,6 +242,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     r_data["AIC"][(self.get_obfuscated_name(action), degree)] = model.aic
     r_data["BIC"][(self.get_obfuscated_name(action), degree)] = model.bic
     r_data["Formula"][(self.get_obfuscated_name(action), degree)] = vbp.linear_regression_modeled_formula(model, degree)
+    
+    r_data["AICc"][(self.get_obfuscated_name(action), degree)] = statsmodels.tools.eval_measures.aicc(model.llf, model.nobs, degree + 1)
     
     predicted_values = model.fittedvalues.copy()
     actual = dfnoNaNs["Crude Rate"].values.copy()

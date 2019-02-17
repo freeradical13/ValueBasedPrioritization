@@ -245,6 +245,13 @@
   note         = {\url{https://apps.who.int/iris/bitstream/handle/10665/246208/9789241549165-V1-eng.pdf}},
 }
 
+@article{anderson2004model,
+  title        = {Model selection and multi-model inference},
+  author       = {Anderson, DR and Burnham, K},
+  journal      = {Second. NY: Springer-Verlag},
+  year         = {2004},
+}
+
 @article{burnham2004multimodel,
   title        = {Multimodel inference: understanding AIC and BIC in model selection},
   author       = {Burnham, Kenneth P and Anderson, David R},
@@ -256,6 +263,14 @@
   publisher    = {Sage Publications Sage CA: Thousand Oaks, CA},
   doi          = {10.1177/0049124104268644},
   note         = {\url{http://www.sortie-nd.org/lme/Statistical\%20Papers/Burnham_and_Anderson_2004_Multimodel_Inference.pdf}},
+}
+
+@book{berk2004regression,
+  title        = {Regression analysis: A constructive critique},
+  author       = {Berk, Richard A},
+  volume       = {11},
+  year         = {2004},
+  publisher    = {Sage},
 }
 
 \end{filecontents}
@@ -385,7 +400,7 @@ D(A) = \\
 \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. linear regression with different degrees):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. linear regression with different degrees\cite{berk2004regression}):
 
 \begin{equation}\label{prediction-models}
 \begin{multlined}
@@ -394,7 +409,7 @@ R(D(A)) =\\
 \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. adjusted $r^2$, log-likelihood, AIC, BIC, ANOVA, cross-validation, etc.).
+The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. Akaike's Information Criterion [AIC], Corrected AIC [AICc], Bayesian Information Criterion [BIC], etc.).
 
 For each action, the \textbf{best fitting model} $M(A(t))$ is selected from $R(D(A))$ using $L(R(D(A)))$.
 
@@ -416,7 +431,7 @@ First, outline the parameters:
 \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
 \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
 \item \eqref{prediction-models} $R(D(A)) = $ ordinary least squares linear regression with one, two, three, and four degrees.
-\item \eqref{model-selection} $L(R(D(A))) = $ lowest log-likelihood, highest Akaike’s Information Criteria (AIC), and highest Bayes' Information Criteria (BIC).
+\item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
 $A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
@@ -449,7 +464,7 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_action
                 Essentially remove actions with heteroscedastic $M(A_i(t))$: Heteroscedastic if the p-value of the Breusch-Pagan Lagrange Multiplier test is $< 0.05$\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html}}.
 \item $S_5(A_i) = \begin{cases}\text{0.1} & \mbox{if no best model} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
-                Essentially remove actions which don't have a model that has the lowest log-likelihood, highest AIC, and highest BIC.
+                Essentially remove actions which don't have a model that has the lowest AICc.
 \item $S_6(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
@@ -550,7 +565,7 @@ Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{f
   \caption{Ordinary least squares linear regression with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
 \end{figure}
 
-For each model, calculate the p-value of the F-statistic, $\bar{R^2}$, log-likelihood, AIC, BIC, and the Breusch-Pagan Lagrange Multiplier test. Filter out models whose p-value of the F-statistic is $> 0.05$ or p-value of Breusch-Pagan is $< 0.05$ and choose the model that has the lowest log-likelihood, highest AIC, and highest BIC. If no models are found, perform the same procedure independent of the p-value tests (the scale functions $S_2(A_i)$ and $S_3(A_i)$ will scale down the chosen model later). If no models are found, choose the degree-1 regression based on the assumption that most disease trends do not tend to change in higher-order ways.
+For each model, calculate the p-value of the F-statistic, $\bar{R^2}$, AICc, and the Breusch-Pagan Lagrange Multiplier test. Filter out models whose p-value of the F-statistic is $> 0.05$ or p-value of Breusch-Pagan is $< 0.05$ and choose the model that has the lowest AICc. If no models are found, perform the same procedure independent of the p-value tests (the scale functions $S_2(A_i)$ and $S_3(A_i)$ will scale down the chosen model later). If no models are found, choose the degree-1 regression based on the assumption that most disease trends do not tend to change in higher-order ways.
 
 For each model, calculate the predicted value for $t_F$ (setting negative values to 0).
 
