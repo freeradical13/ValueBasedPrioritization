@@ -470,6 +470,8 @@ $A_N$  & 0.99   &        & 0.9    \\
 \label{table:scaletable}
 \end{table}
 
+Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
+
 $D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
 
 \begin{table}[H]

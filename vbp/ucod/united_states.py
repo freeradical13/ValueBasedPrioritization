@@ -7,6 +7,7 @@ import pandas
 import pprint
 import argparse
 import datetime
+import traceback
 import matplotlib
 import matplotlib.pyplot
 import matplotlib.offsetbox
@@ -72,8 +73,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
         for i in range(self.options.min_degrees, self.options.max_degrees + 1):
           self.create_model(cause, i, self.options.predict, r_data)
       except:
-        e = sys.exc_info()[0]
-        print("Error {} processing {}".format(e, cause))
+        traceback.print_exc()
         break
     
     if self.options.verbose:
@@ -200,9 +200,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     r_data["BIC"][(self.get_obfuscated_name(action), degree)] = model.bic
     r_data["Formula"][(self.get_obfuscated_name(action), degree)] = vbp.linear_regression_modeled_formula(model, degree)
     
-    #predicted_values = model.fittedvalues.copy()
-    #actual = dfnoNaNs["Crude Rate"].values.copy()
-    #residuals = actual - predicted_values
+    predicted_values = model.fittedvalues.copy()
+    actual = dfnoNaNs["Crude Rate"].values.copy()
+    residuals = actual - predicted_values
     
     # Linearity hypothesis test
     # http://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.linear_harvey_collier.html
@@ -211,10 +211,14 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     #  print("tvalue={}, pvalue={}".format(tvalue, pvalue))
     
     # Residuals plot
-    #fig, ax = matplotlib.pyplot.subplots()
-    #ax.scatter(predicted_values, residuals)
+    fig, ax = matplotlib.pyplot.subplots()
+    ax.scatter(predicted_values, residuals)
+    ax.set_title("Residuals of {} ($x^{}$)".format(self.get_obfuscated_name(action), degree))
+    matplotlib.pyplot.tight_layout()
     #matplotlib.pyplot.show()
-    
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_residuals.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
+    matplotlib.pyplot.close(fig)
+
     # Normal probability plot
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.probplot.html
     #fig, ax = matplotlib.pyplot.subplots()
@@ -252,9 +256,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%d"))
     #fig.set_size_inches(10, 5)
     matplotlib.pyplot.tight_layout()
-    cleaned_title = self.get_obfuscated_name(action).replace(" ", "_").replace("(", "").replace(")", "")
-    matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(cleaned_title, degree)), dpi=100)
-    df.to_csv(self.create_output_name("{}.csv").format(cleaned_title))
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
+    df.to_csv(self.create_output_name("{}.csv").format(self.get_obfuscated_name(action)))
     
     if self.options.show_graphs:
       matplotlib.pyplot.show()
