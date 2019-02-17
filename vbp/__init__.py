@@ -175,6 +175,23 @@ class DataSource(object, metaclass=abc.ABCMeta):
                .replace("?", "_") \
                .replace("*", "_")
     return os.path.join(self.options.output_dir, name)
+  
+  def write_spreadsheet(self, df, name):
+    df.to_csv(self.create_output_name(name + ".csv"))
+    
+    writer = pandas.ExcelWriter(self.create_output_name(name + ".xlsx"), engine="xlsxwriter")
+    df.to_excel(writer)
+    writer.save()
+  
+  def write_verbose(self, file, obj):
+    s = str(obj)
+    self.write(file, s)
+    if self.options.verbose:
+      print(s)
+
+  def write(self, file, str):
+    with open(self.create_output_name(file), "w") as f:
+      f.write(str)
 
 def print_full_columns(df):
   with pandas.option_context("display.max_columns", None):

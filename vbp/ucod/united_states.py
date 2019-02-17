@@ -22,7 +22,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
-    parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=5)
+    parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
     parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
     parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
@@ -65,16 +65,19 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     if causes is None or len(causes) == 0:
       causes = self.get_possible_actions()
       
+    count = len(causes)
     if self.options.verbose:
-      print("{} actions".format(len(causes)))
+      print("{} actions".format(count))
     
+    i = 1
     for cause in causes:
       try:
         for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-          self.create_model(cause, i, self.options.predict, r_data)
+          self.create_model(cause, i, self.options.predict, r_data, i, count)
       except:
         traceback.print_exc()
         break
+      i += 1
     
     if self.options.verbose:
       print("Result actions: {}".format(len(r_data["AdjustedR2"])))
@@ -82,6 +85,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     r = pandas.DataFrame(r_data)
     r.index.rename(["Action", "Degree"], inplace=True)
+    self.write_spreadsheet(r, "r_raw")
     
     if self.options.verbose:
       print("Actions = {}".format(len(r.groupby("Action"))))
@@ -112,7 +116,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     r.reset_index(level=1, inplace=True) # drop=True to suppress adding Degree to the column
     vbp.print_full_columns(r)
     
-    r.to_csv(self.create_output_name("r.csv"))
+    self.write_spreadsheet(r, "r")
     
     if self.options.debug:
       r.to_pickle(self.create_output_name("data.pkl"))
@@ -142,9 +146,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     if not found:
       # If there is no row which has the lowest LogLikelihood, highest
-      # AIC and highest BIC, then just take the row with the highest
-      # AdjustedR2
-      df = df[df.AdjustedR2 == df.AdjustedR2.max()]
+      # AIC and highest BIC, then just take the linear model
+      df = df[df.index.get_level_values(1) == 1]
       df["S5"] = 0.1
     else:
       df["S5"] = 1.0
@@ -156,11 +159,10 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       
     return df
 
-  def create_model(self, action, degree, predict, r_data):
+  def create_model(self, action, degree, predict, r_data, i, count):
     df = self.run_get_action_data(action)
     
-    if self.options.verbose:
-      print("Action data {} for {} / {}:\n{}".format(len(r_data["AdjustedR2"]), action, self.get_obfuscated_name(action), df))
+    print("Creating model for action: {}, degrees: {}, {} of {}".format(self.get_obfuscated_name(action), degree, i, count))
       
     max_year = df.Year.values[-1]
     
@@ -190,8 +192,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
     formula = vbp.linear_regression_formula(degree)
     model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", formula)
-    if self.options.verbose:
-      print(model.summary())
+    self.write_verbose("{}_{}.txt".format(self.get_obfuscated_name(action), degree), model.summary())
     
     r_data["AdjustedR2"][(self.get_obfuscated_name(action), degree)] = model.rsquared_adj
     r_data["ProbFStatistic"][(self.get_obfuscated_name(action), degree)] = model.f_pvalue
