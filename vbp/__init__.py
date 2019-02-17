@@ -23,7 +23,7 @@ def linear_regression(df, x, y, formula):
   data = {"x": df[x].values, "y": df[y].values}
 
   # https://www.statsmodels.org/dev/regression.html
-  # https://www.statsmodels.org/devel/generated/statsmodels.regression.linear_model.RegressionResults.html#statsmodels.regression.linear_model.RegressionResults
+  # https://www.statsmodels.org/devel/generated/statsmodels.regression.linear_model.RegressionResults.html
   # https://www.statsmodels.org/devel/generated/statsmodels.regression.linear_model.OLSResults.html
   ols_result = statsmodels.formula.api.ols(formula, data).fit()
 
@@ -67,7 +67,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
   ##############
   obfuscated_column_name = "Action"
   obfuscated_action_names = {}
-  cached_obfuscation_range = None
+  available_obfuscated_names = None
 
   #######################
   # Main Public Methods #
@@ -143,9 +143,12 @@ class DataSource(object, metaclass=abc.ABCMeta):
       return str
     result = self.obfuscated_action_names.get(str)
     if result is None:
-      if self.cached_obfuscation_range is None:
-        self.cached_obfuscation_range = len(self.get_possible_actions())
-      result = "{}{}".format(self.obfuscated_column_name, random.randint(1, self.cached_obfuscation_range))
+      if self.available_obfuscated_names is None:
+        self.available_obfuscated_names = list(range(1, len(self.get_possible_actions()) + 1))
+        random.shuffle(self.available_obfuscated_names)
+      
+      result = "{}{}".format(self.obfuscated_column_name, self.available_obfuscated_names.pop())
+      
       self.obfuscated_action_names[str] = result
     return result
 
@@ -153,6 +156,24 @@ class DataSource(object, metaclass=abc.ABCMeta):
     shutil.rmtree(self.options.output_dir, ignore_errors=True)
 
   def create_output_name(self, name):
+    name = name.replace(" ", "_") \
+               .replace("(", "") \
+               .replace(")", "") \
+               .replace("[", "") \
+               .replace("]", "") \
+               .replace("{", "") \
+               .replace("}", "") \
+               .replace("/", "_") \
+               .replace(":", "_") \
+               .replace("\\", "_") \
+               .replace("<", "_") \
+               .replace(">", "_") \
+               .replace("!", "_") \
+               .replace("\"", "_") \
+               .replace("'", "_") \
+               .replace("|", "_") \
+               .replace("?", "_") \
+               .replace("*", "_")
     return os.path.join(self.options.output_dir, name)
 
 def print_full_columns(df):

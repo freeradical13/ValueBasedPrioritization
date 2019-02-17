@@ -4,6 +4,7 @@ import math
 import numpy
 import scipy
 import pandas
+import pprint
 import argparse
 import datetime
 import matplotlib
@@ -24,6 +25,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
     parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
     parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
+    parser.add_argument("--debug", action="store_true", help="Debus", default=False)
     parser.set_defaults(
       show_graphs=False,
     )
@@ -54,28 +56,112 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       "BIC": {},
       "BreuschPagan": {},
       "Formula": {},
+      "Predicted": {},
+      "PredictedDerivative": {},
     }
     
     causes = self.options.cause
     if causes is None or len(causes) == 0:
       causes = self.get_possible_actions()
+      
+    if self.options.verbose:
+      print("{} actions".format(len(causes)))
     
     for cause in causes:
       try:
         for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-          self.create_plot(cause, i, self.options.predict, r_data)
+          self.create_model(cause, i, self.options.predict, r_data)
       except:
         e = sys.exc_info()[0]
         print("Error {} processing {}".format(e, cause))
         break
     
+    if self.options.verbose:
+      print("Result actions: {}".format(len(r_data["AdjustedR2"])))
+      pprint.pprint(r_data)
+    
     r = pandas.DataFrame(r_data)
     r.index.rename(["Action", "Degree"], inplace=True)
+    
+    if self.options.verbose:
+      print("Actions = {}".format(len(r.groupby("Action"))))
+    
+    if self.options.verbose:
+      print("Before running best_fitting_model")
+      print(r)
+    
+    r = r.groupby(["Action"]).apply(lambda x: self.best_fitting_model(x))
+    
+    if self.options.verbose:
+      print("After running best_fitting_model")
+      vbp.print_full_columns(r)
+    
+    r["S1"] = 1.0
+    
+    # Adjust any out-of-bounds values
+    r["S2"] = r.apply(lambda row: 0.1 if row.AdjustedR2 < 0.1 else 1.0, axis=1)
+    r["S3"] = r.apply(lambda row: 0.1 if row.ProbFStatistic > 0.05 else 1.0, axis=1)
+    r["S4"] = r.apply(lambda row: 0.1 if row.BreuschPagan < 0.05 else 1.0, axis=1)
+    
+    if len(r) > 1:
+      r["S7"] = vbp.normalize(r.PredictedDerivative.values, 0.5, 1.0)
+    else:
+      r["S7"] = 1.0
+    
+    r = r[["Predicted", "S1", "S2", "S3", "S4", "S5", "S7"]]
+    r.reset_index(level=1, inplace=True) # drop=True to suppress adding Degree to the column
     vbp.print_full_columns(r)
+    
     r.to_csv(self.create_output_name("r.csv"))
+    
+    if self.options.debug:
+      r.to_pickle(self.create_output_name("data.pkl"))
+  
+  def best_fitting_model(self, df):
+    if self.options.verbose:
+      print("Incoming:\n{}\n".format(df))
+      
+    found = False
 
-  def create_plot(self, action, degree, predict, r_data):
+    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
+    if not tmp.empty:
+      df = tmp
+      tmp = df[(df.LogLikelihood == df.LogLikelihood.min()) & (df.AIC == df.AIC.max()) & (df.BIC == df.BIC.max())]
+      if not tmp.empty:
+        df = tmp
+        found = True
+    
+    # If we didn't find anything, then be a bit more lenient on
+    # ProbFStatistic and BreuschPagan (we'll scale down by those
+    # later)
+    if not found:
+      tmp = df[(df.LogLikelihood == df.LogLikelihood.min()) & (df.AIC == df.AIC.max()) & (df.BIC == df.BIC.max())]
+      if not tmp.empty:
+        df = tmp
+        found = True
+    
+    if not found:
+      # If there is no row which has the lowest LogLikelihood, highest
+      # AIC and highest BIC, then just take the row with the highest
+      # AdjustedR2
+      df = df[df.AdjustedR2 == df.AdjustedR2.max()]
+      df["S5"] = 0.1
+    else:
+      df["S5"] = 1.0
+      
+    df.reset_index(level=0, drop=True, inplace=True)
+    
+    if self.options.verbose:
+      print("Outgoing:\n{}\n".format(df))
+      
+    return df
+
+  def create_model(self, action, degree, predict, r_data):
     df = self.run_get_action_data(action)
+    
+    if self.options.verbose:
+      print("Action data {} for {} / {}:\n{}".format(len(r_data["AdjustedR2"]), action, self.get_obfuscated_name(action), df))
+      
     max_year = df.Year.values[-1]
     
     min_scaled_domain = -1
@@ -114,9 +200,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     r_data["BIC"][(self.get_obfuscated_name(action), degree)] = model.bic
     r_data["Formula"][(self.get_obfuscated_name(action), degree)] = vbp.linear_regression_modeled_formula(model, degree)
     
-    #predicted = model.fittedvalues.copy()
+    #predicted_values = model.fittedvalues.copy()
     #actual = dfnoNaNs["Crude Rate"].values.copy()
-    #residuals = actual - predicted
+    #residuals = actual - predicted_values
     
     # Linearity hypothesis test
     # http://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.linear_harvey_collier.html
@@ -126,7 +212,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     # Residuals plot
     #fig, ax = matplotlib.pyplot.subplots()
-    #ax.scatter(predicted, residuals)
+    #ax.scatter(predicted_values, residuals)
     #matplotlib.pyplot.show()
     
     # Normal probability plot
@@ -151,8 +237,11 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     end -= 1
     predicted = func(max_scaled_domain)
+    r_data["Predicted"][(self.get_obfuscated_name(action), degree)] = predicted
     if self.options.verbose:
       print("Predicted in {} years ({}): {}".format(predict, end, predicted))
+    derivative = numpy.poly1d(list(reversed(model.params.values.tolist()))).deriv()
+    r_data["PredictedDerivative"][(self.get_obfuscated_name(action), degree)] = derivative(max_scaled_domain)
     matplotlib.pyplot.plot([end], [predicted], "cD") # https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html
     
     ax.add_artist(matplotlib.offsetbox.AnchoredText("$x^{}$; $\\barR^2$ = {:0.3f}".format(degree, model.rsquared_adj), loc="upper center"))

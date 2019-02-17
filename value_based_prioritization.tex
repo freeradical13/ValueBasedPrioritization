@@ -403,7 +403,7 @@ First, outline the parameters:
 \item \eqref{modeled-future-time} $t_F = $ 5 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
 \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
 \item \eqref{prediction-models} $R(D(A)) = $ ordinary least squares linear regression with one, two, three, and four degrees.
-\item \eqref{model-selection} $L(R(D(A))) = $ highest adjusted $r^2$ ($\bar{R^2}$), lowest log-likelihood, highest AIC, and highest BIC.
+\item \eqref{model-selection} $L(R(D(A))) = $ lowest log-likelihood, highest Akaike’s Information Criteria (AIC), and highest Bayes' Information Criteria (BIC).
 \end{itemize}
 
 $A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
@@ -434,15 +434,18 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_action
 \item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions with heteroscedastic $M(A_i(t))$: Heteroscedastic if the p-value of the Breusch-Pagan Lagrange Multiplier test is $< 0.05$\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html}}.
-\item $S_5(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
+\item $S_5(A_i) = \begin{cases}\text{0.1} & \mbox{if no best model} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+                \newline\newline
+                Essentially remove actions which don't have a model that has the lowest log-likelihood, highest AIC, and highest BIC.
+\item $S_6(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
                 \newline\newline
                 Scale towards younger people as they have more to lose.
-\item $S_6(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
+\item $S_7(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
                 \newline\newline
                 $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
                 \newline\newline
                 Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$ relative to other actions.
-\item $S_7(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+\item $S_8(A_i) = \begin{cases}\text{0.1} & \mbox{if primarily political} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions that are primarily political.
 \end{itemize}
