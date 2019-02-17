@@ -125,4 +125,6 @@ if __name__ == "__main__":
     else:
       raise NotImplementedError()
   except:
-    traceback.print_exc()
+    e = sys.exc_info()[0]
+    if e != SystemExit:
+      traceback.print_exc()

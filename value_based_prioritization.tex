@@ -245,6 +245,19 @@
   note         = {\url{https://apps.who.int/iris/bitstream/handle/10665/246208/9789241549165-V1-eng.pdf}},
 }
 
+@article{burnham2004multimodel,
+  title        = {Multimodel inference: understanding AIC and BIC in model selection},
+  author       = {Burnham, Kenneth P and Anderson, David R},
+  journal      = {Sociological methods \& research},
+  volume       = {33},
+  number       = {2},
+  pages        = {261--304},
+  year         = {2004},
+  publisher    = {Sage Publications Sage CA: Thousand Oaks, CA},
+  doi          = {10.1177/0049124104268644},
+  note         = {\url{http://www.sortie-nd.org/lme/Statistical\%20Papers/Burnham_and_Anderson_2004_Multimodel_Inference.pdf}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -430,7 +443,7 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_action
                 Essentially remove actions with poorly predicted $B(A_i(t_F))$.
 \item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if } p(F) > 0.05 \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                 \newline\newline
-                Essentially remove actions whose $M(A_i(t))$ p-value of the F-statistic of the fully specified model is not statistically significant. Calculated as the mean squared error of the model divided by the mean squared error of the residuals\footnote{\url{https://www.statsmodels.org/devel/generated/statsmodels.regression.linear_model.RegressionResults.html}}.
+                Essentially remove actions whose $M(A_i(t))$ p-value of the F-statistic of the fully specified model is not statistically significant. Calculated as the mean squared error of the model divided by the mean squared error of the residuals\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.RegressionResults.html}}.
 \item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
                 \newline\newline
                 Essentially remove actions with heteroscedastic $M(A_i(t))$: Heteroscedastic if the p-value of the Breusch-Pagan Lagrange Multiplier test is $< 0.05$\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html}}.
@@ -512,25 +525,25 @@ Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{f
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_1.png}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_1_model.png}
     \caption{1 degree}
     \label{fig:deg1}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_2.png}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_2_model.png}
     \caption{2 degrees}
     \label{fig:deg2}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_3.png}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_3_model.png}
     \caption{3 degrees}
     \label{fig:deg3}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_4.png}
+    \includegraphics[width=\textwidth]{Malignant_neoplasms_4_model.png}
     \caption{4 degrees}
     \label{fig:deg4}
   \end{subfigure}

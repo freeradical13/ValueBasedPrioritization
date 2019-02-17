@@ -37,17 +37,22 @@ def linear_regression_modeled_formula(ols_result, degree=1, truncate_scientific=
 
 # https://en.wikipedia.org/wiki/Normalization_(statistics)
 def normalize(nparray, min, max):
+  return numpy.vectorize(normalize_func(nparray, min, max))(nparray)
+
+def normalize_func(nparray, min, max):
   # (((element - min(nparray)) * (max - min)) / (max(nparray) - min(nparray))) + min
   min_nparray = nparray.min()
   max_nparray = nparray.max()
-  minmax_nparray_diff = max_nparray - min_nparray
+  return normalize_func_explicit_minmax(nparray, min_nparray, max_nparray, min, max)
+
+def normalize_func_explicit_minmax(nparray, min_range, max_range, min, max):
+  # (((element - min_range) * (max - min)) / (max_range - min_range)) + min
+  minmax_range_diff = max_range - min_range
   minmaxdiff = max - min
-  # (((element - min_nparray) * minmaxdiff) / minmax_nparray_diff) + min
-  #return numpy.vectorize(lambda x: ((x - min_nparray) * minmaxdiff) / minmax_nparray_diff)(nparray) + min
-  # =>
-  # ((element * minmaxdiff) - (min_nparray * minmaxdiff)) / minmax_nparray_diff) + min
-  min_nparray_minmaxdiff = min_nparray * minmaxdiff
-  return numpy.vectorize(lambda x: (((x * minmaxdiff) - min_nparray_minmaxdiff) / minmax_nparray_diff) + min)(nparray)
+  # (((element - min_range) * minmaxdiff) / minmax_range_diff) + min
+  # ((element * minmaxdiff) - (min_range * minmaxdiff)) / minmax_range_diff) + min
+  min_range_minmaxdiff = min_range * minmaxdiff
+  return lambda x: (((x * minmaxdiff) - min_range_minmaxdiff) / minmax_range_diff) + min
 
 def normalize0to1(nparray):
   return normalize(nparray, 0, 1)

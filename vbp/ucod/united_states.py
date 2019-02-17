@@ -69,15 +69,15 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     if self.options.verbose:
       print("{} actions".format(count))
     
-    i = 1
+    action_count = 1
     for cause in causes:
       try:
         for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-          self.create_model(cause, i, self.options.predict, r_data, i, count)
+          self.create_model(cause, i, self.options.predict, r_data, action_count, count)
       except:
         traceback.print_exc()
         break
-      i += 1
+      action_count += 1
     
     if self.options.verbose:
       print("Result actions: {}".format(len(r_data["AdjustedR2"])))
@@ -161,13 +161,11 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
   def create_model(self, action, degree, predict, r_data, i, count):
     df = self.run_get_action_data(action)
+    df = df.reset_index()
     
-    print("Creating model for action: {}, degrees: {}, {} of {}".format(self.get_obfuscated_name(action), degree, i, count))
+    print("Creating model {} of {} for: {}, degrees: {}".format(i, count, self.get_obfuscated_name(action), degree))
       
     max_year = df.Year.values[-1]
-    
-    min_scaled_domain = -1
-    max_scaled_domain = +1
     
     current_year = datetime.datetime.now().year
     year_diff = current_year - max_year
@@ -177,14 +175,14 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     else:
       start = max_year + 1
       end = current_year + predict
-    
+
     nan_row = {i: numpy.nan for i in df.columns.get_values().tolist()}
     for i in range(start, end):
       new_row = nan_row.copy()
       new_row["Year"] = i
       df = df.append(new_row, ignore_index=True)
     
-    df["ScaledYear"] = df["Year"].transform(vbp.normalize0to1)
+    df["ScaledYear"] = numpy.vectorize(vbp.normalize_func_explicit_minmax(df.Year.values, df.Year.min(), max_year, 0, 1))(df.Year.values)
     
     dfnoNaNs = df.dropna()
     if self.options.verbose:
@@ -241,24 +239,24 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), color="blue")
     
     end -= 1
-    predicted = func(max_scaled_domain)
+    predict_x = df.ScaledYear.max()
+    predicted = func(predict_x)
     r_data["Predicted"][(self.get_obfuscated_name(action), degree)] = predicted
     if self.options.verbose:
       print("Predicted in {} years ({}): {}".format(predict, end, predicted))
     derivative = numpy.poly1d(list(reversed(model.params.values.tolist()))).deriv()
-    r_data["PredictedDerivative"][(self.get_obfuscated_name(action), degree)] = derivative(max_scaled_domain)
+    r_data["PredictedDerivative"][(self.get_obfuscated_name(action), degree)] = derivative(predict_x)
     matplotlib.pyplot.plot([end], [predicted], "cD") # https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html
     
-    ax.add_artist(matplotlib.offsetbox.AnchoredText("$x^{}$; $\\barR^2$ = {:0.3f}".format(degree, model.rsquared_adj), loc="upper center"))
-    ax.add_artist(matplotlib.offsetbox.AnchoredText("Predicted in +{} = {:0.1f}".format(predict, predicted), loc="upper right", pad=0.65))
+    ax.add_artist(matplotlib.offsetbox.AnchoredText("$x^{}$; $\\barR^2={:0.3f}$; $y({})\\approx${:0.1f}".format(degree, model.rsquared_adj, end, predicted), loc="upper center"))
 
     fig = matplotlib.pyplot.gcf()
     fig.autofmt_xdate(bottom=0.2, rotation=30, ha="right", which="both")
     ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%d"))
     #fig.set_size_inches(10, 5)
     matplotlib.pyplot.tight_layout()
-    matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
-    df.to_csv(self.create_output_name("{}.csv").format(self.get_obfuscated_name(action)))
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_model.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
+    self.write_spreadsheet(df, "{}".format(self.get_obfuscated_name(action)))
     
     if self.options.show_graphs:
       matplotlib.pyplot.show()
