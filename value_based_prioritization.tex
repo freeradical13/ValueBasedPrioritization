@@ -519,7 +519,7 @@ For example:
   \centering
   \begin{tabular}{lc}
     \toprule
-      Action                               & $S_8$ \\
+      Action                               & $S_4$ \\
     \midrule
       Eliminate: Assault                   & 0.1   \\
       Eliminate: Legal intervention \ldots & 0.1   \\
@@ -550,7 +550,7 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
   \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{fig:neoplasmregs} for exponential smoothing functions using Holt's linear trend method for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate -p 10 "Malignant neoplasms"}}.
+Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate -p 10 "Malignant neoplasms"}}:
 
 \begin{figure}[H]
   \centering

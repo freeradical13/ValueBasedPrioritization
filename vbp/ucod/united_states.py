@@ -244,6 +244,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     self.write_spreadsheet(etsdf, "{}_ets".format(self.get_obfuscated_name(action)))
     m = etsdf[etsdf.AICc == etsdf.AICc.min()]
     etsname = m.iloc[0].name[1]
+    print("min AICc = {}: {}".format(etsname, m["Predicted"][0]))
     #ax.add_artist(matplotlib.offsetbox.AnchoredText("$y({})\\approx{:0.1f}$".format(m["PredictedYear"][0], m["Predicted"][0]), loc="upper center"))
     
     matplotlib.pyplot.savefig(self.create_output_name("{}_ets.png".format(self.get_obfuscated_name(action))), dpi=100)
