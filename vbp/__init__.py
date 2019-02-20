@@ -124,8 +124,15 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
       self.options = parser.parse_args(args)
-      if self.options.clean:
+      
+      clean = self.options.clean
+      if self.options.output_dir == "output":
+        # Always clean if it's the default output directory
+        clean = True
+      
+      if clean and os.path.exists(self.options.output_dir):
         self.clean_files()
+        
       if not os.path.exists(self.options.output_dir):
         os.makedirs(self.options.output_dir)
 
@@ -158,7 +165,12 @@ class DataSource(object, metaclass=abc.ABCMeta):
     return result
 
   def clean_files(self):
-    shutil.rmtree(self.options.output_dir, ignore_errors=True)
+    for e in os.listdir(self.options.output_dir):
+      p = os.path.join(self.options.output_dir, e)
+      if os.path.isfile(p):
+        os.unlink(p)
+      else:
+        shutil.rmtree(p)
 
   def create_output_name(self, name):
     name = name.replace(" ", "_") \
@@ -178,11 +190,14 @@ class DataSource(object, metaclass=abc.ABCMeta):
                .replace("'", "_") \
                .replace("|", "_") \
                .replace("?", "_") \
+               .replace(",", "") \
                .replace("*", "_")
     return os.path.join(self.options.output_dir, name)
   
   def write_spreadsheet(self, df, name):
     df.to_csv(self.create_output_name(name + ".csv"))
+
+    df.to_pickle(self.create_output_name(name + ".pkl"))
     
     writer = pandas.ExcelWriter(self.create_output_name(name + ".xlsx"), engine="xlsxwriter")
     df.to_excel(writer)

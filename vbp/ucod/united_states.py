@@ -11,6 +11,7 @@ import traceback
 import matplotlib
 import matplotlib.pyplot
 import statsmodels.tools
+import statsmodels.tsa.api
 import matplotlib.offsetbox
 import statsmodels.stats.api
 import statsmodels.formula.api
@@ -28,6 +29,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
     parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
     parser.add_argument("-l", "--model", choices=["lowest_aic", "lowest_aicc", "lowest_bic", "highest_log_likelihood"], help="Best fitting model algorithm", default="lowest_aicc")
+    parser.add_argument("--ols", action="store_true", help="Ordinary least squares", default=False)
+    parser.add_argument("--ets", action="store_true", help="Exponential smoothing using Holt's linear trend method", default=True)
     parser.add_argument("--debug", action="store_true", help="Debus", default=False)
     parser.set_defaults(
       show_graphs=False,
@@ -75,54 +78,59 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     action_count = 1
     for cause in causes:
       try:
-        for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-          self.create_model(cause, i, self.options.predict, r_data, action_count, count)
+        if self.options.ols:
+          for i in range(self.options.min_degrees, self.options.max_degrees + 1):
+            self.create_model_ols(cause, i, self.options.predict, r_data, action_count, count)
+        if self.options.ets:
+          self.create_model_ets(cause, self.options.predict, r_data, action_count, count)
       except:
         traceback.print_exc()
         break
       action_count += 1
     
-    if self.options.verbose:
-      print("Result actions: {}".format(len(r_data["AdjustedR2"])))
-      pprint.pprint(r_data)
-    
-    r = pandas.DataFrame(r_data)
-    r.index.rename(["Action", "Degree"], inplace=True)
-    self.write_spreadsheet(r, "r_raw")
-    
-    if self.options.verbose:
-      print("Actions = {}".format(len(r.groupby("Action"))))
-    
-    if self.options.verbose:
-      print("Before running best_fitting_model")
-      print(r)
-    
-    r = r.groupby(["Action"]).apply(lambda x: self.best_fitting_model(x))
-    
-    if self.options.verbose:
-      print("After running best_fitting_model")
-      vbp.print_full_columns(r)
-    
-    r["S1"] = 1.0
-    
-    # Adjust any out-of-bounds values
-    r["S2"] = r.apply(lambda row: 0.1 if row.AdjustedR2 < 0.1 else 1.0, axis=1)
-    r["S3"] = r.apply(lambda row: 0.1 if row.ProbFStatistic > 0.05 else 1.0, axis=1)
-    r["S4"] = r.apply(lambda row: 0.1 if row.BreuschPagan < 0.05 else 1.0, axis=1)
-    
-    if len(r) > 1:
-      r["S7"] = vbp.normalize(r.PredictedDerivative.values, 0.5, 1.0)
-    else:
-      r["S7"] = 1.0
-    
-    r = r[["Predicted", "S1", "S2", "S3", "S4", "S5", "S7"]]
-    r.reset_index(level=1, inplace=True) # drop=True to suppress adding Degree to the column
-    vbp.print_full_columns(r)
-    
-    self.write_spreadsheet(r, "r")
-    
-    if self.options.debug:
-      r.to_pickle(self.create_output_name("data.pkl"))
+    #r = pandas.DataFrame(r_data)
+    #if not r.empty:
+      #if self.options.verbose:
+        #print("Result actions: {}".format(len(r_data["AdjustedR2"])))
+        #pprint.pprint(r_data)
+      #r.index.rename(["Action", "Degree"], inplace=True)
+      #self.write_spreadsheet(r, "r_raw")
+      
+      #if self.options.verbose:
+        #print("Actions = {}".format(len(r.groupby("Action"))))
+      
+      #if self.options.verbose:
+        #print("Before running best_fitting_model")
+        #print(r)
+      
+      #r = r.groupby(["Action"]).apply(lambda x: self.best_fitting_model(x))
+      
+      #if self.options.verbose:
+        #print("After running best_fitting_model")
+        #vbp.print_full_columns(r)
+      
+      #r["S1"] = 1.0
+      
+      ## Adjust any out-of-bounds values
+      #r["S2"] = r.apply(lambda row: 0.1 if row.AdjustedR2 < 0.1 else 1.0, axis=1)
+      #r["S3"] = r.apply(lambda row: 0.1 if row.ProbFStatistic > 0.05 else 1.0, axis=1)
+      #r["S4"] = r.apply(lambda row: 0.1 if row.BreuschPagan < 0.05 else 1.0, axis=1)
+      
+      #if len(r) > 1:
+        #r["S7"] = vbp.normalize(r.PredictedDerivative.values, 0.5, 1.0)
+      #else:
+        #r["S7"] = 1.0
+      
+      #r = r[["Predicted", "S1", "S2", "S3", "S4", "S5", "S7"]]
+      #r.reset_index(level=1, inplace=True) # drop=True to suppress adding Degree to the column
+      #vbp.print_full_columns(r)
+      
+      #self.write_spreadsheet(r, "r")
+      
+      #if self.options.debug:
+        #r.to_pickle(self.create_output_name("data.pkl"))
+    #else:
+      #print("No results")
       
   def best_fitting_model(self, df):
     if self.options.verbose:
@@ -202,12 +210,86 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       result = df[df.LogLikelihood == df.LogLikelihood.max()]
         
     return result
+  
+  def create_model_ets(self, action, predict, r_data, i, count):
+    print("Creating ETS model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
+    df = self.run_get_action_data(action)
+    df = df[["Date", "Crude Rate"]]
+    df = df.set_index("Date")
     
-  def create_model(self, action, degree, predict, r_data, i, count):
+    ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)))
+    ax.set_ylabel("Crude Rate")
+    fig = matplotlib.pyplot.gcf()
+    
+    ets = {
+      "AICc": {},
+      "PredictedYear": {},
+      "Predicted": {},
+      "PredictedDerivative": {},
+    }
+    
+    results = {}
+    results.update(self.run_ets(df["Crude Rate"], color="red", predict=predict, exponential=False, damped=False))
+    results.update(self.run_ets(df["Crude Rate"], color="cyan", predict=predict, exponential=False, damped=True))
+    results.update(self.run_ets(df["Crude Rate"], color="green", predict=predict, exponential=True, damped=False))
+    results.update(self.run_ets(df["Crude Rate"], color="blue", predict=predict, exponential=True, damped=True))
+    
+    for title, result in results.items():
+      ets["PredictedYear"][(self.get_obfuscated_name(action), title)] = result[1].index[-1].year
+      ets["Predicted"][(self.get_obfuscated_name(action), title)] = result[1][-1]
+      ets["PredictedDerivative"][(self.get_obfuscated_name(action), title)] = result[2]
+      ets["AICc"][(self.get_obfuscated_name(action), title)] = result[0].aicc
+      
+    etsdf = pandas.DataFrame(ets)
+    self.write_spreadsheet(etsdf, "{}_ets".format(self.get_obfuscated_name(action)))
+    m = etsdf[etsdf.AICc == etsdf.AICc.min()]
+    etsname = m.iloc[0].name[1]
+    #ax.add_artist(matplotlib.offsetbox.AnchoredText("$y({})\\approx{:0.1f}$".format(m["PredictedYear"][0], m["Predicted"][0]), loc="upper center"))
+    
+    matplotlib.pyplot.savefig(self.create_output_name("{}_ets.png".format(self.get_obfuscated_name(action))), dpi=100)
+    self.write_spreadsheet(df, "{}".format(self.get_obfuscated_name(action)))
+    
+    if self.options.show_graphs:
+      matplotlib.pyplot.show()
+
+    matplotlib.pyplot.close(fig)
+    
+    for title, result in results.items():
+      fig, ax = matplotlib.pyplot.subplots()
+      ax.scatter(result[0].fittedvalues, result[0].resid)
+      ax.set_title("Residuals of {} (${}$)".format(self.get_obfuscated_name(action), title))
+      matplotlib.pyplot.tight_layout()
+      matplotlib.pyplot.savefig(self.create_output_name("{}_{}_residuals.png".format(self.get_obfuscated_name(action), title)), dpi=100)
+      matplotlib.pyplot.close(fig)
+      
+    return etsdf
+      
+  def run_ets(self, df, color, predict, exponential=False, damped=False, damping_slope=0.98):
+    # https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.Holt.html
+    # https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.ExponentialSmoothing.html
+    # https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html
+    
+    if not damped:
+      damping_slope = None
+      
+    fit = statsmodels.tsa.api.Holt(df, exponential=exponential, damped=damped).fit(damping_slope=damping_slope)
+    fit.fittedvalues.plot(color=color, style="--")
+    title = "ETS(A,"
+    title += "M" if exponential else "A"
+    title += "_d" if damped else ""
+    title += ",N)"
+    forecast = fit.forecast(predict).rename("${}$".format(title))
+    forecast.plot(color=color, legend=True, style="--")
+    
+    slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(list(map(lambda x: x.year, forecast.index.to_pydatetime())), forecast.values)
+    
+    return {title: [fit, forecast, slope]}
+
+  def create_model_ols(self, action, degree, predict, r_data, i, count):
     df = self.run_get_action_data(action)
     df = df.reset_index()
     
-    print("Creating model {} of {} for: {}, degrees: {}".format(i, count, self.get_obfuscated_name(action), degree))
+    print("Creating OLS model {} of {} for: {}, degrees: {}".format(i, count, self.get_obfuscated_name(action), degree))
       
     max_year = df.Year.values[-1]
     

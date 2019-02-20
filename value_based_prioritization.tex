@@ -273,6 +273,26 @@
   publisher    = {Sage},
 }
 
+@book{hyndman2018forecasting,
+  title        = {Forecasting: principles and practice},
+  author       = {Hyndman, Rob J and Athanasopoulos, George},
+  year         = {2018},
+  publisher    = {OTexts},
+  note         = {\url{https://otexts.com/fpp2/}},
+}
+
+@article{clemen1989combining,
+  title        = {Combining forecasts: A review and annotated bibliography},
+  author       = {Clemen, Robert T},
+  journal      = {International journal of forecasting},
+  volume       = {5},
+  number       = {4},
+  pages        = {559--583},
+  year         = {1989},
+  publisher    = {Elsevier},
+  note         = {\url{https://faculty.fuqua.duke.edu/\~clemen/bio/Published\%20Papers/13.CombiningReview-Clemen-IJOF-89.pdf}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -345,8 +365,8 @@ A \textbf{value system} \inlineequation[value-system]{V} generates a \textbf{goa
 
 \begin{equation}\label{potential-actions}
   \begin{gathered}
-A(t) = \{A_1(t), \ldots, A_N(t)\}, \\
-N > 1
+    A(t) = \{A_1(t), \ldots, A_N(t)\}, \\
+    N > 1
   \end{gathered}
 \end{equation}
 
@@ -354,23 +374,23 @@ An action's \textbf{estimated relative accomplishment amount} $B(A(t))$ is an ac
 
 \begin{equation}\label{action-amount}
   \begin{gathered}
-B(A(t)) = \mathbb{R}, \\
-0 \leq \mathbb{R} \leq 1
+    B(A(t)) = \mathbb{R}, \\
+    0 \leq \mathbb{R} \leq 1
   \end{gathered}
 \end{equation}
 
 Thus, $G(t)$ is fully accomplished if all actions are accomplished:
 
 \begin{equation}\label{goal-accomplished}
-G(t) = \sum_{i=1}^{N} B(A_i(t)) = 1
+  G(t) = \sum_{i=1}^{N} B(A_i(t)) = 1
 \end{equation}
 
 A \textbf{value-based prioritization score} $C(A(t))$ is the result of the product of a set of \textbf{value-based prioritization scale functions} \inlineequation[scale-functions]{S = \{S_1, \ldots, S_N\}} multiplied by \eqref{action-amount}:
 
 \begin{equation}\label{prioritization-score}
   \begin{gathered}
-C(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
-0 \leq S_j(B(A(t))) \leq 1
+    C(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
+    0 \leq S_j(B(A(t))) \leq 1
   \end{gathered}
 \end{equation}
 
@@ -380,8 +400,8 @@ A \textbf{value-based prioritization} $Z(t)$ is a sequence of actions ordered by
 
 \begin{equation}\label{vbp}
   \begin{gathered}
-Z(t) = (A_1(t), \ldots, A_N(t)), \\
-C(A_1(t)) \geq \ldots \geq C(A_N(t))
+    Z(t) = (A_1(t), \ldots, A_N(t)), \\
+    C(A_1(t)) \geq \ldots \geq C(A_N(t))
   \end{gathered}
 \end{equation}
 
@@ -389,29 +409,29 @@ The first $k$ actions in $Z(t)$ should be executed in descending priority/propor
 
 \section{Modeled Value-Based Prioritization}
 
-Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F}  (e.g. the average time actions will take to ramp up implementation).
+Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F} (e.g. the average time actions will take to ramp up implementation).
 
 If each action has historical data $D(A)$:
 
 \begin{equation}\label{action-predictors}
-\begin{multlined}
-D(A) = \\
-\shoveleft[0.5cm]{((t_1, D(A,t_1)), \ldots, (t_N, D(A,t_N)))}
-\end{multlined}
+  \begin{multlined}
+    D(A) = \\
+    \shoveleft[0.5cm]{((t_1, D(A,t_1)), \ldots, (t_N, D(A,t_N)))}
+  \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. linear regression with different degrees\cite{berk2004regression}):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/expsmooth.html}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/arima.html}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/regression.html}}, etc.):
 
 \begin{equation}\label{prediction-models}
-\begin{multlined}
-R(D(A)) =\\
-\{R_1(D(A)), \ldots, R_N(D(A))\}
-\end{multlined}
+  \begin{multlined}
+    R(D(A)) =\\
+    \{R_1(D(A)), \ldots, R_N(D(A))\}
+  \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection}\cite{wit2012all,zucchini2000introduction} \inlineequation[model-selection]{L(R(D(A)))} (e.g. Akaike's Information Criterion [AIC], Corrected AIC [AICc], Bayesian Information Criterion [BIC], etc.).
+The models are compared using \textbf{model selection} (or forecasting)\cite{hyndman2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/selecting-predictors.html}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
-For each action, the \textbf{best fitting model} $M(A(t))$ is selected from $R(D(A))$ using $L(R(D(A)))$.
+For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/combinations.html}}).
 
 Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
@@ -419,101 +439,96 @@ Finally, \textbf{modeled value-based prioritization} \inlineequation[modeled-vbp
 
 \section{Choosing Meaningful Work}
 
-The following example applies modeled value-based prioritization \eqref{modeled-vbp} to the goal of choosing meaningful work. Every aspect is an example and should be reconsidered.
+The following example applies modeled value-based prioritization \eqref{modeled-vbp} to the goal of choosing meaningful work\cite{martela2016three}. Every aspect is an example and should be reconsidered.
 
 First, outline the parameters:
 
 \begin{itemize}
-\item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
-\item \eqref{goal} $G(t) = $ eliminate human death.
-\item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
-\item \eqref{how-many-actions} $k = $ 2 for a single person, weighted heavily on the first item with the second item being a hedge or volunteer activity.
-\item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
-\item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
-\item \eqref{prediction-models} $R(D(A)) = $ ordinary least squares linear regression with one, two, three, and four degrees.
-\item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
+  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
+  \item \eqref{goal} $G(t) = $ eliminate human death.
+  \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
+  \item \eqref{how-many-actions} $k = $ 1 for a single person (use 2 to hedge the failure of the first action or as a volunteer activity).
+  \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
+  \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\url{https://otexts.com/fpp2/holt.html}}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/ets.html}}\textsuperscript{,}\footnote{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}:
+    \begin{equation*}
+      \begin{gathered}
+        \{ETS(A,A,N),ETS(A,A_d,N),\\
+        ETS(A,M,N),ETS(A,M_d,N)\},\\
+        \phi=0.98
+      \end{gathered}
+    \end{equation*}
+  \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
 $A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
-\begin{gathered}
-A(t) = \{\\
-A_1(t) = \textrm{Eliminate: Malignant neoplasms},\\
-A_2(t) = \textrm{Eliminate: Ischaemic heart diseases},\\
-\textrm{\ldots}\\
-A_{179}(t) = \textrm{Eliminate: Other disorders of ear}\\
-\}
-\end{gathered}
+  \begin{gathered}
+    A(t) = \{\\
+    A_1(t) = \textrm{Eliminate: Malignant neoplasms},\\
+    A_2(t) = \textrm{Eliminate: Ischaemic heart diseases},\\
+    \textrm{\ldots}\\
+    A_{179}(t) = \textrm{Eliminate: Other disorders of ear}\\
+    \}
+  \end{gathered}
 \end{equation*}
 
 Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_actions UnderlyingCausesOfDeathUnitedStates}} and hypothesize scale functions. Examples:
 
 \begin{itemize}
-\item $S_1(A_i) = 1$
-                \newline\newline
-                Required scale function.
-\item $S_2(A_i) = \begin{cases}\text{0.1} & \mbox{if } \bar{R^2} < 0.1 \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
-                \newline\newline
-                Essentially remove actions with poorly predicted $B(A_i(t_F))$.
-\item $S_3(A_i) = \begin{cases}\text{0.1} & \mbox{if } p(F) > 0.05 \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
-                \newline\newline
-                Essentially remove actions whose $M(A_i(t))$ p-value of the F-statistic of the fully specified model is not statistically significant. Calculated as the mean squared error of the model divided by the mean squared error of the residuals\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.regression.linear_model.RegressionResults.html}}.
-\item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if heteroscedastic} \\ \text{1} & \mbox{if homoscedastic} \\ \end{cases}$
-                \newline\newline
-                Essentially remove actions with heteroscedastic $M(A_i(t))$: Heteroscedastic if the p-value of the Breusch-Pagan Lagrange Multiplier test is $< 0.05$\footnote{\url{https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_breuschpagan.html}}.
-\item $S_5(A_i) = \begin{cases}\text{0.1} & \mbox{if no best model} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
-                \newline\newline
-                Essentially remove actions which don't have a model that has the lowest AICc.
-\item $S_6(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
-                \newline\newline
-                Scale towards younger people as they have more to lose.
-\item $S_7(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
-                \newline\newline
-                $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
-                \newline\newline
-                Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$ relative to other actions.
-\item $S_8(A_i) = \begin{cases}\text{0.1} & \mbox{if political/cultural} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
-                \newline\newline
-                Essentially remove actions that are primarily political and/or cultural.
+  \item $S_1(A_i) = 1$
+                  \newline\newline
+                  Required scale function.
+  \item $S_2(A_i) = \left(1 - \frac{AverageAge(A_i)}{MaxAge(A(t))}\right)$
+                  \newline\newline
+                  Scale towards younger people as they have more to lose.
+  \item $S_3(A_i) = \left(\frac{(f(A_i)-min(f(A(t)))) \cdot (b-a)}{max(f(A(t))-min(f(A(t))}\right) + a$
+                  \newline\newline
+                  $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
+                  \newline\newline
+                  Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$ relative to other actions.
+  \item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if political/cultural} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
+                  \newline\newline
+                  Essentially remove actions that are primarily political and/or cultural.
 \end{itemize}
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_7(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S7}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run scale\char`_functions -t excel -o scale\char`_functions.xslx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S4}}:
 
 \begin{table}[H]
-\centering
-\begin{tabular}{cccc}
-\toprule
-Action & $S_1$  & \ldots & $S_N$  \\
-\midrule
-$A_1$  & 0.1    &        & 1      \\
-$A_2$  & 1      &        & 0.25   \\
-\ldots &        &        &        \\
-$A_N$  & 0.99   &        & 0.9    \\
-\bottomrule
-\end{tabular}
-\caption{Theoretical scale function table}
-\label{table:scaletable}
+  \centering
+  \begin{tabular}{cccc}
+    \toprule
+      Action & $S_1$  & \ldots & $S_N$  \\
+    \midrule
+      $A_1$  & 0.1    &        & 1      \\
+      $A_2$  & 1      &        & 0.25   \\
+      \ldots &        &        &        \\
+      $A_N$  & 0.99   &        & 0.9    \\
+    \bottomrule
+  \end{tabular}
+  \caption{Theoretical scale function table}
+  \label{table:scaletable}
 \end{table}
 
 For example:
 
 \begin{table}[H]
-\centering
-\begin{tabular}{lc}
-\toprule
-Action                               & $S_8$ \\
-\midrule
-Eliminate: Assault                   & 0.1   \\
-Eliminate: Legal intervention \ldots & 0.1   \\
-Eliminate: Malnutrition              & 0.1   \\
-Eliminate: Transport accidents       & 0.1   \\
-\bottomrule
-\end{tabular}
-\caption{Example scale function table}
-\label{table:exscaletable}
+  \centering
+  \begin{tabular}{lc}
+    \toprule
+      Action                               & $S_8$ \\
+    \midrule
+      Eliminate: Assault                   & 0.1   \\
+      Eliminate: Legal intervention \ldots & 0.1   \\
+      Eliminate: Malnutrition              & 0.1   \\
+      Eliminate: Transport accidents       & 0.1   \\
+    \bottomrule
+  \end{tabular}
+  \caption{Example scale function table}
+  \label{table:exscaletable}
 \end{table}
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
@@ -521,59 +536,36 @@ Outside of the manually calculated scale function table, use obfuscated action n
 $D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
 
 \begin{table}[H]
-\centering
-\begin{tabular}{ccc}
-\toprule
-Year    & Crude Rate \\
-\midrule
-1999    &      197.0 \\
-\ldots  & \ldots     \\
-2017    &      183.9 \\
-\bottomrule
-\end{tabular}
-\caption{Crude rate of deaths per year for \textit{Malignant neoplasms}}
-\label{table:daa1}
+  \centering
+  \begin{tabular}{ccc}
+    \toprule
+      Year    & Crude Rate \\
+    \midrule
+      1999    &      197.0 \\
+      \ldots  & \ldots     \\
+      2017    &      183.9 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Crude rate of deaths per year for \textit{Malignant neoplasms}}
+  \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{fig:neoplasmregs} for ordinary least squares linear regressions with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms" -d -m 1 -x 4 --do-not-obfuscate -p 10}}.
+Run each comparable prediction model $R_i(D(A))$. For example, see Figure \ref{fig:neoplasmregs} for exponential smoothing functions using Holt's linear trend method for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate -p 10 "Malignant neoplasms"}}.
 
-\begin{figure}
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_1_model.png}
-    \caption{1 degree}
-    \label{fig:deg1}
-  \end{subfigure}
-
-  \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_2_model.png}
-    \caption{2 degrees}
-    \label{fig:deg2}
-  \end{subfigure}
-
-  \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_3_model.png}
-    \caption{3 degrees}
-    \label{fig:deg3}
-  \end{subfigure}
-
-  \begin{subfigure}[b]{0.4\textwidth}
-    \includegraphics[width=\textwidth]{Malignant_neoplasms_4_model.png}
-    \caption{4 degrees}
-    \label{fig:deg4}
-  \end{subfigure}
-  \caption{Ordinary least squares linear regression with polynomial degrees 1, 2, 3, and 4 for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
+  \includegraphics[width=0.5\textwidth]{Malignant_neoplasms_ets.png}
+  \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
 \end{figure}
 
-For each model, calculate the p-value of the F-statistic, $\bar{R^2}$, AICc, and the Breusch-Pagan Lagrange Multiplier test. Filter out models whose p-value of the F-statistic is $> 0.05$ or p-value of Breusch-Pagan is $< 0.05$ and choose the model that has the lowest AICc. If no models are found, perform the same procedure independent of the p-value tests (the scale functions $S_2(A_i)$ and $S_3(A_i)$ will scale down the chosen model later). If no models are found, choose the degree-1 regression based on the assumption that most disease trends do not tend to change in higher-order ways.
+For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc.
 
-For each model, calculate the predicted value for $t_F$ (setting negative values to 0).
+Use each $M(A(t_F))$ to calculate the predicted value for $t_F$ (setting negative values to 0).
 
 %%%%%%%%%%%%%%
 % References %
 %%%%%%%%%%%%%%
 
-\nocite{*}
 \bibliography{value_based_prioritization}
 
 \end{document}
