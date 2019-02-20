@@ -247,6 +247,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     print("min AICc = {}: {}".format(etsname, m["Predicted"][0]))
     #ax.add_artist(matplotlib.offsetbox.AnchoredText("$y({})\\approx{:0.1f}$".format(m["PredictedYear"][0], m["Predicted"][0]), loc="upper center"))
     
+    # https://stackoverflow.com/questions/54791323/
+    matplotlib.pyplot.legend()
+    
     matplotlib.pyplot.savefig(self.create_output_name("{}_ets.png".format(self.get_obfuscated_name(action))), dpi=100)
     self.write_spreadsheet(df, "{}".format(self.get_obfuscated_name(action)))
     
@@ -274,7 +277,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       damping_slope = None
       
     fit = statsmodels.tsa.api.Holt(df, exponential=exponential, damped=damped).fit(damping_slope=damping_slope)
-    fit.fittedvalues.plot(color=color, style="--")
+    fit.fittedvalues.plot(color=color, style="--", label="_nolegend_")
     title = "ETS(A,"
     title += "M" if exponential else "A"
     title += "_d" if damped else ""

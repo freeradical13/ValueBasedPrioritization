@@ -30,7 +30,7 @@ csv_data = """Year,CrudeRate
 
 def ets_non_seasonal(df, color, predict, exponential=False, damped=False, damping_slope=0.98):
   fit = statsmodels.tsa.api.Holt(df, exponential=exponential, damped=damped).fit(damping_slope=damping_slope if damped else None)
-  fit.fittedvalues.plot(color=color, style="--")
+  fit.fittedvalues.plot(color=color, style="--", label='_nolegend_')
   title = "ETS(A,{}{},N)".format("M" if exponential else "A", "_d" if damped else "")
   forecast = fit.forecast(predict).rename("${}$".format(title))
   forecast.plot(color=color, legend=True, style="--")
@@ -42,4 +42,5 @@ ets_non_seasonal(df, "red", 5, exponential=False, damped=False, damping_slope=0.
 ets_non_seasonal(df, "cyan", 5, exponential=False, damped=True, damping_slope=0.98)
 ets_non_seasonal(df, "green", 5, exponential=True, damped=False, damping_slope=0.98)
 ets_non_seasonal(df, "blue", 5, exponential=True, damped=True, damping_slope=0.98)
+matplotlib.pyplot.legend()
 matplotlib.pyplot.show()
