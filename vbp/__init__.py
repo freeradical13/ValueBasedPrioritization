@@ -66,6 +66,11 @@ class DetailedErrorArgumentParser(argparse.ArgumentParser):
 def create_parser():
   return DetailedErrorArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+def print_full_columns(df):
+  with pandas.option_context("display.max_columns", None):
+    with pandas.option_context("display.max_colwidth", sys.maxsize):
+      print(df)
+
 class DataSource(object, metaclass=abc.ABCMeta):
   ##############
   # Attributes #
@@ -120,9 +125,18 @@ class DataSource(object, metaclass=abc.ABCMeta):
     if not hasattr(self, "options"):
       parser = create_parser()
       self.initialize_parser(parser)
+      parser.add_argument("-b", "--best-fit", choices=["lowest_aic", "lowest_aicc", "lowest_bic"], default="lowest_aicc", help="Best fitting model algorithm")
+      parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
       parser.add_argument("-o", "--output-dir", help="output directory", default="output")
+      parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
+      parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
+      parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
+      parser.add_argument("--debug", action="store_true", help="Debug", default=False)
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
+      parser.set_defaults(
+        show_graphs=False,
+      )
       self.options = parser.parse_args(args)
       
       clean = self.options.clean
@@ -147,9 +161,6 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def run_get_possible_actions(self):
     return self.data[self.get_action_column_name()].unique()
 
-  def run_get_action_data(self, action):
-    return self.data[self.data[self.get_action_column_name()] == action]
-    
   def get_obfuscated_name(self, str):
     if self.options.do_not_obfuscate:
       return str
@@ -213,8 +224,59 @@ class DataSource(object, metaclass=abc.ABCMeta):
     with open(self.create_output_name(file), "w") as f:
       f.write(str)
 
-def print_full_columns(df):
-  with pandas.option_context("display.max_columns", None):
-    with pandas.option_context("display.max_colwidth", sys.maxsize):
-      print(df)
+  def find_best_fitting_models(self, df):
+    result = df.groupby("Action").apply(lambda x: self.best_fitting_model(x))
+    result.index = result.index.droplevel()
+    return result
+      
+  def best_fitting_model_grouped(self, df):
+    if self.options.verbose:
+      print("=================\nGrouped Incoming:\n{}\n".format(df))
+      
+    result = getattr(self, "best_fitting_model_{}".format(self.options.best_fit))(df)
+    if result.empty:
+      raise ValueError("Empty best fit model for {}".format(result))
+    elif len(result) > 1:
+      # Multiple results, so just print a warning and pick the first one
+      print_warning("More than one model matches {}: {}".format(self.options.best_fit, result))
+      result = result.iloc[[0]]
 
+    if self.options.verbose:
+      print("Grouped Outgoing:\n{}\n=================".format(result))
+    
+    return result
+      
+  def best_fitting_model(self, df):
+    if self.options.verbose:
+      print("=========\nIncoming:\n{}\n".format(df))
+    
+    # For each ModelType, select the best model. We end up
+    # with a single row for each ModelType
+    result = df.groupby(["ModelType"]).apply(lambda x: self.best_fitting_model_grouped(x))
+    
+    # Grouping by ModelType puts ModelType into the MultiIndex, but we don't need that
+    # so drop it (it's still a column):
+    result.index = result.index.droplevel()
+    
+    # Finally we take the averages across model groups
+    result = result.groupby("Action").mean()
+    
+    if self.options.verbose:
+      print("Outgoing:\n{}\n=========".format(result))
+      
+    return result
+  
+  def best_fitting_model_lowest_aicc(self, df):
+    return df[df.AICc == df.AICc.min()]
+  
+  def best_fitting_model_lowest_aic(self, df):
+    return df[df.AIC == df.AIC.min()]
+  
+  def best_fitting_model_lowest_bic(self, df):
+    return df[df.BIC == df.BIC.min()]
+
+  def print_warning(self, message):
+    print("WARNING: {}".format(message))
+
+  def prefix_all(self, name):
+    return "_all_" + name

@@ -22,18 +22,14 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def initialize_parser(self, parser):
     parser.add_argument("cause", nargs="*", help="ICD Sub-Chapter")
     parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
-    parser.add_argument("-m", "--min-degrees", help="minimum polynomial degree", type=int, default=1)
-    parser.add_argument("-x", "--max-degrees", help="maximum polynomial degree", type=int, default=4)
-    parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
-    parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
-    parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
-    parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
-    parser.add_argument("-l", "--model", choices=["lowest_aic", "lowest_aicc", "lowest_bic", "highest_log_likelihood"], help="Best fitting model algorithm", default="lowest_aicc")
-    parser.add_argument("--ols", action="store_true", help="Ordinary least squares", default=False)
-    parser.add_argument("--ets", action="store_true", help="Exponential smoothing using Holt's linear trend method", default=True)
-    parser.add_argument("--debug", action="store_true", help="Debus", default=False)
+    parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
+    parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
+    parser.add_argument("--ols", help="Ordinary least squares", dest="ols", action="store_true")
+    parser.add_argument("--no-ols", help="Ordinary least squares", dest="ols", action="store_false")
+    parser.add_argument("--ols-min-degrees", help="minimum polynomial degree", type=int, default=1)
+    parser.add_argument("--ols-max-degrees", help="maximum polynomial degree", type=int, default=1)
     parser.set_defaults(
-      show_graphs=False,
+      ets=True,
     )
 
   def run_load(self):
@@ -53,20 +49,17 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def get_action_column_name(self):
     return "ICD Sub-Chapter"
   
+  def run_get_action_data(self, action):
+    df = self.data[self.data[self.get_action_column_name()] == action]
+    df = df.set_index("Date")
+    # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases
+    df.index.freq = "YS"
+    return df
+  
+  def set_or_append(self, df, append):
+    return append if df is None else pandas.concat([df, append], sort=False)
+
   def run_predict(self):
-    r_data = {
-      "AdjustedR2": {},
-      "ProbFStatistic": {},
-      "LogLikelihood": {},
-      "AIC": {},
-      "AICc": {},
-      "BIC": {},
-      "BreuschPagan": {},
-      "Formula": {},
-      "Predicted": {},
-      "PredictedDerivative": {},
-    }
-    
     causes = self.options.cause
     if causes is None or len(causes) == 0:
       causes = self.get_possible_actions()
@@ -75,158 +68,71 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     if self.options.verbose:
       print("{} actions".format(count))
     
+    model_results = None
+    
     action_count = 1
     for cause in causes:
       try:
         if self.options.ols:
-          for i in range(self.options.min_degrees, self.options.max_degrees + 1):
-            self.create_model_ols(cause, i, self.options.predict, r_data, action_count, count)
+          for i in range(self.options.ols_min_degrees, self.options.ols_max_degrees + 1):
+            model_results = self.set_or_append(model_results, self.create_model_ols(cause, i, self.options.predict, action_count, count))
         if self.options.ets:
-          self.create_model_ets(cause, self.options.predict, r_data, action_count, count)
+          model_results = self.set_or_append(model_results, self.create_model_ets(cause, self.options.predict, action_count, count))
       except:
         traceback.print_exc()
         break
       action_count += 1
-    
-    #r = pandas.DataFrame(r_data)
-    #if not r.empty:
-      #if self.options.verbose:
-        #print("Result actions: {}".format(len(r_data["AdjustedR2"])))
-        #pprint.pprint(r_data)
-      #r.index.rename(["Action", "Degree"], inplace=True)
-      #self.write_spreadsheet(r, "r_raw")
       
-      #if self.options.verbose:
-        #print("Actions = {}".format(len(r.groupby("Action"))))
+    if model_results is not None and len(model_results) > 0:
       
-      #if self.options.verbose:
-        #print("Before running best_fitting_model")
-        #print(r)
+      self.write_spreadsheet(model_results, self.prefix_all("model_results"))
       
-      #r = r.groupby(["Action"]).apply(lambda x: self.best_fitting_model(x))
+      m = self.find_best_fitting_models(model_results)
       
-      #if self.options.verbose:
-        #print("After running best_fitting_model")
-        #vbp.print_full_columns(r)
+      m["S1"] = 1.0
       
-      #r["S1"] = 1.0
-      
-      ## Adjust any out-of-bounds values
+      # Adjust any out-of-bounds values
       #r["S2"] = r.apply(lambda row: 0.1 if row.AdjustedR2 < 0.1 else 1.0, axis=1)
       #r["S3"] = r.apply(lambda row: 0.1 if row.ProbFStatistic > 0.05 else 1.0, axis=1)
       #r["S4"] = r.apply(lambda row: 0.1 if row.BreuschPagan < 0.05 else 1.0, axis=1)
       
-      #if len(r) > 1:
-        #r["S7"] = vbp.normalize(r.PredictedDerivative.values, 0.5, 1.0)
-      #else:
-        #r["S7"] = 1.0
+      if len(m) > 1:
+        m["S3"] = vbp.normalize(m.PredictedDerivative.values, 0.5, 1.0)
+      else:
+        m["S3"] = 1.0
       
-      #r = r[["Predicted", "S1", "S2", "S3", "S4", "S5", "S7"]]
-      #r.reset_index(level=1, inplace=True) # drop=True to suppress adding Degree to the column
-      #vbp.print_full_columns(r)
+      self.write_spreadsheet(m, self.prefix_all("m"))
+
+      b = m[["Predicted", "S1", "S3"]]
+      vbp.print_full_columns(b)
       
-      #self.write_spreadsheet(r, "r")
-      
-      #if self.options.debug:
-        #r.to_pickle(self.create_output_name("data.pkl"))
-    #else:
-      #print("No results")
-      
-  def best_fitting_model(self, df):
-    if self.options.verbose:
-      print("Incoming:\n{}\n".format(df))
-      
-    fit_result = getattr(self, "best_fitting_model_{}".format(self.options.model))(df)
-    if fit_result is not None and len(fit_result) == 1:
-      df = fit_result
-      df["S5"] = 1.0
+      self.write_spreadsheet(b, self.prefix_all("b"))
+
     else:
-      df = df[df.index.get_level_values(1) == 1]
-      df["S5"] = 0.1
-      
-    df.reset_index(level=0, drop=True, inplace=True)
-    
-    if self.options.verbose:
-      print("Outgoing:\n{}\n".format(df))
-      
-    return df
-
-  def best_fitting_model_lowest_aic(self, df):
-    result = None
-
-    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
-    if not tmp.empty:
-      tmp = tmp[tmp.AIC == tmp.AIC.min()]
-      if not tmp.empty:
-        result = tmp
-    
-    if result is None:
-      tmp = df[df.AIC == df.AIC.min()]
-      if not tmp.empty:
-        result = tmp
-        
-    return result
+      print("No results")
   
-  def best_fitting_model_lowest_aicc(self, df):
-    result = None
-
-    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
-    if not tmp.empty:
-      tmp = tmp[tmp.AICc == tmp.AICc.min()]
-      if not tmp.empty:
-        result = tmp
-    
-    if result is None:
-      tmp = df[df.AICc == df.AICc.min()]
-      if not tmp.empty:
-        result = tmp
-        
-    return result
-  
-  def best_fitting_model_lowest_bic(self, df):
-    result = None
-
-    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
-    if not tmp.empty:
-      tmp = tmp[tmp.BIC == tmp.BIC.min()]
-      if not tmp.empty:
-        result = tmp
-    
-    if result is None:
-      tmp = df[df.BIC == df.BIC.min()]
-      if not tmp.empty:
-        result = tmp
-        
-    return result
-  
-  def best_fitting_model_highest_log_likelihood(self, df):
-    result = None
-
-    tmp = df[(df.ProbFStatistic < 0.05) & (df.BreuschPagan > 0.05)]
-    if not tmp.empty:
-      result = tmp[tmp.LogLikelihood == tmp.LogLikelihood.max()]
-    
-    if result is None:
-      result = df[df.LogLikelihood == df.LogLikelihood.max()]
-        
-    return result
-  
-  def create_model_ets(self, action, predict, r_data, i, count):
-    print("Creating ETS model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
-    df = self.run_get_action_data(action)
-    df = df[["Date", "Crude Rate"]]
-    df = df.set_index("Date")
-    
-    ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)))
-    ax.set_ylabel("Crude Rate")
-    fig = matplotlib.pyplot.gcf()
-    
-    ets = {
+  def get_model_map_base(self):
+    return {
+      "ModelType": {},
+      "AIC": {},
       "AICc": {},
+      "BIC": {},
+      "SSE": {},
       "PredictedYear": {},
       "Predicted": {},
       "PredictedDerivative": {},
     }
+  
+  def create_model_ets(self, action, predict, i, count):
+    print("Creating ETS model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
+    df = self.run_get_action_data(action)
+    
+    df = df[["Crude Rate"]]
+    ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)))
+    ax.set_ylabel("Crude Rate")
+    fig = matplotlib.pyplot.gcf()
+    
+    model_map = self.get_model_map_base()
     
     results = {}
     results.update(self.run_ets(df["Crude Rate"], color="red", predict=predict, exponential=False, damped=False))
@@ -235,23 +141,24 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     results.update(self.run_ets(df["Crude Rate"], color="blue", predict=predict, exponential=True, damped=True))
     
     for title, result in results.items():
-      ets["PredictedYear"][(self.get_obfuscated_name(action), title)] = result[1].index[-1].year
-      ets["Predicted"][(self.get_obfuscated_name(action), title)] = result[1][-1]
-      ets["PredictedDerivative"][(self.get_obfuscated_name(action), title)] = result[2]
-      ets["AICc"][(self.get_obfuscated_name(action), title)] = result[0].aicc
+      index = (self.get_obfuscated_name(action), title)
+      model_map["ModelType"][index] = "ETS"
+      model_map["PredictedYear"][index] = result[1].index[-1].year
+      model_map["Predicted"][index] = result[1][-1]
+      model_map["PredictedDerivative"][index] = result[2]
+      model_map["AIC"][index] = result[0].aic
+      model_map["AICc"][index] = result[0].aicc
+      model_map["BIC"][index] = result[0].bic
+      model_map["SSE"][index] = result[0].sse
       
-    etsdf = pandas.DataFrame(ets)
-    self.write_spreadsheet(etsdf, "{}_ets".format(self.get_obfuscated_name(action)))
-    m = etsdf[etsdf.AICc == etsdf.AICc.min()]
-    etsname = m.iloc[0].name[1]
-    print("min AICc = {}: {}".format(etsname, m["Predicted"][0]))
-    #ax.add_artist(matplotlib.offsetbox.AnchoredText("$y({})\\approx{:0.1f}$".format(m["PredictedYear"][0], m["Predicted"][0]), loc="upper center"))
+    resultdf = pandas.DataFrame(model_map)
+    resultdf.index.rename(["Action", "Model"], inplace=True)
     
     # https://stackoverflow.com/questions/54791323/
     matplotlib.pyplot.legend()
-    
+
+    matplotlib.pyplot.tight_layout()
     matplotlib.pyplot.savefig(self.create_output_name("{}_ets.png".format(self.get_obfuscated_name(action))), dpi=100)
-    self.write_spreadsheet(df, "{}".format(self.get_obfuscated_name(action)))
     
     if self.options.show_graphs:
       matplotlib.pyplot.show()
@@ -263,14 +170,17 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       ax.scatter(result[0].fittedvalues, result[0].resid)
       ax.set_title("Residuals of {} (${}$)".format(self.get_obfuscated_name(action), title))
       matplotlib.pyplot.tight_layout()
-      matplotlib.pyplot.savefig(self.create_output_name("{}_{}_residuals.png".format(self.get_obfuscated_name(action), title)), dpi=100)
+      matplotlib.pyplot.savefig(self.create_output_name("{}_{}_ets_residuals.png".format(self.get_obfuscated_name(action), title)), dpi=100)
       matplotlib.pyplot.close(fig)
       
-    return etsdf
+    self.write_spreadsheet(df, "{}_etsdata".format(self.get_obfuscated_name(action)))
+    self.write_spreadsheet(resultdf, "{}_etsresults".format(self.get_obfuscated_name(action)))
+    return resultdf
       
   def run_ets(self, df, color, predict, exponential=False, damped=False, damping_slope=0.98):
     # https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.Holt.html
     # https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.ExponentialSmoothing.html
+    # https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.HoltWintersResults.html
     # https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html
     
     if not damped:
@@ -289,10 +199,19 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     return {title: [fit, forecast, slope]}
 
-  def create_model_ols(self, action, degree, predict, r_data, i, count):
+  def create_model_ols(self, action, degree, predict, i, count):
     df = self.run_get_action_data(action)
     df = df.reset_index()
     
+    model_map = self.get_model_map_base()
+    model_map.update({
+      "AdjustedR2": {},
+      "ProbFStatistic": {},
+      "LogLikelihood": {},
+      "BreuschPagan": {},
+      "Formula": {},
+    })
+
     print("Creating OLS model {} of {} for: {}, degrees: {}".format(i, count, self.get_obfuscated_name(action), degree))
       
     max_year = df.Year.values[-1]
@@ -322,14 +241,16 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     model = vbp.linear_regression(dfnoNaNs, "ScaledYear", "Crude Rate", formula)
     self.write_verbose("{}_{}.txt".format(self.get_obfuscated_name(action), degree), model.summary())
     
-    r_data["AdjustedR2"][(self.get_obfuscated_name(action), degree)] = model.rsquared_adj
-    r_data["ProbFStatistic"][(self.get_obfuscated_name(action), degree)] = model.f_pvalue
-    r_data["LogLikelihood"][(self.get_obfuscated_name(action), degree)] = model.llf
-    r_data["AIC"][(self.get_obfuscated_name(action), degree)] = model.aic
-    r_data["BIC"][(self.get_obfuscated_name(action), degree)] = model.bic
-    r_data["Formula"][(self.get_obfuscated_name(action), degree)] = vbp.linear_regression_modeled_formula(model, degree)
+    index = (self.get_obfuscated_name(action), degree)
+    model_map["ModelType"][index] = "OLS"
+    model_map["AdjustedR2"][index] = model.rsquared_adj
+    model_map["ProbFStatistic"][index] = model.f_pvalue
+    model_map["LogLikelihood"][index] = model.llf
+    model_map["AIC"][index] = model.aic
+    model_map["BIC"][index] = model.bic
+    model_map["Formula"][index] = vbp.linear_regression_modeled_formula(model, degree)
     
-    r_data["AICc"][(self.get_obfuscated_name(action), degree)] = statsmodels.tools.eval_measures.aicc(model.llf, model.nobs, degree + 1)
+    model_map["AICc"][index] = statsmodels.tools.eval_measures.aicc(model.llf, model.nobs, degree + 1)
     
     predicted_values = model.fittedvalues.copy()
     actual = dfnoNaNs["Crude Rate"].values.copy()
@@ -347,7 +268,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     ax.set_title("Residuals of {} ($x^{}$)".format(self.get_obfuscated_name(action), degree))
     matplotlib.pyplot.tight_layout()
     #matplotlib.pyplot.show()
-    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_residuals.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_ols_residuals.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
     matplotlib.pyplot.close(fig)
 
     # Normal probability plot
@@ -363,21 +284,22 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     lm, lm_pvalue, fvalue, f_pvalue = statsmodels.stats.diagnostic.het_breuschpagan(model.resid, model.model.exog)
     if self.options.verbose:
       print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
-    r_data["BreuschPagan"][(self.get_obfuscated_name(action), degree)] = f_pvalue
+    model_map["BreuschPagan"][index] = f_pvalue
 
-    ax = df.plot("Year", "Crude Rate", kind="scatter", grid=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), color = "red")
+    ax = df.plot("Year", "Crude Rate", grid=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), color="black", marker="o")
 
     func = numpy.polynomial.Polynomial(model.params)
-    matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), color="blue")
+    matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), "--", color="blue", label="OLS $x^{}$".format(degree))
     
     end -= 1
     predict_x = df.ScaledYear.max()
     predicted = func(predict_x)
-    r_data["Predicted"][(self.get_obfuscated_name(action), degree)] = predicted
+    model_map["Predicted"][index] = predicted
+    model_map["PredictedYear"][index] = end
     if self.options.verbose:
       print("Predicted in {} years ({}): {}".format(predict, end, predicted))
     derivative = numpy.poly1d(list(reversed(model.params.values.tolist()))).deriv()
-    r_data["PredictedDerivative"][(self.get_obfuscated_name(action), degree)] = derivative(predict_x)
+    model_map["PredictedDerivative"][index] = derivative(predict_x)
     matplotlib.pyplot.plot([end], [predicted], "cD") # https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html
     
     ax.add_artist(matplotlib.offsetbox.AnchoredText("$x^{}$; $\\barR^2={:0.3f}$; $y({})\\approx${:0.1f}".format(degree, model.rsquared_adj, end, predicted), loc="upper center"))
@@ -387,10 +309,17 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%d"))
     #fig.set_size_inches(10, 5)
     matplotlib.pyplot.tight_layout()
-    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_model.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
-    self.write_spreadsheet(df, "{}".format(self.get_obfuscated_name(action)))
+    matplotlib.pyplot.legend()
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_ols.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
     
     if self.options.show_graphs:
       matplotlib.pyplot.show()
       
     matplotlib.pyplot.close(fig)
+
+    resultdf = pandas.DataFrame(model_map)
+    resultdf.index.rename(["Action", "Model"], inplace=True)
+
+    self.write_spreadsheet(df, "{}_olsdata".format(self.get_obfuscated_name(action)))
+    self.write_spreadsheet(resultdf, "{}_olsresults".format(self.get_obfuscated_name(action)))
+    return resultdf
