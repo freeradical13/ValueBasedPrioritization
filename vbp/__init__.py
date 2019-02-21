@@ -226,7 +226,16 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def find_best_fitting_models(self, df):
     result = df.groupby("Action").apply(lambda x: self.best_fitting_model(x))
-    result.index = result.index.droplevel()
+    
+    # Drop all but a single Action index. Some other indices may
+    # accumulate as part of the grouping and averaging (variable
+    # depending on pandas optimizations).
+    while result.index.nlevels > 1:
+      action_index = result.index.names.index("Action")
+      if action_index == 0:
+        result.index = result.index.droplevel(1)
+      else:
+        result.index = result.index.droplevel(0)
     
     # Update any negative predictions to 0
     result["Predicted"] = result["Predicted"].apply(lambda x: 0 if x < 0 else x)
@@ -253,18 +262,15 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def best_fitting_model(self, df):
     if self.options.verbose:
       print("=========\nIncoming:\n{}\n".format(df))
-    
+      
     # For each ModelType, select the best model. We end up
     # with a single row for each ModelType
-    result = df.groupby(["ModelType"]).apply(lambda x: self.best_fitting_model_grouped(x))
-    
-    # Grouping by ModelType puts ModelType into the MultiIndex, but we don't need that
-    # so drop it (it's still a column):
-    result.index = result.index.droplevel()
-    
-    # Finally we take the averages across model groups
-    result = result.groupby("Action").mean()
-    
+    result = df.groupby("ModelType").apply(lambda x: self.best_fitting_model_grouped(x))
+
+    if len(result) > 1:
+      # Finally we take the averages across model groups
+      result = result.groupby("Action").mean()
+      
     if self.options.verbose:
       print("Outgoing:\n{}\n=========".format(result))
       
