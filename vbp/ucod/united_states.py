@@ -52,8 +52,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def run_get_action_data(self, action):
     df = self.data[self.data[self.get_action_column_name()] == action]
     df = df.set_index("Date")
-    # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#timeseries-offset-aliases
-    df.index.freq = "YS"
+    # ETS requires a specific frequency so we forward-fill any missing years
+    # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
+    df = df.resample("AS").ffill()
     return df
   
   def set_or_append(self, df, append):
@@ -72,6 +73,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     action_count = 1
     for cause in causes:
+      self.check_action_exists(cause)
       try:
         if self.options.ols:
           for i in range(self.options.ols_min_degrees, self.options.ols_max_degrees + 1):
@@ -79,6 +81,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
         if self.options.ets:
           model_results = self.set_or_append(model_results, self.create_model_ets(cause, self.options.predict, action_count, count))
       except:
+        if self.options.verbose:
+          print(cause)
         traceback.print_exc()
         break
       action_count += 1

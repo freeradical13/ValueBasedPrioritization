@@ -154,6 +154,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
     if not hasattr(self, "data"):
       self.data = self.run_load()
       self.post_process()
+      
+  def check_action_exists(self, action):
+    if action not in self.get_possible_actions():
+      raise ValueError("Could not find action: {}".format(action))
   
   def post_process(self):
     self.data[self.obfuscated_column_name] = self.data[self.get_action_column_name()].apply(lambda x: self.get_obfuscated_name(x))
