@@ -227,6 +227,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def find_best_fitting_models(self, df):
     result = df.groupby("Action").apply(lambda x: self.best_fitting_model(x))
     result.index = result.index.droplevel()
+    
+    # Update any negative predictions to 0
+    result["Predicted"] = result["Predicted"].apply(lambda x: 0 if x < 0 else x)
+    
     return result
       
   def best_fitting_model_grouped(self, df):
