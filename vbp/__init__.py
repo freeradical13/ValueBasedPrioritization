@@ -172,6 +172,8 @@ class DataSource(object, metaclass=abc.ABCMeta):
     self.data[self.obfuscated_column_name] = self.data[self.get_action_column_name()].apply(lambda x: self.get_obfuscated_name(x))
 
   def run_modeled_value_based_prioritization(self):
+    self.write_spreadsheet(self.data, self.prefix_all("data"))
+
     manual_scales = None
     if self.options.manual_scales is not None:
       if self.options.manual_scales.endswith("xslx"):
