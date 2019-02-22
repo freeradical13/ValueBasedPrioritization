@@ -108,7 +108,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       
       self.write_spreadsheet(m, self.prefix_all("m"))
 
-      b = m[["Predicted", "S1", "S3"]]
+      b = m[[self.predict_column_name, "S1", "S3"]]
       
       self.write_spreadsheet(b, self.prefix_all("b"))
       return b
@@ -123,9 +123,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       "AICc": {},
       "BIC": {},
       "SSE": {},
-      "PredictedYear": {},
-      "Predicted": {},
-      "PredictedDerivative": {},
+      self.predict_column_name + "Year": {},
+      self.predict_column_name: {},
+      self.predict_column_name + "Derivative": {},
     }
   
   def create_model_ets(self, action, predict, i, count):
@@ -148,9 +148,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     for title, result in results.items():
       index = (self.get_obfuscated_name(action), title)
       model_map["ModelType"][index] = "ETS"
-      model_map["PredictedYear"][index] = result[1].index[-1].year
-      model_map["Predicted"][index] = result[1][-1]
-      model_map["PredictedDerivative"][index] = result[2]
+      model_map[self.predict_column_name + "Year"][index] = result[1].index[-1].year
+      model_map[self.predict_column_name][index] = result[1][-1]
+      model_map[self.predict_column_name + "Derivative"][index] = result[2]
       model_map["AIC"][index] = result[0].aic
       model_map["AICc"][index] = result[0].aicc
       model_map["BIC"][index] = result[0].bic
@@ -302,12 +302,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     end -= 1
     predict_x = df.ScaledYear.max()
     predicted = func(predict_x)
-    model_map["Predicted"][index] = predicted
-    model_map["PredictedYear"][index] = end
+    model_map[self.predict_column_name][index] = predicted
+    model_map[self.predict_column_name + "Year"][index] = end
     if self.options.verbose:
-      print("Predicted in {} years ({}): {}".format(predict, end, predicted))
+      print("{} in {} years ({}): {}".format(self.predict_column_name, predict, end, predicted))
     derivative = numpy.poly1d(list(reversed(model.params.values.tolist()))).deriv()
-    model_map["PredictedDerivative"][index] = derivative(predict_x)
+    model_map[self.predict_column_name + "Derivative"][index] = derivative(predict_x)
     matplotlib.pyplot.plot([end], [predicted], "cD") # https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html
     
     ax.add_artist(matplotlib.offsetbox.AnchoredText("$x^{}$; $\\barR^2={:0.3f}$; $y({})\\approx${:0.1f}".format(degree, model.rsquared_adj, end, predicted), loc="upper center"))

@@ -78,6 +78,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
   pretty_action_column_name = "Action"
   action_number_column_name = "ActionNumber"
   obfuscated_column_name = "RawName"
+  predict_column_name = "Predicted"
   obfuscated_action_names = {}
   obfuscated_action_names_count = 0
   available_obfuscated_names = None
@@ -133,6 +134,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
       self.initialize_parser(parser)
       parser.add_argument("-b", "--best-fit", choices=["lowest_aic", "lowest_aicc", "lowest_bic"], default="lowest_aicc", help="Best fitting model algorithm")
       parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
+      parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=1)
       parser.add_argument("-o", "--output-dir", help="output directory", default="output")
       parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
       parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
@@ -184,13 +186,25 @@ class DataSource(object, metaclass=abc.ABCMeta):
       manual_scales.drop(columns=[self.pretty_action_column_name, self.action_number_column_name], inplace=True, errors="ignore")
     
     b = self.predict()
+    
+    sum = b[self.predict_column_name].sum()
+    b[self.predict_column_name] = b[self.predict_column_name].divide(sum)
 
     if manual_scales is not None:
       b = b.join(manual_scales)
     
     b = b.reindex(columns=sorted(b.columns))
+    
+    self.write_spreadsheet(b, self.prefix_all("b"))
+    
+    z = b.prod(axis="columns").sort_values(ascending=False)
+    z.name = "Z({})".format(self.options.predict)
+    
+    self.write_spreadsheet(z, self.prefix_all("z"))
+    
+    z = z.head(self.options.top_actions)
 
-    return b
+    return z
 
   def run_get_possible_actions(self):
     return self.data[self.get_action_column_name()].unique()
@@ -274,7 +288,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
         result.index = result.index.droplevel(0)
     
     # Update any negative predictions to 0
-    result["Predicted"] = result["Predicted"].apply(lambda x: 0 if x < 0 else x)
+    result[self.predict_column_name] = result[self.predict_column_name].apply(lambda x: 0 if x < 0 else x)
     
     return result
       
