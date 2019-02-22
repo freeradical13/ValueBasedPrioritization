@@ -75,8 +75,11 @@ class DataSource(object, metaclass=abc.ABCMeta):
   ##############
   # Attributes #
   ##############
-  obfuscated_column_name = "Action"
+  pretty_action_column_name = "Action"
+  action_number_column_name = "ActionNumber"
+  obfuscated_column_name = "RawName"
   obfuscated_action_names = {}
+  obfuscated_action_names_count = 0
   available_obfuscated_names = None
 
   #######################
@@ -85,6 +88,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def load(self, args):
     self.prepare(args)
     return self
+  
+  def modeled_value_based_prioritization(self):
+    return self.run_modeled_value_based_prioritization()
   
   def predict(self):
     return self.run_predict()
@@ -134,6 +140,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("--debug", action="store_true", help="Debug", default=False)
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
+      parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.set_defaults(
         show_graphs=False,
       )
@@ -162,21 +169,46 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def post_process(self):
     self.data[self.obfuscated_column_name] = self.data[self.get_action_column_name()].apply(lambda x: self.get_obfuscated_name(x))
 
+  def run_modeled_value_based_prioritization(self):
+    manual_scales = None
+    if self.options.manual_scales is not None:
+      if self.options.manual_scales.endswith("xslx"):
+        manual_scales = pandas.read_excel(self.options.manual_scales)
+      elif self.options.manual_scales.endswith("csv"):
+        manual_scales = pandas.read_csv(self.options.manual_scales)
+      else:
+        raise ValueError("Could not infer type of manually calculated scale function file (expecting extension .xslx or .csv)")
+      
+      manual_scales[self.obfuscated_column_name] = manual_scales[self.obfuscated_column_name].apply(lambda x: self.get_obfuscated_name(x))
+      manual_scales.set_index(self.obfuscated_column_name, inplace=True)
+      manual_scales.drop(columns=[self.pretty_action_column_name, self.action_number_column_name], inplace=True, errors="ignore")
+    
+    b = self.predict()
+
+    if manual_scales is not None:
+      b = b.join(manual_scales)
+    
+    b = b.reindex(columns=sorted(b.columns))
+
+    return b
+
   def run_get_possible_actions(self):
     return self.data[self.get_action_column_name()].unique()
 
-  def get_obfuscated_name(self, str):
+  def get_obfuscated_name(self, s):
     if self.options.do_not_obfuscate:
-      return str
-    result = self.obfuscated_action_names.get(str)
+      return s
+    result = self.obfuscated_action_names.get(s)
     if result is None:
       if self.available_obfuscated_names is None:
-        self.available_obfuscated_names = list(range(1, len(self.get_possible_actions()) + 1))
+        self.obfuscated_action_names_count = len(self.get_possible_actions())
+        self.available_obfuscated_names = list(range(1, self.obfuscated_action_names_count + 1))
         random.shuffle(self.available_obfuscated_names)
       
-      result = "{}{}".format(self.obfuscated_column_name, self.available_obfuscated_names.pop())
+      format_string = "{}{:0" + str(len(str(self.obfuscated_action_names_count))) + "d}"
+      result = format_string.format(self.obfuscated_column_name, self.available_obfuscated_names.pop())
       
-      self.obfuscated_action_names[str] = result
+      self.obfuscated_action_names[s] = result
     return result
 
   def clean_files(self):
@@ -229,13 +261,13 @@ class DataSource(object, metaclass=abc.ABCMeta):
       f.write(str)
 
   def find_best_fitting_models(self, df):
-    result = df.groupby("Action").apply(lambda x: self.best_fitting_model(x))
+    result = df.groupby(self.obfuscated_column_name).apply(lambda x: self.best_fitting_model(x))
     
     # Drop all but a single Action index. Some other indices may
     # accumulate as part of the grouping and averaging (variable
     # depending on pandas optimizations).
     while result.index.nlevels > 1:
-      action_index = result.index.names.index("Action")
+      action_index = result.index.names.index(self.obfuscated_column_name)
       if action_index == 0:
         result.index = result.index.droplevel(1)
       else:
@@ -273,7 +305,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
     if len(result) > 1:
       # Finally we take the averages across model groups
-      result = result.groupby("Action").mean()
+      result = result.groupby(self.obfuscated_column_name).mean()
       
     if self.options.verbose:
       print("Outgoing:\n{}\n=========".format(result))

@@ -109,12 +109,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       self.write_spreadsheet(m, self.prefix_all("m"))
 
       b = m[["Predicted", "S1", "S3"]]
-      vbp.print_full_columns(b)
       
       self.write_spreadsheet(b, self.prefix_all("b"))
+      return b
 
     else:
-      print("No results")
+      return None
   
   def get_model_map_base(self):
     return {
@@ -157,7 +157,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       model_map["SSE"][index] = result[0].sse
       
     resultdf = pandas.DataFrame(model_map)
-    resultdf.index.rename(["Action", "Model"], inplace=True)
+    resultdf.index.rename([self.obfuscated_column_name, "Model"], inplace=True)
     
     # https://stackoverflow.com/questions/54791323/
     matplotlib.pyplot.legend()
@@ -326,7 +326,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     matplotlib.pyplot.close(fig)
 
     resultdf = pandas.DataFrame(model_map)
-    resultdf.index.rename(["Action", "Model"], inplace=True)
+    resultdf.index.rename([self.obfuscated_column_name, "Model"], inplace=True)
 
     self.write_spreadsheet(df, "{}_olsdata".format(self.get_obfuscated_name(action)))
     self.write_spreadsheet(resultdf, "{}_olsresults".format(self.get_obfuscated_name(action)))

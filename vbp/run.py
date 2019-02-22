@@ -41,6 +41,10 @@ if __name__ == "__main__":
     
     subparsers = parser.add_subparsers(title="command", help="Run `command -h` for additional help", dest="command_name", required=True)
     
+    subparser = subparsers.add_parser("modeled_value_based_prioritization", help="Run modeled value based prioritization")
+    add_data_source_arg(subparser, data_source_names)
+    add_remainder_arg(subparser)
+    
     subparser = subparsers.add_parser("predict", help="Generate predictions for an action")
     add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
@@ -59,7 +63,7 @@ if __name__ == "__main__":
     subparser.add_argument("action", help="Action")
     add_remainder_arg(subparser)
     
-    subparser = subparsers.add_parser("scale_functions", help="Generate scale functions table")
+    subparser = subparsers.add_parser("manual_scale_functions", help="Generate scale functions table")
     add_data_source_arg(subparser, data_source_names)
     add_output_arg(subparser)
     subparser.add_argument("-t", "--type", choices=["csv", "excel"], help="Output type", default="csv")
@@ -70,10 +74,16 @@ if __name__ == "__main__":
     add_remainder_arg(subparser)
 
     options = parser.parse_args(args)
-    if options.command_name == "predict":
+    if options.command_name == "modeled_value_based_prioritization":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
-      ds.predict()
+      b = ds.modeled_value_based_prioritization()
+      vbp.print_full_columns(b)
+    elif options.command_name == "predict":
+      ds = create_data_source(data_source_classes, options)
+      ds.load(options.args)
+      b = ds.predict()
+      vbp.print_full_columns(b)
     elif options.command_name == "list_actions":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
@@ -84,26 +94,32 @@ if __name__ == "__main__":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       print(len(ds.get_possible_actions()))
-    elif options.command_name == "scale_functions":
+    elif options.command_name == "manual_scale_functions":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       
       actions = numpy.sort(ds.get_possible_actions())
       
-      data = {"Action": actions}
+      data = {ds.obfuscated_column_name: actions}
       
       for column in options.column:
         data[column] = numpy.ones(len(actions))
         
       df = pandas.DataFrame(data, range(1, len(actions) + 1))
 
-      df.index.name = "ActionNumber"
-
-      if options.prefix is not None:
-        df["Action"] = options.prefix + df["Action"]
+      df.index.name = ds.action_number_column_name
       
-      if options.suffix is not None:
-        df["Action"] = df["Action"] + options.suffix
+      if options.prefix is not None or options.suffix is not None:
+        df[ds.pretty_action_column_name] = df[ds.obfuscated_column_name]
+        
+        # Re-order columns
+        df = df.reindex(columns=([ds.pretty_action_column_name] + list([x for x in df.columns if x != ds.pretty_action_column_name and x != ds.obfuscated_column_name] + [ds.obfuscated_column_name])))
+        
+        if options.prefix is not None:
+          df[ds.pretty_action_column_name] = options.prefix + df[ds.pretty_action_column_name]
+        
+        if options.suffix is not None:
+          df[ds.pretty_action_column_name] = df[ds.pretty_action_column_name] + options.suffix
       
       if options.type == "csv":
         write_str(options.output, df.to_csv())
