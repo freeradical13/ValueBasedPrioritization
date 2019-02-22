@@ -6,6 +6,8 @@ import numpy
 import pandas
 import argparse
 import traceback
+import matplotlib
+import matplotlib.pyplot
 
 # Import all subclasses of DataSource so that they are options
 import vbp.ucod.united_states
@@ -73,6 +75,11 @@ if __name__ == "__main__":
     subparser.add_argument("column", help="Column", nargs="+")
     add_remainder_arg(subparser)
 
+    subparser = subparsers.add_parser("prophet", help="Run prophet")
+    add_data_source_arg(subparser, data_source_names)
+    subparser.add_argument("action", help="Action")
+    add_remainder_arg(subparser)
+    
     options = parser.parse_args(args)
     if options.command_name == "modeled_value_based_prioritization":
       ds = create_data_source(data_source_classes, options)
@@ -138,6 +145,28 @@ if __name__ == "__main__":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       print(ds.get_action_data(options.action))
+    elif options.command_name == "prophet":
+      import fbprophet
+      ds = create_data_source(data_source_classes, options)
+      ds.load(options.args)
+      df = ds.get_action_data(options.action)
+      df.reset_index(inplace=True)
+      df = df[["Date", "Crude Rate"]]
+      df.rename(columns={"Date": "ds", "Crude Rate": "y"}, inplace=True)
+      print(df)
+      prophet = fbprophet.Prophet()
+      prophet.fit(df)
+      future = prophet.make_future_dataframe(periods=10, freq="Y")
+      forecast = prophet.predict(future)
+
+      prophet.plot(forecast)
+      matplotlib.pyplot.show()
+      
+      prophet.plot_components(forecast)
+      matplotlib.pyplot.show()
+      
+      forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
+      print(forecast)
     else:
       raise NotImplementedError()
   except:

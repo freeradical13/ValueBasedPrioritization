@@ -133,7 +133,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     df = self.run_get_action_data(action)
     
     df = df[["Crude Rate"]]
-    ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)))
+    ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), kind="line")
     ax.set_ylabel("Crude Rate")
     fig = matplotlib.pyplot.gcf()
     
@@ -294,7 +294,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       print("het_breuschpagan: {} {} {} {}".format(lm, lm_pvalue, fvalue, f_pvalue))
     model_map["BreuschPagan"][index] = f_pvalue
 
-    ax = df.plot("Year", "Crude Rate", grid=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), color="black", marker="o")
+    ax = df.plot("Year", "Crude Rate", grid=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), color="black", marker="o", kind="line", legend=True)
 
     func = numpy.polynomial.Polynomial(model.params)
     matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), "--", color="blue", label="OLS $x^{}$".format(degree))

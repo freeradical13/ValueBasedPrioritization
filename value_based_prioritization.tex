@@ -294,6 +294,18 @@
   note         = {\url{https://faculty.fuqua.duke.edu/\~clemen/bio/Published\%20Papers/13.CombiningReview-Clemen-IJOF-89.pdf}},
 }
 
+@article{taylor2018forecasting,
+  title        = {Forecasting at scale},
+  author       = {Taylor, Sean J and Letham, Benjamin},
+  journal      = {The American Statistician},
+  volume       = {72},
+  number       = {1},
+  pages        = {37--45},
+  year         = {2018},
+  publisher    = {Taylor \& Francis},
+  note         = {\url{https://peerj.com/preprints/3190.pdf}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -421,7 +433,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/expsmooth.html}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/arima.html}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/regression.html}}, etc.):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -430,9 +442,9 @@ Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to eac
   \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection} (or forecasting)\cite{hyndman2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/selecting-predictors.html}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
+The models are compared using \textbf{model selection} (or forecasting)\cite{hyndman2018forecasting,taylor2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
-For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/combinations.html}}).
+For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
 Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
@@ -488,7 +500,7 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_action
                   \newline\newline
                   $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
                   \newline\newline
-                  Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}} into $[0.5,1]$ relative to other actions.
+                  Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\scriptsize{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}}} into $[0.5,1]$ relative to other actions.
   \item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if political/cultural} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                   \newline\newline
                   Essentially remove actions that are primarily political and/or cultural.
@@ -558,6 +570,8 @@ Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Malig
   \includegraphics[width=0.5\textwidth]{Malignant_neoplasms_ets.png}
   \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
 \end{figure}
+
+Scedasticity, forecast uncertainty, and outliers are not considered because it's not clear how to automate processing of such data.
 
 For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc. For example:
 
