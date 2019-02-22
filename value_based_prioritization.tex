@@ -560,7 +560,26 @@ Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Malig
 
 For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc.
 
-Use each $M(A(t_F))$ to calculate the predicted value for $t_F$ (setting negative values to 0).
+Use each $M(A(t_F))$ to calculate the predicted value $B(t_F)$ (setting negative values to 0) and any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lccc}
+    \toprule
+      Action  & $B(t_F)$ & $S_1$  & $S_3$  \\
+    \midrule
+      Action1 & 0.74     & 1.0    & 1.0    \\
+      Action2 & 78.11    & 1.0    & 0.57   \\
+      \ldots  & \ldots   & \ldots & \ldots \\
+    \bottomrule
+  \end{tabular}
+  \caption{Example $B(t_F)$ table and model-based scale function values}
+  \label{table:btable}
+\end{table}
+
+\section{Discussion}
+
+The example modeling methods are crude and the field is ripe for more detailed approaches.
 
 %%%%%%%%%%%%%%
 % References %

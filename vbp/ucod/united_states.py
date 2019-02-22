@@ -52,7 +52,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def run_get_action_data(self, action):
     df = self.data[self.data[self.get_action_column_name()] == action]
     df = df.set_index("Date")
-    # ETS requires a specific frequency so we forward-fill any missing years
+    # ETS requires a specific frequency so we forward-fill any missing
+    # years. If there's already an anual frequency, no change is made
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
     df = df.resample("AS").ffill()
     return df
@@ -199,7 +200,10 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     forecast = fit.forecast(predict).rename("${}$".format(title))
     forecast.plot(color=color, legend=True, style="--")
     
-    slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(list(map(lambda x: x.year, forecast.index.to_pydatetime())), forecast.values)
+    # Not necessarily linear, so take the slope of a line through the last two points
+    lasttwopoints = forecast.iloc[-2::,]
+    slope = (lasttwopoints.iloc[1,] - lasttwopoints.iloc[0,]) / (lasttwopoints.index[1].year - lasttwopoints.index[0].year)
+    #slope, intercept, r_value, p_value, std_err = scipy.stats.linregress(list(map(lambda x: x.year, forecast.index.to_pydatetime())), forecast.values)
     
     return {title: [fit, forecast, slope]}
 
