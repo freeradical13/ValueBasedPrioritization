@@ -26,6 +26,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{bm}
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -537,13 +538,13 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
 
 \begin{table}[H]
   \centering
-  \begin{tabular}{ccc}
+  \begin{tabular}{cc}
     \toprule
-      Year    & Crude Rate \\
+      Year   & Crude Rate \\
     \midrule
-      1999    &      197.0 \\
-      \ldots  & \ldots     \\
-      2017    &      183.9 \\
+      1999   &      197.0 \\
+      \ldots &     \ldots \\
+      2017   &      183.9 \\
     \bottomrule
   \end{tabular}
   \caption{Crude rate of deaths per year for \textit{Malignant neoplasms}}
@@ -558,7 +559,23 @@ Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Malig
   \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
 \end{figure}
 
-For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc.
+For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc. For example:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lcc}
+    \toprule
+      $R_i(D(A))$       & Predicted       & AICc           \\
+    \midrule
+      $ETS(A,A,N)$      & 177.60          & 13.43          \\
+      $ETS(A,A_d,N)$    & 179.19          & 18.78          \\
+      $\bm{ETS(A,M,N)}$ & \textbf{177.75} & \textbf{12.44} \\
+      $ETS(A,M_d,N)$    & 179.17          & 14.35          \\
+    \bottomrule
+  \end{tabular}
+  \caption{Example AICc values of $R_i(D(A))$ for \textit{Malignant neoplasms}}
+  \label{table:choosem}
+\end{table}
 
 Use each $M(A(t_F))$ to calculate the predicted value and then generate all of the relative $B(t_F)$ values (setting negative values to 0) and any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example:
 
@@ -568,8 +585,8 @@ Use each $M(A(t_F))$ to calculate the predicted value and then generate all of t
     \toprule
       Action  & $B(t_F)$ & $S_1$  & $S_3$  \\
     \midrule
-      Action1 & 0.74     & 1.0    & 1.0    \\
-      Action2 & 78.11    & 1.0    & 0.57   \\
+      Action1 & 0.17     & 1.0    & 0.57   \\
+      Action2 & 0.09     & 1.0    & 1      \\
       \ldots  & \ldots   & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
