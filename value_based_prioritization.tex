@@ -77,7 +77,7 @@
   pages        = {531--545},
   year         = {2016},
   publisher    = {Taylor \& Francis},
-  note         = {\url{https://dx.doi.org/10.1080/17439760.2015.1137623}},
+  note         = {\url{https://www.ippanetwork.org/wp-content/uploads/2017/02/Martela-Steger-JOPP.pdf}},
 }
 
 @book{huemer2007ethical,
@@ -306,6 +306,18 @@
   note         = {\url{https://peerj.com/preprints/3190.pdf}},
 }
 
+@article{makridakis2018m4,
+  title        = {The M4 Competition: Results, findings, conclusion and way forward},
+  author       = {Makridakis, Spyros and Spiliotis, Evangelos and Assimakopoulos, Vassilios},
+  journal      = {International Journal of Forecasting},
+  volume       = {34},
+  number       = {4},
+  pages        = {802--808},
+  year         = {2018},
+  publisher    = {Elsevier},
+  note         = {\url{https://www.researchgate.net/profile/Spyros_Makridakis/publication/325901666_The_M4_Competition_Results_findings_conclusion_and_way_forward/links/5b2c9aa4aca2720785d66b5e/The-M4-Competition-Results-findings-conclusion-and-way-forward.pdf}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -348,7 +360,7 @@ Why should a particular goal be pursued (\enquote{Why})? Given a goal, what acti
 
 This article proposes that value theory usually best scopes \enquote{Why} and \enquote{What} and the scientific method usually best answers \enquote{How}. A method called Value-Based Prioritization is developed to answer the \enquote{What} question:
 
-\begin{equation}\label{article-equation}
+\begin{equation*}
   \begin{gathered}
     \textrm{Why: } \textit{Value Theory} \\
     \downarrow \\
@@ -356,7 +368,7 @@ This article proposes that value theory usually best scopes \enquote{Why} and \e
     \downarrow \\
     \textrm{How: } \textit{Scientific Method}
   \end{gathered}
-\end{equation}
+\end{equation*}
 
 \section{Why a Goal?}
 
@@ -433,7 +445,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, etc.):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -571,7 +583,7 @@ Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Malig
   \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
 \end{figure}
 
-Scedasticity, forecast uncertainty, and outliers are not considered because it's not clear how to automate processing of such data.
+Scedasticity, forecast uncertainty, and outliers are not considered because it's not clear how to automate processing of such data to tune or choose models.
 
 For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc. For example:
 

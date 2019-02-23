@@ -153,16 +153,18 @@ if __name__ == "__main__":
       df.reset_index(inplace=True)
       df = df[["Date", "Crude Rate"]]
       df.rename(columns={"Date": "ds", "Crude Rate": "y"}, inplace=True)
-      print(df)
+      # https://facebook.github.io/prophet/docs/saturating_forecasts.html
+      df["floor"] = 0
+      df["cap"] = 100000
       prophet = fbprophet.Prophet()
       prophet.fit(df)
       future = prophet.make_future_dataframe(periods=10, freq="Y")
       forecast = prophet.predict(future)
 
       prophet.plot(forecast)
-      matplotlib.pyplot.show()
       
       prophet.plot_components(forecast)
+
       matplotlib.pyplot.show()
       
       forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
