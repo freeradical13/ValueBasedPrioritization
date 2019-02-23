@@ -616,8 +616,57 @@ Use each $M(A(t_F))$ to calculate the predicted value and then generate all of t
       \ldots  & \ldots   & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
-  \caption{Example $B(t_F)$ table and model-based scale function values}
+  \caption{Example $B(t_F)$ table and model-based scale functions}
   \label{table:btable}
+\end{table}
+
+Combine the table above with the manually calculated scale functions table \ref{table:scaletable}. For example:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lcccc}
+    \toprule
+      Action  & $B(t_F)$ & $S_1$  & $S_3$  & $S_4$  \\
+    \midrule
+      Action1 & 0.17     & 1.0    & 0.57   & 1      \\
+      Action2 & 0.09     & 1.0    & 1      & 1      \\
+      \ldots  & \ldots   & \ldots & \ldots & \ldots \\
+    \bottomrule
+  \end{tabular}
+  \caption{Example $B(t_F)$ table, model-based scale functions, and manually calculated scale functions}
+  \label{table:btablewithmanual}
+\end{table}
+
+Calculate any non-manually calculated and non-model based scale functions for each action\footnote{For the example scale functions, this is only $S_2(A_i)$} and create the final table with all scale functions. For example:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lccccc}
+    \toprule
+      Action  & $B(t_F)$ & $S_1$  & $S_2$  & $S_3$  & $S_4$  \\
+    \midrule
+      Action1 & 0.17     & 1.0    & 1.0    & 0.57   & 1      \\
+      Action2 & 0.09     & 1.0    & 1.0    & 1      & 1      \\
+      \ldots  & \ldots   & \ldots & \ldots & \ldots \\
+    \bottomrule
+  \end{tabular}
+  \caption{Example $B(t_F)$ table with all scale functions}
+  \label{table:btablewithall}
+\end{table}
+
+Calculate the product for each action to produce the final $Z(t_F)$ table, sort by the value descending and choose the top $k$ actions. For example:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lc}
+    \toprule
+      Action          & $Z(t_F)$ \\
+    \midrule
+      Eliminate: TODO & 0.08     \\
+    \bottomrule
+  \end{tabular}
+  \caption{Example $Z(t_F)$ table}
+  \label{table:ztable}
 \end{table}
 
 \section{Discussion}
