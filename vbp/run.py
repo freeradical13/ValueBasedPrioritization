@@ -54,6 +54,7 @@ if __name__ == "__main__":
     subparser = subparsers.add_parser("list_actions", help="List unique actions")
     add_data_source_arg(subparser, data_source_names)
     add_output_arg(subparser)
+    subparser.add_argument("--no-sort", help="Do not sort", action="store_true", default=False)
     add_remainder_arg(subparser)
     
     subparser = subparsers.add_parser("count_actions", help="Count unique actions")
@@ -77,7 +78,14 @@ if __name__ == "__main__":
 
     subparser = subparsers.add_parser("prophet", help="Run prophet")
     add_data_source_arg(subparser, data_source_names)
-    subparser.add_argument("action", help="Action")
+    add_remainder_arg(subparser)
+    
+    subparser = subparsers.add_parser("generate_average_ages", help="Generate average age data")
+    add_data_source_arg(subparser, data_source_names)
+    add_remainder_arg(subparser)
+    
+    subparser = subparsers.add_parser("test", help="Test")
+    add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
     
     options = parser.parse_args(args)
@@ -94,7 +102,10 @@ if __name__ == "__main__":
     elif options.command_name == "list_actions":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
-      options.output.write(os.linesep.join(numpy.sort(ds.get_possible_actions()).tolist()))
+      if options.no_sort:
+        options.output.write(os.linesep.join(ds.get_possible_actions().tolist()))
+      else:
+        options.output.write(os.linesep.join(numpy.sort(ds.get_possible_actions()).tolist()))
       options.output.write(os.linesep)
       options.output.close()
     elif options.command_name == "count_actions":
@@ -146,29 +157,17 @@ if __name__ == "__main__":
       ds.load(options.args)
       print(ds.get_action_data(options.action))
     elif options.command_name == "prophet":
-      import fbprophet
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
-      df = ds.get_action_data(options.action)
-      df.reset_index(inplace=True)
-      df = df[["Date", "Crude Rate"]]
-      df.rename(columns={"Date": "ds", "Crude Rate": "y"}, inplace=True)
-      # https://facebook.github.io/prophet/docs/saturating_forecasts.html
-      df["floor"] = 0
-      df["cap"] = 100000
-      prophet = fbprophet.Prophet()
-      prophet.fit(df)
-      future = prophet.make_future_dataframe(periods=10, freq="Y")
-      forecast = prophet.predict(future)
-
-      prophet.plot(forecast)
-      
-      prophet.plot_components(forecast)
-
-      matplotlib.pyplot.show()
-      
-      forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
-      print(forecast)
+      ds.prophet()
+    elif options.command_name == "generate_average_ages":
+      ds = create_data_source(data_source_classes, options)
+      ds.load(options.args)
+      ds.generate_average_ages()
+    elif options.command_name == "test":
+      ds = create_data_source(data_source_classes, options)
+      ds.load(options.args)
+      ds.test()
     else:
       raise NotImplementedError()
   except:

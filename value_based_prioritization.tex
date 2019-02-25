@@ -318,6 +318,34 @@
   note         = {\url{https://www.researchgate.net/profile/Spyros_Makridakis/publication/325901666_The_M4_Competition_Results_findings_conclusion_and_way_forward/links/5b2c9aa4aca2720785d66b5e/The-M4-Competition-Results-findings-conclusion-and-way-forward.pdf}},
 }
 
+@misc{censusestimates19001999,
+  title        = {\textit{Historical National Population Estimates}},
+  author       = {{U.S. Census Bureau}},
+  howpublished = {\url{https://www2.census.gov/programs-surveys/popest/tables/1900-1980/national/totals/popclockest.txt}},
+  note         = {Accessed: 2019-02-23},
+}
+
+@misc{worldbankopendata,
+  title        = {\textit{World Bank Open Data: United States SP.POP.TOTL}},
+  author       = {{World Bank}},
+  howpublished = {\url{http://api.worldbank.org/v2/en/country/USA?downloadformat=csv}},
+  note         = {Accessed: 2019-02-23},
+}
+
+@misc{nbermortality,
+  title        = {\textit{Mortality Data: Vital Statistics NCHS' Multiple Cause of Death Data, 1959-2017}},
+  author       = {{The National Bureau of Economic Research}},
+  howpublished = {\url{https://www.nber.org/data/vital-statistics-mortality-data-multiple-cause-of-death.html}},
+  note         = {Accessed: 2019-02-23},
+}
+
+@misc{icdcomparabilityratios,
+  title        = {{A Guide to State Implementation of ICD-10 for Mortality; Part II: Applying Comparability Ratios}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
+  howpublished = {\url{https://www.cdc.gov/nchs/data/statab/document-for-the-states.pdf}},
+  note         = {Accessed: 2019-02-23},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -469,12 +497,12 @@ The following example applies modeled value-based prioritization \eqref{modeled-
 First, outline the parameters:
 
 \begin{itemize}
-  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
+  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include morbidity and disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
   \item \eqref{goal} $G(t) = $ eliminate human death.
   \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
   \item \eqref{how-many-actions} $k = $ 1 for a single person (use 2 to hedge the failure of the first action or as a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
-  \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause.
+  \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\url{https://www.who.int/topics/mortality/en/}}.
   \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\url{https://otexts.com/fpp2/holt.html}}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/ets.html}}\textsuperscript{,}\footnote{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}:
     \begin{equation*}
       \begin{gathered}
@@ -486,7 +514,7 @@ First, outline the parameters:
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
-$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
+$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying,censusestimates19001999,worldbankopendata,nbermortality}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
   \begin{gathered}
@@ -591,12 +619,12 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
   \centering
   \begin{tabular}{lcc}
     \toprule
-      $R_i(D(A))$       & Predicted       & AICc           \\
+      $R_i(D(A))$       & AICc           & Predicted       \\
     \midrule
-      $ETS(A,A,N)$      & 177.60          & 13.43          \\
-      $ETS(A,A_d,N)$    & 179.19          & 18.78          \\
-      $\bm{ETS(A,M,N)}$ & \textbf{177.75} & \textbf{12.44} \\
-      $ETS(A,M_d,N)$    & 179.17          & 14.35          \\
+      $ETS(A,A,N)$      & 13.43          & 177.60          \\
+      $ETS(A,A_d,N)$    & 18.78          & 179.19          \\
+      $\bm{ETS(A,M,N)}$ & \textbf{12.44} & \textbf{177.75} \\
+      $ETS(A,M_d,N)$    & 14.35          & 179.17          \\
     \bottomrule
   \end{tabular}
   \caption{Example AICc values of $R_i(D(A))$ for \textit{Malignant neoplasms}}
@@ -616,7 +644,7 @@ Use each $M(A(t_F))$ to calculate the predicted value and then generate all of t
       \ldots  & \ldots   & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
-  \caption{Example $B(t_F)$ table and model-based scale functions}
+  \caption{Example $B(t_F)$ values and model-based scale function values}
   \label{table:btable}
 \end{table}
 
@@ -633,7 +661,7 @@ Combine the table above with the manually calculated scale functions table \ref{
       \ldots  & \ldots   & \ldots & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
-  \caption{Example $B(t_F)$ table, model-based scale functions, and manually calculated scale functions}
+  \caption{Example $B(t_F)$ values, model-based scale function values, and manually calculated scale function values}
   \label{table:btablewithmanual}
 \end{table}
 
@@ -650,19 +678,21 @@ Calculate any non-manually calculated and non-model based scale functions for ea
       \ldots  & \ldots   & \ldots & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
-  \caption{Example $B(t_F)$ table with all scale functions}
+  \caption{Example $B(t_F)$ values with all scale function values}
   \label{table:btablewithall}
 \end{table}
 
-Calculate the product for each action to produce the final $Z(t_F)$ table, sort by the value descending and choose the top $k$ actions. For example:
+Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table, then sort by the values in descending order and choose the top $k$ actions.
+
+For the parameters and data in this example, the result is:
 
 \begin{table}[H]
   \centering
-  \begin{tabular}{lc}
+  \begin{tabular}{clc}
     \toprule
-      Action          & $Z(t_F)$ \\
+      $k$ & Action          & $Z(t_F)$ \\
     \midrule
-      Eliminate: TODO & 0.08     \\
+      1   & Eliminate: TODO & 0.08     \\
     \bottomrule
   \end{tabular}
   \caption{Example $Z(t_F)$ table}

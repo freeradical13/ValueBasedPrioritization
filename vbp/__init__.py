@@ -101,6 +101,15 @@ class DataSource(object, metaclass=abc.ABCMeta):
   
   def get_action_data(self, action):
     return self.run_get_action_data(action)
+  
+  def prophet(self):
+    return self.run_prophet()
+
+  def generate_average_ages(self):
+    return self.run_generate_average_ages()
+
+  def test(self):
+    return self.run_test()
 
   ####################
   # Abstract Methods #
@@ -170,10 +179,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
   
   def post_process(self):
     self.data[self.obfuscated_column_name] = self.data[self.get_action_column_name()].apply(lambda x: self.get_obfuscated_name(x))
+    self.write_spreadsheet(self.data, self.prefix_all("data_processed"))
 
   def run_modeled_value_based_prioritization(self):
-    self.write_spreadsheet(self.data, self.prefix_all("data"))
-
     manual_scales = None
     if self.options.manual_scales is not None:
       if self.options.manual_scales.endswith("xslx"):
@@ -209,7 +217,11 @@ class DataSource(object, metaclass=abc.ABCMeta):
     return z
 
   def run_get_possible_actions(self):
-    return self.data[self.get_action_column_name()].unique()
+    df = self.data[self.get_action_column_name()]
+    # Randomize the list to reduce bias
+    df = df.sample(frac=1)
+    df = df.unique()
+    return df
 
   def get_obfuscated_name(self, s):
     if self.options.do_not_obfuscate:
@@ -342,3 +354,12 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def prefix_all(self, name):
     return "_all_" + name
+
+  def run_prophet(self):
+    raise NotImplementedError()
+
+  def run_generate_average_ages(self):
+    raise NotImplementedError()
+
+  def run_test(self):
+    return False
