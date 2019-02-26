@@ -108,6 +108,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def generate_average_ages(self):
     return self.run_generate_average_ages()
 
+  def prepare_data(self):
+    return self.run_prepare_data()
+
   def test(self):
     return self.run_test()
 
@@ -360,6 +363,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def run_generate_average_ages(self):
     raise NotImplementedError()
+
+  def run_prepare_data(self):
+    return False
 
   def run_test(self):
     return False

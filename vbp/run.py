@@ -88,6 +88,10 @@ if __name__ == "__main__":
     add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
     
+    subparser = subparsers.add_parser("prepare_data", help="Prepare data")
+    add_data_source_arg(subparser, data_source_names)
+    add_remainder_arg(subparser)
+    
     options = parser.parse_args(args)
     if options.command_name == "modeled_value_based_prioritization":
       ds = create_data_source(data_source_classes, options)
@@ -164,6 +168,10 @@ if __name__ == "__main__":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       ds.generate_average_ages()
+    elif options.command_name == "prepare_data":
+      ds = create_data_source(data_source_classes, options)
+      ds.load(options.args)
+      ds.prepare_data()
     elif options.command_name == "test":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
