@@ -97,8 +97,6 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     df["Year"] = df["Date"].dt.year
     # https://wonder.cdc.gov/wonder/help/cmf.html#Frequently%20Asked%20Questions%20about%20Death%20Rates
     df["Crude Rate"] = (df.Deaths / df.Population) * 100000.0
-    if self.options.average_ages:
-      df = self.add_average_ages(df, "ICD Sub-Chapter Code", self.options.average_age_range, df["Year"].max() - self.options.average_age_range + 1)
     self.write_spreadsheet(df, self.prefix_all("data"))
     return df
 
@@ -166,10 +164,6 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
       extra_columns = ["S1", "S3"]
       final_columns = [self.predict_column_name]
-
-      if self.options.average_ages:
-        m[self.options.average_ages] = m.apply(lambda row: self.data[self.data[self.obfuscated_column_name] == row.name].iloc[0][self.options.average_ages], axis="columns", raw=True)
-        extra_columns.append(self.options.average_ages)
 
       extra_columns.sort()
       final_columns += extra_columns
@@ -695,9 +689,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def print_processing_csv(self, i, csv, csvs):
     print("Processing {} ({} of {})".format(csv, i+1, len(csvs)))
 
-  def add_average_ages(self, incomingdf, groupbycol, average_range, min_year):
+  def get_calculated_scale_function_values(self):
     self.check_raw_files_directory()
-    icd_codes = incomingdf[groupbycol].unique()
+    groupbycol = "ICD Sub-Chapter Code"
+    average_range = self.options.average_age_range
+    min_year = self.data["Year"].max() - self.options.average_age_range + 1
+    icd_codes = self.data[groupbycol].unique()
     icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
     csvs = self.get_mortality_files()
     stats = {}
@@ -720,7 +717,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     self.write_spreadsheet(statsdf, self.prefix_all("statsdf"))
     subset = statsdf.loc[statsdf.index.max()[0]-average_range:statsdf.index.max()[0]]
     deathmax = statsdf["Max"].max()
-    calculated_col = "Calculated"
+    calculated_col = self.options.average_ages
     agesbygroup = subset.groupby(groupbycol).apply(lambda row: 1 - ((row["Sum"].sum() / row["Count"].sum()) / deathmax)).sort_values().rename(calculated_col).to_frame()
     agesbygroup["MaxAgeMinutes"] = deathmax
     agesbygroup["MaxAgeYears"] = agesbygroup["MaxAgeMinutes"] / 525960
@@ -729,10 +726,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     agesbygroup["SumAgeMinutes"] = subset.groupby(groupbycol).apply(lambda row: row["Sum"].sum())
     agesbygroup["SumAgeYears"] = agesbygroup["SumAgeMinutes"] / 525960
     agesbygroup["Count"] = subset.groupby(groupbycol).apply(lambda row: row["Count"].sum())
+    agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[groupbycol] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
     self.write_spreadsheet(agesbygroup, self.prefix_all("agesbygroup"))
-    incomingdf[self.options.average_ages] = incomingdf[groupbycol].apply(lambda group: agesbygroup.loc[group][calculated_col] if group in agesbygroup.index else 1)
-    #incomingdf[self.options.average_ages] = vbp.normalize(incomingdf[self.options.average_ages].values, 0.5, 1.0)
-    return incomingdf
+    result = agesbygroup[[self.obfuscated_column_name, calculated_col]]
+    result.set_index(self.obfuscated_column_name, inplace=True)
+    #result[self.options.average_ages] = vbp.normalize(result[self.options.average_ages].values, 0.5, 1.0)
+    return result
   
   def run_test(self):
     return None

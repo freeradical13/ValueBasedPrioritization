@@ -207,6 +207,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
     if manual_scales is not None:
       b = b.join(manual_scales)
     
+    calculated_scales = self.get_calculated_scale_function_values()
+    if calculated_scales is not None and calculated_scales.empty is False:
+      b = b.join(calculated_scales)
+    
     b = b.reindex(columns=sorted(b.columns))
     
     self.write_spreadsheet(b, self.prefix_all("b"))
@@ -370,3 +374,6 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def run_test(self):
     return False
+
+  def get_calculated_scale_function_values(self):
+    return None
