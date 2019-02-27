@@ -257,7 +257,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     title += "_d" if damped else ""
     title += ",N)"
     forecast = fit.forecast(predict).rename("${}$".format(title))
-    forecast.plot(color=color, legend=True, style="--")
+    forecast.plot(color=color, legend=True, grid=True, style="--")
     
     # Not necessarily linear, so take the slope of a line through the last two points
     lasttwopoints = forecast.iloc[-2::,]
