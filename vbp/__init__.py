@@ -217,6 +217,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
     
     z = b.prod(axis="columns").sort_values(ascending=False)
     z.name = "Z({})".format(self.options.predict)
+    z = z.to_frame()
+    z.reset_index(inplace=True)
+    z.index.name = "k"
+    z.index += 1
     
     self.write_spreadsheet(z, self.prefix_all("z"))
     

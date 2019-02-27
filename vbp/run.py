@@ -97,6 +97,7 @@ if __name__ == "__main__":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       b = ds.modeled_value_based_prioritization()
+      print("")
       vbp.print_full_columns(b)
     elif options.command_name == "predict":
       ds = create_data_source(data_source_classes, options)
