@@ -68,15 +68,16 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   
   def initialize_parser(self, parser):
     parser.add_argument("cause", nargs="*", help="ICD Sub-Chapter")
-    parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
-    parser.add_argument("-r", "--raw-files-directory", help="directory with raw files")
+    parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
     parser.add_argument("--download", help="If not files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
+    parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
     parser.add_argument("--ols", help="Ordinary least squares", dest="ols", action="store_true")
     parser.add_argument("--no-ols", help="Ordinary least squares", dest="ols", action="store_false")
     parser.add_argument("--ols-min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("--ols-max-degrees", help="maximum polynomial degree", type=int, default=1)
+    parser.add_argument("-r", "--raw-files-directory", help="directory with raw files")
     parser.add_argument("--test", help="Test data")
     parser.set_defaults(
       ets=True,
@@ -459,28 +460,17 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     #for cause in causes:
       #print(cause)
 
-  def transform_row(self, row, comparability_ratios):
-    icd = row["ICD Revision"]
-    if icd > 5:
-      icd_index = int(icd - 5)
-      for column in row.index.values:
-        if column in comparability_ratios.index:
-          ratios = comparability_ratios.loc[column]
-          ratios = ratios.iloc[0:icd_index]
-          row[column] = row[column] * numpy.prod(ratios.values)
-    return row
-
   def run_test(self):
-    self.top_ucods()
+    return None
   
-  def create_comparable(self):
-    comparability_ratios = pandas.read_excel(self.options.test, sheet_name="Comparability Codes", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
-    comparable_ucods = pandas.read_excel(self.options.test, index_col="Year")
-    comparable_ucods = comparable_ucods.transform(self.transform_row, axis="columns", comparability_ratios=comparability_ratios)
-    comparable_ucods.to_excel("{}_mod.xlsx".format(self.options.test))
-    
   def run_prepare_data(self):
     self.check_raw_files_directory()
+    if self.options.comparable_ratios:
+      self.create_comparable()
+    else:
+      self.process_raw_mortality_data()
+    
+  def process_raw_mortality_data(self):
     counts = {}
     csvs = glob.glob(os.path.join(self.options.raw_files_directory, "*.csv"))
     for csv in csvs:
@@ -676,6 +666,24 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
             count_years["Homicide"] = len(df[((df["ucodint"] >= ICD.toint("X85")) & (df["ucodint"] <= ICD.toint("Y09"))) | (df["ucodint"] == ICD.toint("Y35")) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("Y87.1"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("Y89.0")))])*scale
 
     df = pandas.DataFrame.from_dict(counts, orient="index")
-    output_file = os.path.abspath("comparable_data_since_1959.xlsx")
+    output_file = os.path.abspath("data/ucod/united_states/comparable_data_since_1959.xlsx")
     df.to_excel(output_file)
     print("Created {}".format(output_file))
+
+  def create_comparable(self):
+    comparability_ratios = pandas.read_excel("data/ucod/united_states/comparable_ucod_estimates.xlsx", sheet_name="Comparability Codes", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
+    comparable_ucods = pandas.read_excel("data/ucod/united_states/comparable_ucod_estimates.xlsx", index_col="Year")
+    comparable_ucods = comparable_ucods.transform(self.transform_row, axis="columns", comparability_ratios=comparability_ratios)
+    comparable_ucods.to_excel("{}_mod.xlsx".format("data/ucod/united_states/comparable_ucod_estimates.xlsx".replace(".xlsx", "")))
+    
+  def transform_row(self, row, comparability_ratios):
+    icd = row["ICD Revision"]
+    currenticd = 10
+    if icd < currenticd:
+      icd_index = int(icd - 5) # Data starts at 5th ICD
+      for column in row.index.values:
+        if column in comparability_ratios.index:
+          ratios = comparability_ratios.loc[column]
+          ratios = ratios.iloc[icd_index:]
+          row[column] = row[column] * numpy.prod(ratios.values)
+    return row
