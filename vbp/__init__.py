@@ -15,6 +15,7 @@ import statsmodels.tools
 import statsmodels.formula.api
 
 VERSION = "0.1.0"
+numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
   return "y ~ " + " + ".join("I(x**{})".format(i) for i in range(1, degree+1))
@@ -187,12 +188,12 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def run_modeled_value_based_prioritization(self):
     manual_scales = None
     if self.options.manual_scales is not None:
-      if self.options.manual_scales.endswith("xslx"):
+      if self.options.manual_scales.endswith("xlsx"):
         manual_scales = pandas.read_excel(self.options.manual_scales)
       elif self.options.manual_scales.endswith("csv"):
         manual_scales = pandas.read_csv(self.options.manual_scales)
       else:
-        raise ValueError("Could not infer type of manually calculated scale function file (expecting extension .xslx or .csv)")
+        raise ValueError("Could not infer type of manually calculated scale function file (expecting extension .xlsx or .csv)")
       
       manual_scales[self.obfuscated_column_name] = manual_scales[self.obfuscated_column_name].apply(lambda x: self.get_obfuscated_name(x))
       manual_scales.set_index(self.obfuscated_column_name, inplace=True)

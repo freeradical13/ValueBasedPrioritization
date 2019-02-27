@@ -38,6 +38,9 @@ class ICD:
     if len(x) < 3:
       return int(int(x) * 365.25 * 24 * 60) # years
     else:
+      if x[1:] == "999": # Age unknown
+        return numpy.NaN
+
       ageType = x[0]
       if ageType == '0' or ageType == '1': # years
         return int(int(x[1:]) * 365.25 * 24 * 60)

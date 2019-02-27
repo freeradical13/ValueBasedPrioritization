@@ -1,9 +1,12 @@
 value_based_prioritization.bib
-*xslx*
+/*xlsx*
+/*csv*
+/work
+/output
+/data/ucod/united_states/mort/
+
 *.pyc
 __pycache__
-work
-/output
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

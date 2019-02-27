@@ -170,11 +170,11 @@ if __name__ == "__main__":
       ds.generate_average_ages()
     elif options.command_name == "prepare_data":
       ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
+      ds.ensure_options(options.args)
       ds.prepare_data()
     elif options.command_name == "test":
       ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
+      ds.ensure_options(options.args)
       ds.test()
     else:
       raise NotImplementedError()
