@@ -25,7 +25,7 @@ Example:
 
 ### United States
 
-#### Long-term, comparable leading causes of death
+#### Long-term, comparable, leading causes of death
 
 Generate `data/ucod/united_states/comparable_data_since_1959.xlsx` for
 all long-term, comparable, leading causes of death in
