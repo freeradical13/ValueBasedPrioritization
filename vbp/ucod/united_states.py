@@ -52,12 +52,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
      5,  5,  5,  5,  5,  5,  5,  5,  5,  5, # 1910-1919
      5,  5,  5,  5,  5,  5,  5,  5,  5,  5, # 1920-1929
      5,  5,  5,  5,  5,  5,  5,  5,  5,  5, # 1930-1939
-     5,  5,  5,  5,  5,  5,  5,  5,  5,  6, # 1940-1949
-     6,  6,  6,  6,  6,  6,  6,  6,  7,  7, # 1950-1959
-     7,  7,  7,  7,  7,  7,  7,  7,  8,  8, # 1960-1969
-     8,  8,  8,  8,  8,  8,  8,  9,  9,  9, # 1970-1979
+     5,  5,  5,  5,  5,  5,  5,  5,  5,  6, # 1940-1949; Switch @ 1949: https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf
+     6,  6,  6,  6,  6,  6,  6,  6,  7,  7, # 1950-1959; Switch @ 1958: https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf
+     7,  7,  7,  7,  7,  7,  7,  7,  8,  8, # 1960-1969; Switch @ 1968: https://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp
+     8,  8,  8,  8,  8,  8,  8,  8,  8,  9, # 1970-1979; Switch @ 1979: https://www.cdc.gov/nchs/data/nvsr/nvsr49/nvsr49_02.pdf
      9,  9,  9,  9,  9,  9,  9,  9,  9,  9, # 1980-1989
-     9,  9,  9,  9,  9,  9,  9,  9,  9, 10, # 1990-1999
+     9,  9,  9,  9,  9,  9,  9,  9,  9, 10, # 1990-1999; Switch @ 1999: https://www.cdc.gov/nchs/data/nvsr/nvsr49/nvsr49_02.pdf
     10, 10, 10, 10, 10, 10, 10, 10, 10, 10, # 2000-2009
     10, 10, 10, 10, 10, 10, 10, 10,         # 2010-2017
   ]
@@ -71,6 +71,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("--average-ages", help="Compute average ages column with the specified column name")
     parser.add_argument("--average-age-range", help="Range over which to calculate the average age", type=int, default=5)
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
+    parser.add_argument("--comparable-ratios-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
     parser.add_argument("--download", help="If not files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
     parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
@@ -568,7 +569,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
           count_years["Ulcer"] = len(df[df["ucodint"].isin(list(range(540, 542)))])*scale
           count_years["Suicide"] = len(df[df["ucodint"].isin([963] + list(range(970, 980)))])*scale
           count_years["Homicide"] = len(df[df["ucodint"].isin([964] + list(range(980, 986)))])*scale
-        elif file_year >= 1968 and file_year <= 1976:
+        elif file_year >= 1968 and file_year <= 1978:
           count_years["Tuberculosis"] = len(df[df["ucodint"].isin(list(range(10, 20)))])*scale
           count_years["Diarrhea, enteritis, and colitis"] = len(df[df["ucodint"] == 9])*scale
           count_years["Cancer"] = len(df[df["ucodint"].isin(list(range(140, 210)))])*scale
@@ -597,7 +598,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
           count_years["Ulcer"] = len(df[df["ucodint"].isin(list(range(531, 534)))])*scale
           count_years["Suicide"] = len(df[df["ucodint"].isin(list(range(950, 960)))])*scale
           count_years["Homicide"] = len(df[df["ucodint"].isin(list(range(960, 979)))])*scale
-        elif file_year >= 1977 and file_year <= 1998:
+        elif file_year >= 1979 and file_year <= 1998:
           count_years["Tuberculosis"] = len(df[df["ucodint"].isin(list(range(10, 19)))])*scale
           count_years["Diarrhea, enteritis, and colitis"] = len(df[df["ucodint"] == 9])*scale
           count_years["Cancer"] = len(df[df["ucodint"].isin(list(range(140, 209)))])*scale
@@ -662,10 +663,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     print("Created {}".format(output_file))
 
   def create_comparable(self):
-    comparability_ratios = pandas.read_excel("data/ucod/united_states/comparable_ucod_estimates.xlsx", sheet_name="Comparability Codes", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
-    comparable_ucods = pandas.read_excel("data/ucod/united_states/comparable_ucod_estimates.xlsx", index_col="Year")
+    comparability_ratios = pandas.read_excel(self.options.comparable_ratios_file, sheet_name="Comparability Ratios", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
+    comparable_ucods = pandas.read_excel(self.options.comparable_ratios_file, index_col="Year")
     comparable_ucods = comparable_ucods.transform(self.transform_row, axis="columns", comparability_ratios=comparability_ratios)
-    comparable_ucods.to_excel("{}_mod.xlsx".format("data/ucod/united_states/comparable_ucod_estimates.xlsx".replace(".xlsx", "")))
+    target = "{}_ratios_applied.xlsx".format(self.options.comparable_ratios_file.replace(".xlsx", ""))
+    comparable_ucods.to_excel(target)
+    print("Created {}".format(target))
     
   def transform_row(self, row, comparability_ratios):
     icd = row["ICD Revision"]
