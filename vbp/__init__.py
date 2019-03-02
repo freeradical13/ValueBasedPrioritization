@@ -114,7 +114,15 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def test(self):
     return self.run_test()
+  
+  @staticmethod
+  def get_data_types_enum():
+    return None
 
+  @staticmethod
+  def get_data_types_enum_default():
+    return None
+  
   ####################
   # Abstract Methods #
   ####################
@@ -146,16 +154,23 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser = create_parser()
       self.initialize_parser(parser)
       parser.add_argument("-b", "--best-fit", choices=["lowest_aic", "lowest_aicc", "lowest_bic"], default="lowest_aicc", help="Best fitting model algorithm")
+      parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
+      parser.add_argument(
+        "--data-type",
+        help="The type of data to process",
+        type=self.get_data_types_enum() if self.get_data_types_enum() is not None else str,
+        default=self.get_data_types_enum_default(),
+        choices=list(self.get_data_types_enum()),
+      )
+      parser.add_argument("--debug", action="store_true", help="Debug", default=False)
+      parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=1)
+      parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.add_argument("-o", "--output-dir", help="output directory", default="output")
       parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
       parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
       parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
-      parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
-      parser.add_argument("--debug", action="store_true", help="Debug", default=False)
-      parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
-      parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.set_defaults(
         show_graphs=False,
       )
@@ -384,3 +399,6 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def get_calculated_scale_function_values(self):
     return None
+
+  def get_enum_names(self, e):
+    return list(map(lambda x: x.name, list(e)))

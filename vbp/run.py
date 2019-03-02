@@ -21,6 +21,12 @@ def add_remainder_arg(parser):
 def add_output_arg(parser):
   parser.add_argument("-o", "--output", help="Output file", type=argparse.FileType("wb"), default="-")
 
+def add_all_arg(parser):
+  parser.add_argument("-a", "--all", action="store_true", help="Perform command for all types", default=False)
+
+def get_data_source(data_source_classes, options):
+  return data_source_classes[options.data_source]
+
 def create_data_source(data_source_classes, options):
   return data_source_classes[options.data_source]()
 
@@ -29,6 +35,27 @@ def write_str(output, str):
     output.write(str)
   else:
     output.write(str.encode())
+
+def get_data_types(data_source_classes, options):
+  dsc = get_data_source(data_source_classes, options)
+  default = dsc.get_data_types_enum_default()
+  if default is not None:
+    default = default.name
+  data_types = [default]
+  if options.all:
+    e = dsc.get_data_types_enum()
+    if e is not None:
+      data_types = list(map(lambda x: x.name, list(e)))
+  return data_types
+
+def get_options_with_data_type(parser, data_type, args):
+  cloned_args = args.copy()
+  if "--data-type" not in args and data_type is not None:
+    cloned_args.append("--data-type")
+    cloned_args.append(data_type)
+
+  options = parser.parse_args(cloned_args)
+  return options
 
 if __name__ == "__main__":
   try:
@@ -45,24 +72,29 @@ if __name__ == "__main__":
     
     subparser = subparsers.add_parser("modeled_value_based_prioritization", help="Run modeled value based prioritization")
     add_data_source_arg(subparser, data_source_names)
+    add_all_arg(subparser)
     add_remainder_arg(subparser)
     
     subparser = subparsers.add_parser("predict", help="Generate predictions for an action")
     add_data_source_arg(subparser, data_source_names)
+    add_all_arg(subparser)
     add_remainder_arg(subparser)
     
     subparser = subparsers.add_parser("list_actions", help="List unique actions")
     add_data_source_arg(subparser, data_source_names)
+    add_all_arg(subparser)
     add_output_arg(subparser)
     subparser.add_argument("--no-sort", help="Do not sort", action="store_true", default=False)
     add_remainder_arg(subparser)
     
     subparser = subparsers.add_parser("count_actions", help="Count unique actions")
     add_data_source_arg(subparser, data_source_names)
+    add_all_arg(subparser)
     add_remainder_arg(subparser)
     
     subparser = subparsers.add_parser("action_data", help="Print data for an action")
     add_data_source_arg(subparser, data_source_names)
+    add_all_arg(subparser)
     subparser.add_argument("action", help="Action")
     add_remainder_arg(subparser)
     
@@ -94,30 +126,81 @@ if __name__ == "__main__":
     
     options = parser.parse_args(args)
     if options.command_name == "modeled_value_based_prioritization":
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
-      b = ds.modeled_value_based_prioritization()
-      print("")
-      vbp.print_full_columns(b)
+      
+      data_types = get_data_types(data_source_classes, options)
+      for i, data_type in enumerate(data_types):
+        if len(data_types) > 1:
+          if data_type is not None:
+            if i > 0:
+              print("")
+            print("Data type {}:".format(data_type))
+            print("")
+
+        options = get_options_with_data_type(parser, data_type, args)
+        ds = create_data_source(data_source_classes, options)
+        ds.load(options.args)
+        b = ds.modeled_value_based_prioritization()
+        print("")
+        vbp.print_full_columns(b)
+        
     elif options.command_name == "predict":
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
-      b = ds.predict()
-      vbp.print_full_columns(b)
+      
+      data_types = get_data_types(data_source_classes, options)
+      for i, data_type in enumerate(data_types):
+        if len(data_types) > 1:
+          if data_type is not None:
+            if i > 0:
+              print("")
+            print("Data type {}:".format(data_type))
+            print("")
+
+        options = get_options_with_data_type(parser, data_type, args)
+        ds = create_data_source(data_source_classes, options)
+        ds.load(options.args)
+        b = ds.predict()
+        vbp.print_full_columns(b)
+      
     elif options.command_name == "list_actions":
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
-      if options.no_sort:
-        options.output.write(os.linesep.join(ds.get_possible_actions().tolist()))
-      else:
-        options.output.write(os.linesep.join(numpy.sort(ds.get_possible_actions()).tolist()))
-      options.output.write(os.linesep)
+      
+      data_types = get_data_types(data_source_classes, options)
+
+      for i, data_type in enumerate(data_types):
+        if len(data_types) > 1:
+          if data_type is not None:
+            if i > 0:
+              options.output.write(os.linesep)
+            options.output.write("Data type {}:".format(data_type))
+            options.output.write(os.linesep)
+
+        options = get_options_with_data_type(parser, data_type, args)
+        ds = create_data_source(data_source_classes, options)
+        ds.load(options.args)
+        if options.no_sort:
+          options.output.write(os.linesep.join(ds.get_possible_actions().tolist()))
+        else:
+          options.output.write(os.linesep.join(numpy.sort(ds.get_possible_actions()).tolist()))
+        options.output.write(os.linesep)
+
       options.output.close()
+      
     elif options.command_name == "count_actions":
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
-      print(len(ds.get_possible_actions()))
+      
+      data_types = get_data_types(data_source_classes, options)
+      for i, data_type in enumerate(data_types):
+        if len(data_types) > 1:
+          if data_type is not None:
+            if i > 0:
+              print("")
+            print("Data type {}:".format(data_type))
+            print("")
+
+        options = get_options_with_data_type(parser, data_type, args)
+        ds = create_data_source(data_source_classes, options)
+        ds.load(options.args)
+        print(len(ds.get_possible_actions()))
+      
     elif options.command_name == "manual_scale_functions":
+      
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       
@@ -157,26 +240,37 @@ if __name__ == "__main__":
         raise NotImplementedError()
       
       options.output.close()
+      
     elif options.command_name == "action_data":
+      
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       print(ds.get_action_data(options.action))
+      
     elif options.command_name == "prophet":
+      
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       ds.prophet()
+      
     elif options.command_name == "generate_average_ages":
+      
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       ds.generate_average_ages()
+      
     elif options.command_name == "prepare_data":
+      
       ds = create_data_source(data_source_classes, options)
       ds.ensure_options(options.args)
       ds.prepare_data()
+      
     elif options.command_name == "test":
+      
       ds = create_data_source(data_source_classes, options)
       ds.ensure_options(options.args)
       ds.test()
+      
     else:
       raise NotImplementedError()
   except:

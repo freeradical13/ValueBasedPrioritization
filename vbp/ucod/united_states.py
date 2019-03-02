@@ -77,6 +77,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     10, 10, 10, 10, 10, 10, 10, 10, 10, 10, # 2000-2009
     10, 10, 10, 10, 10, 10, 10, 10,         # 2010-2017
   ]
+  
   mortality_uspopulation = pandas.DataFrame(
     {"Population": mortality_uspopulation_per_year, "ICDRevision": mortality_icd_revision},
     index=mortality_uspopulation_years
@@ -89,7 +90,6 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
     parser.add_argument("--comparable-ratios-input-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
     parser.add_argument("--comparable-ratios-output-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
-    parser.add_argument("--data-type", help="The type of data to process", type=DataType, default=DataType.UCOD_1999_2017_SUB_CHAPTERS, choices=list(DataType))
     parser.add_argument("--download", help="If not files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
     parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
@@ -99,10 +99,18 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("--ols-min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("--ols-max-degrees", help="maximum polynomial degree", type=int, default=1)
     parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/united_states/mort/")
-    parser.add_argument("--test", help="Test data")
+    parser.add_argument("--test", help="Test")
     parser.set_defaults(
       ets=True,
     )
+
+  @staticmethod
+  def get_data_types_enum():
+    return DataType
+
+  @staticmethod
+  def get_data_types_enum_default():
+    return DataType.UCOD_1999_2017_SUB_CHAPTERS
 
   def run_load(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
