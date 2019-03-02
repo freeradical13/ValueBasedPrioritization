@@ -245,6 +245,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
         self.available_obfuscated_names = list(range(1, self.obfuscated_action_names_count + 1))
         random.shuffle(self.available_obfuscated_names)
       
+      if len(self.available_obfuscated_names) == 0:
+        print(self.obfuscated_action_names)
+        raise ValueError("Tried to obfuscate too many items. This one: {}".format(s))
       format_string = "{}{:0" + str(len(str(self.obfuscated_action_names_count))) + "d}"
       result = format_string.format(self.obfuscated_column_name, self.available_obfuscated_names.pop())
       

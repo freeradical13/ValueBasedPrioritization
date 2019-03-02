@@ -84,7 +84,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   
   def initialize_parser(self, parser):
     parser.add_argument("cause", nargs="*", help="ICD Sub-Chapter")
-    parser.add_argument("--average-ages", help="Compute average ages column with the specified column name")
+    parser.add_argument("--average-ages", help="Compute average ages column with the specified column name", default="AverageAge")
     parser.add_argument("--average-age-range", help="Range over which to calculate the average age", type=int, default=5)
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
     parser.add_argument("--comparable-ratios-input-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
@@ -114,11 +114,16 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
             parse_dates=[0]
           ).dropna(how="all")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
-      df = pandas.read_excel(self.options.comparable_ratios_output_file, index_col=0)
+      df = pandas.read_excel(
+        self.options.comparable_ratios_output_file,
+        index_col=0,
+        parse_dates=[0],
+      )
       df.drop(columns=["Total Deaths", "ICD Revision"], inplace=True)
       melt_cols = df.columns.values
-      print(df.reset_index().melt(id_vars=['Year'], value_vars=melt_cols, var_name="UCOD", value_name="Deaths").sort_values(by=["Year", "UCOD"]))
-      raise NotImplementedError()
+      df = df.reset_index().melt(id_vars=["Year"], value_vars=melt_cols, var_name=self.get_action_column_name(), value_name="Deaths").sort_values(by=["Year", self.get_action_column_name()])
+      df.Year = df.Year
+      df["Population"] = df.Year.apply(lambda y: self.mortality_uspopulation.loc[y.year]["Population"])
     else:
       raise NotImplementedError()
     
@@ -718,14 +723,62 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
   def print_processing_csv(self, i, csv, csvs):
     print("Processing {} ({} of {})".format(csv, i+1, len(csvs)))
+    
+  def icd_query(self, codes):
+    result = ""
+    atol = 1e-08
+    codes_pieces = codes.split(",")
+    for codes_piece in codes_pieces:
+      if len(result) > 0:
+        result += " | "
+      result += "("
+      codes_piece = codes_piece.strip()
+      if "-" in codes_piece:
+        range_pieces = codes_piece.split("-")
+        x = range_pieces[0]
+        y = range_pieces[1]
+        if "." in x:
+          floatval = vbp.ucod.icd.ICD.tofloat(x)
+          result += "(ucodfloat >= {})".format(floatval - atol)
+        else:
+          result += "(ucodint >= {})".format(vbp.ucod.icd.ICD.toint(x))
+        result += " & "
+        if "." in y:
+          floatval = vbp.ucod.icd.ICD.tofloat(y)
+          result += "(ucodfloat <= {})".format(floatval + atol)
+        else:
+          result += "(ucodint <= {})".format(vbp.ucod.icd.ICD.toint(y))
+      else:
+        if "." in codes_piece:
+          floatval = vbp.ucod.icd.ICD.tofloat(codes_piece)
+          result += "(ucodfloat >= {}) & (ucodfloat <= {})".format(floatval - atol, floatval + atol)
+        else:
+          result += "ucodint == {}".format(vbp.ucod.icd.ICD.toint(codes_piece))
+      result += ")"
+
+    return result
 
   def get_calculated_scale_function_values(self):
     self.check_raw_files_directory()
-    groupbycol = "ICD Sub-Chapter Code"
     average_range = self.options.average_age_range
     min_year = self.data["Year"].max() - self.options.average_age_range + 1
-    icd_codes = self.data[groupbycol].unique()
-    icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
+    
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+      icd_codes = self.data["ICD Sub-Chapter Code"].unique()
+      icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
+    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+      ulcl_codes = pandas.read_excel(
+        self.options.comparable_ratios_input_file,
+        index_col=0,
+        sheet_name="Comparability Ratios",
+        usecols=[0, 11],
+        squeeze=True,
+      )
+      icd_codes = ulcl_codes.unique()
+      icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
+    else:
+      raise NotImplementedError()
+
     csvs = self.get_mortality_files()
     stats = {}
     max_year = sys.maxsize
@@ -737,26 +790,32 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
         stats[file_year] = year_stats
         df, scale = self.get_mortality_data(csv, file_year)
         for icd_range, trash in icd_codes_map.items():
-          icd_ranges = icd_range.split("-")
-          icd_range_list = list(range(vbp.ucod.icd.ICD.toint(icd_ranges[0]), vbp.ucod.icd.ICD.toint(icd_ranges[1])+1))
-          ages = df[df["ucodint"].isin(icd_range_list)]["AgeMinutes"]
+          ages = df.query(self.icd_query(icd_range))["AgeMinutes"]
           year_stats[icd_range] = {"Sum": ages.sum(), "Max": ages.max(), "Count": ages.count(), "Scale": scale}
     
-    statsdf = self.create_with_multi_index2(stats, ["Year", groupbycol])
+    codescol = "Codes"
+    statsdf = self.create_with_multi_index2(stats, ["Year", codescol])
     statsdf = statsdf.dropna()
     self.write_spreadsheet(statsdf, self.prefix_all("statsdf"))
     subset = statsdf.loc[statsdf.index.max()[0]-average_range:statsdf.index.max()[0]]
     deathmax = statsdf["Max"].max()
     calculated_col = self.options.average_ages
-    agesbygroup = subset.groupby(groupbycol).apply(lambda row: 1 - ((row["Sum"].sum() / row["Count"].sum()) / deathmax)).sort_values().rename(calculated_col).to_frame()
+    agesbygroup = subset.groupby(codescol).apply(lambda row: 1 - ((row["Sum"].sum() / row["Count"].sum()) / deathmax)).sort_values().rename(calculated_col).to_frame()
     agesbygroup["MaxAgeMinutes"] = deathmax
     agesbygroup["MaxAgeYears"] = agesbygroup["MaxAgeMinutes"] / 525960
-    agesbygroup["AverageAgeMinutes"] = subset.groupby(groupbycol).apply(lambda row: row["Sum"].sum() / row["Count"].sum())
+    agesbygroup["AverageAgeMinutes"] = subset.groupby(codescol).apply(lambda row: row["Sum"].sum() / row["Count"].sum())
     agesbygroup["AverageAgeYears"] = agesbygroup["AverageAgeMinutes"] / 525960
-    agesbygroup["SumAgeMinutes"] = subset.groupby(groupbycol).apply(lambda row: row["Sum"].sum())
+    agesbygroup["SumAgeMinutes"] = subset.groupby(codescol).apply(lambda row: row["Sum"].sum())
     agesbygroup["SumAgeYears"] = agesbygroup["SumAgeMinutes"] / 525960
-    agesbygroup["Count"] = subset.groupby(groupbycol).apply(lambda row: row["Count"].sum())
-    agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[groupbycol] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
+    agesbygroup["Count"] = subset.groupby(codescol).apply(lambda row: row["Count"].sum())
+
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+      agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data["ICD Sub-Chapter Code"] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
+    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+      agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(ulcl_codes[ulcl_codes == row.name].index.values[0]), raw=True, axis="columns")
+    else:
+      raise NotImplementedError()
+
     self.write_spreadsheet(agesbygroup, self.prefix_all("agesbygroup"))
     result = agesbygroup[[self.obfuscated_column_name, calculated_col]]
     result.set_index(self.obfuscated_column_name, inplace=True)
@@ -764,4 +823,5 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     return result
   
   def run_test(self):
+    self.ensure_loaded()
     return None
