@@ -112,10 +112,6 @@ if __name__ == "__main__":
     add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
     
-    subparser = subparsers.add_parser("generate_average_ages", help="Generate average age data")
-    add_data_source_arg(subparser, data_source_names)
-    add_remainder_arg(subparser)
-    
     subparser = subparsers.add_parser("test", help="Test")
     add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
@@ -218,7 +214,9 @@ if __name__ == "__main__":
       if options.prefix is not None or options.suffix is not None:
         df[ds.pretty_action_column_name] = df[ds.obfuscated_column_name]
         
-        # Re-order columns
+        # Re-order columns so that pretty_action_column_name is first,
+        # obfuscated_column_name is last, and all other columns are
+        # in between.
         df = df.reindex(columns=([ds.pretty_action_column_name] + list([x for x in df.columns if x != ds.pretty_action_column_name and x != ds.obfuscated_column_name] + [ds.obfuscated_column_name])))
         
         if options.prefix is not None:
@@ -252,12 +250,6 @@ if __name__ == "__main__":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       ds.prophet()
-      
-    elif options.command_name == "generate_average_ages":
-      
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
-      ds.generate_average_ages()
       
     elif options.command_name == "prepare_data":
       

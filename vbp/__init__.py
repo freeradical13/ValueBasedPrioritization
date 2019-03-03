@@ -106,9 +106,6 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def prophet(self):
     return self.run_prophet()
 
-  def generate_average_ages(self):
-    return self.run_generate_average_ages()
-
   def prepare_data(self):
     return self.run_prepare_data()
 
@@ -393,9 +390,6 @@ class DataSource(object, metaclass=abc.ABCMeta):
     return "_all_" + name
 
   def run_prophet(self):
-    raise NotImplementedError()
-
-  def run_generate_average_ages(self):
     raise NotImplementedError()
 
   def run_prepare_data(self):
