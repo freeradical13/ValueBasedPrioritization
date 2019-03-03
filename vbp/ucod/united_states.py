@@ -26,9 +26,17 @@ import statsmodels.tools.eval_measures
 from vbp.ucod.icd import ICD
 
 class DataType(enum.Enum):
-  UCOD_1999_2017_SUB_CHAPTERS = enum.auto()
-  UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
   
+  # Group Results By “Year” And By “ICD Sub-Chapter”; Check “Export Results”; Uncheck “Show Totals”
+  # https://wonder.cdc.gov/ucd-icd10.html
+  UCOD_1999_2017_SUB_CHAPTERS = enum.auto()
+
+  # Group Results By “Year” And By Cause of death”; Check “Export Results”; Uncheck “Show Totals”
+  # https://wonder.cdc.gov/ucd-icd10.html
+  UCOD_1999_2017_UNGROUPED = enum.auto()
+  
+  UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
+
   def __str__(self):
     return self.name
   
@@ -89,10 +97,11 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("--average-age-range", help="Range over which to calculate the average age", type=int, default=5)
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
     parser.add_argument("--comparable-ratios-input-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
-    parser.add_argument("--comparable-ratios-output-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
     parser.add_argument("--download", help="If not files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
-    parser.add_argument("-f", "--file", help="path to file", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
+    parser.add_argument("--file-ucod-1999-2017-sub-chapters", help="Path to file for UCOD_1999_2017_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
+    parser.add_argument("--file-ucod-1999-2017-ungrouped", help="Path to file for UCOD_1999_2017_UNGROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_Ungrouped.txt")
+    parser.add_argument("--file-ucod-longterm-comparable-leading", help="Path to file for UCOD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
     parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
     parser.add_argument("--ols", help="Ordinary least squares", dest="ols", action="store_true")
     parser.add_argument("--no-ols", help="Ordinary least squares", dest="ols", action="store_false")
@@ -113,17 +122,18 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     return DataType.UCOD_1999_2017_SUB_CHAPTERS
 
   def run_load(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
       df = pandas.read_csv(
-            self.options.file,
-            sep="\t",
-            usecols=["Year", "ICD Sub-Chapter", "ICD Sub-Chapter Code", "Deaths", "Population"],
-            na_values=["Unreliable"],
-            parse_dates=[0]
-          ).dropna(how="all")
+             self.get_data_file(),
+             sep="\t",
+             usecols=["Year", self.get_action_column_name(), self.get_code_column_name(), "Deaths", "Population"],
+             na_values=["Unreliable"],
+             parse_dates=[0],
+             encoding="ISO-8859-1",
+           ).dropna(how="all")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       df = pandas.read_excel(
-        self.options.comparable_ratios_output_file,
+        self.get_data_file(),
         index_col=0,
         parse_dates=[0],
       )
@@ -143,7 +153,34 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     return df
 
   def get_action_column_name(self):
-    return "ICD Sub-Chapter"
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+      return "ICD Sub-Chapter"
+    elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+      return "Cause of death"
+    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+      return "Cause of death"
+    else:
+      raise NotImplementedError()
+  
+  def get_code_column_name(self):
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+      return "ICD Sub-Chapter Code"
+    elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+      return "Cause of death Code"
+    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+      return "Cause of death Code"
+    else:
+      raise NotImplementedError()
+  
+  def get_data_file(self):
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+      return self.options.file_ucod_1999_2017_sub_chapters
+    elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+      return self.options.file_ucod_1999_2017_ungrouped
+    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+      return self.options.file_ucod_longterm_comparable_leading
+    else:
+      raise NotImplementedError()
   
   def run_get_action_data(self, action):
     df = self.data[self.data[self.get_action_column_name()] == action]
@@ -707,8 +744,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     comparability_ratios = pandas.read_excel(self.options.comparable_ratios_input_file, sheet_name="Comparability Ratios", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
     comparable_ucods = pandas.read_excel(self.options.comparable_ratios_input_file, index_col="Year")
     comparable_ucods = comparable_ucods.transform(self.transform_row, axis="columns", comparability_ratios=comparability_ratios)
-    comparable_ucods.to_excel(self.options.comparable_ratios_output_file)
-    print("Created {}".format(self.options.comparable_ratios_output_file))
+    comparable_ucods.to_excel(self.get_data_file())
+    print("Created {}".format(self.get_data_file()))
     
   def transform_row(self, row, comparability_ratios):
     icd = row["ICD Revision"]
@@ -771,8 +808,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     average_range = self.options.average_age_range
     min_year = self.data["Year"].max() - self.options.average_age_range + 1
     
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
-      icd_codes = self.data["ICD Sub-Chapter Code"].unique()
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+      icd_codes = self.data[self.get_code_column_name()].unique()
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       ulcl_codes = pandas.read_excel(
@@ -817,8 +854,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     agesbygroup["SumAgeYears"] = agesbygroup["SumAgeMinutes"] / 525960
     agesbygroup["Count"] = subset.groupby(codescol).apply(lambda row: row["Count"].sum())
 
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
-      agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data["ICD Sub-Chapter Code"] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+      agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[self.get_code_column_name()] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(ulcl_codes[ulcl_codes == row.name].index.values[0]), raw=True, axis="columns")
     else:
