@@ -8,12 +8,7 @@ import matplotlib
 class ExampleDataSource(vbp.DataSource):
   def initialize_parser(self, parser):
     parser.add_argument("--random-action", help="Create a random action", action="append", default=["Action1"])
-    parser.add_argument("--example-flag", help="Example flag True", action="store_true")
-    parser.add_argument("--no-example-flag", help="Example flag False", action="store_false")
     parser.add_argument("--years", help="Number of years to generate", type=int, default=100)
-    parser.set_defaults(
-      example_flag=True,
-    )
 
   def run_load(self):
     end_year = datetime.datetime.now().year

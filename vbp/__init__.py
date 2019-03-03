@@ -410,6 +410,8 @@ class DataSource(object, metaclass=abc.ABCMeta):
       df = df[[self.get_value_column_name()]]
       df.reset_index(inplace=True)
       df.rename(columns={"index": "ds", self.get_value_column_name(): "y"}, inplace=True)
+      # https://facebook.github.io/prophet/docs/saturating_forecasts.html
+      df["floor"] = 0
 
       prophet = fbprophet.Prophet()
       prophet.fit(df)
