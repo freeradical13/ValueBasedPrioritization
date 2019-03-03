@@ -528,7 +528,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       self.process_raw_mortality_data()
     
   def get_mortality_files(self):
-    return glob.glob(os.path.join(self.options.raw_files_directory, "*.csv"))
+    return sorted(glob.glob(os.path.join(self.options.raw_files_directory, "*.csv")))
   
   def get_mortality_file_info(self, csv):
     filename, file_extension = os.path.splitext(os.path.basename(csv))
@@ -618,122 +618,122 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
         df, scale = self.get_mortality_data(csv, file_year)
         count_years["Total Deaths"] = len(df)*scale
 
-        if file_year >= 1959 and file_year <= 1967:
-          count_years["Tuberculosis"] = len(df[df["ucodint"].isin(list(range(1, 20)))])*scale
-          count_years["Diarrhea, enteritis, and colitis"] = len(df[df["ucodint"].isin([543, 571, 572])])*scale
-          count_years["Cancer"] = len(df[df["ucodint"].isin(list(range(140, 206)))])*scale
-          count_years["Diabetes"] = len(df[df["ucodint"] == 260])*scale
-          count_years["Heart disease"] = len(df[df["ucodint"].isin([402, 404] + list(range(410, 444)))])*scale
-          count_years["Stroke"] = len(df[df["ucodint"].isin(list(range(330, 335)))])*scale
-          count_years["Arteriosclerosis"] = len(df[df["ucodint"] == 450])*scale
-          count_years["Influenza and pneumonia"] = len(df[df["ucodint"].isin(list(range(480, 494)))])*scale
-          count_years["Cirrhosis of liver"] = len(df[df["ucodint"] == 581])*scale
-          count_years["Kidney disease"] = len(df[df["ucodint"].isin(list(range(590, 595)))])*scale
-          count_years["Congenital Malformations"] = len(df[df["ucodint"].isin(list(range(750, 760)))])*scale
-          count_years["Perinatal Conditions"] = len(df[df["ucodint"].isin(list(range(760, 777)))])*scale
-          count_years["Motor vehicle accidents"] = len(df[df["ucodint"].isin(list(range(810, 836)))])*scale
-          count_years["Accidents excluding motor vehicles"] = len(df[df["ucodint"].isin(list(range(800, 803)) + list(range(840, 963)))])*scale
-          count_years["Typhoid fever"] = len(df[df["ucodint"] == 40])*scale
-          count_years["Measles"] = len(df[df["ucodint"] == 85])*scale
-          count_years["Whooping cough"] = len(df[df["ucodint"] == 56])*scale
-          count_years["Diphtheria"] = len(df[df["ucodint"] == 55])*scale
-          count_years["Intestinal infections"] = len(df[df["ucodint"].isin([571, 764])])*scale
-          count_years["Meningococcal infections"] = len(df[df["ucodint"] == 57])*scale
-          count_years["Acute poliomyelitis"] = len(df[df["ucodint"] == 80])*scale
-          count_years["Syphilis"] = len(df[df["ucodint"].isin(list(range(20, 30)))])*scale
-          count_years["Acute rheumatic fever"] = len(df[df["ucodint"].isin(list(range(400, 403)))])*scale
-          count_years["Hypertension"] = len(df[df["ucodint"].isin(list(range(444, 448)))])*scale
-          count_years["Chronic respiratory diseases"] = len(df[(df["ucodint"] == 241) | (df["ucodint"] == 501) | (df["ucodint"] == 502) | (numpy.isclose(df["ucodfloat"], 527.1))])*scale
-          count_years["Ulcer"] = len(df[df["ucodint"].isin(list(range(540, 542)))])*scale
-          count_years["Suicide"] = len(df[df["ucodint"].isin([963] + list(range(970, 980)))])*scale
-          count_years["Homicide"] = len(df[df["ucodint"].isin([964] + list(range(980, 986)))])*scale
+        if file_year >= 1958 and file_year <= 1967:
+          count_years["Tuberculosis"] = len(df.query(self.icd_query("001-019")))*scale
+          count_years["Diarrhea, enteritis, and colitis"] = len(df.query(self.icd_query("543,571,572")))*scale
+          count_years["Cancer"] = len(df.query(self.icd_query("140-205")))*scale
+          count_years["Diabetes"] = len(df.query(self.icd_query("260")))*scale
+          count_years["Heart disease"] = len(df.query(self.icd_query("400-402,410-443")))*scale
+          count_years["Stroke"] = len(df.query(self.icd_query("330-334")))*scale
+          count_years["Arteriosclerosis"] = len(df.query(self.icd_query("450")))*scale
+          count_years["Influenza and pneumonia"] = len(df.query(self.icd_query("480-493")))*scale
+          count_years["Cirrhosis of liver"] = len(df.query(self.icd_query("581")))*scale
+          count_years["Kidney disease"] = len(df.query(self.icd_query("590-594")))*scale
+          count_years["Congenital Malformations"] = len(df.query(self.icd_query("750-759")))*scale
+          count_years["Perinatal Conditions"] = len(df.query(self.icd_query("760-776")))*scale
+          count_years["Motor vehicle accidents"] = len(df.query(self.icd_query("810-835")))*scale
+          count_years["Accidents excluding motor vehicles"] = len(df.query(self.icd_query("800-802,840-962")))*scale
+          count_years["Typhoid fever"] = len(df.query(self.icd_query("040")))*scale
+          count_years["Measles"] = len(df.query(self.icd_query("085")))*scale
+          count_years["Whooping cough"] = len(df.query(self.icd_query("056")))*scale
+          count_years["Diphtheria"] = len(df.query(self.icd_query("055")))*scale
+          count_years["Intestinal infections"] = len(df.query(self.icd_query("571,764")))*scale
+          count_years["Meningococcal infections"] = len(df.query(self.icd_query("057")))*scale
+          count_years["Acute poliomyelitis"] = len(df.query(self.icd_query("080")))*scale
+          count_years["Syphilis"] = len(df.query(self.icd_query("020-029")))*scale
+          count_years["Acute rheumatic fever"] = len(df.query(self.icd_query("400-402")))*scale
+          count_years["Hypertension"] = len(df.query(self.icd_query("444-447")))*scale
+          count_years["Chronic respiratory diseases"] = len(df.query(self.icd_query("241,501,502,527.1")))*scale
+          count_years["Ulcer"] = len(df.query(self.icd_query("540,541")))*scale
+          count_years["Suicide"] = len(df.query(self.icd_query("963,970-979")))*scale
+          count_years["Homicide"] = len(df.query(self.icd_query("964,980-985")))*scale
         elif file_year >= 1968 and file_year <= 1978:
-          count_years["Tuberculosis"] = len(df[df["ucodint"].isin(list(range(10, 20)))])*scale
-          count_years["Diarrhea, enteritis, and colitis"] = len(df[df["ucodint"] == 9])*scale
-          count_years["Cancer"] = len(df[df["ucodint"].isin(list(range(140, 210)))])*scale
-          count_years["Diabetes"] = len(df[df["ucodint"] == 250])*scale
-          count_years["Heart disease"] = len(df[df["ucodint"].isin(list(range(390, 399)) + [402, 404] + list(range(410, 430)))])*scale
-          count_years["Stroke"] = len(df[df["ucodint"].isin(list(range(430, 439)))])*scale
-          count_years["Arteriosclerosis"] = len(df[df["ucodint"] == 440])*scale
-          count_years["Influenza and pneumonia"] = len(df[df["ucodint"].isin(list(range(470, 475))+list(range(480, 487)))])*scale
-          count_years["Cirrhosis of liver"] = len(df[df["ucodint"] == 571])*scale
-          count_years["Kidney disease"] = len(df[df["ucodint"].isin(list(range(580, 585)))])*scale
-          count_years["Congenital Malformations"] = len(df[df["ucodint"].isin(list(range(740, 750)))])*scale
-          count_years["Perinatal Conditions"] = len(df[((df["ucodint"] >= 760) & (df["ucodfloat"] < 769.3)) | ((df["ucodfloat"] > 769.3) & (df["ucodint"] <= 772)) | ((df["ucodint"] >= 774) & (df["ucodint"] <= 778))])*scale
-          count_years["Motor vehicle accidents"] = len(df[df["ucodint"].isin(list(range(810, 824)))])*scale
-          count_years["Accidents excluding motor vehicles"] = len(df[df["ucodint"].isin(list(range(800, 808)) + list(range(825, 950)))])*scale
-          count_years["Typhoid fever"] = len(df[df["ucodint"] == 1])*scale
-          count_years["Measles"] = len(df[df["ucodint"] == 55])*scale
-          count_years["Whooping cough"] = len(df[df["ucodint"] == 33])*scale
-          count_years["Diphtheria"] = len(df[df["ucodint"] == 32])*scale
-          count_years["Intestinal infections"] = len(df[df["ucodint"].isin([8, 9])])*scale
-          count_years["Meningococcal infections"] = len(df[df["ucodint"] == 36])*scale
-          count_years["Acute poliomyelitis"] = len(df[df["ucodint"].isin(list(range(40, 44)))])*scale
-          count_years["Syphilis"] = len(df[df["ucodint"].isin(list(range(90, 98)))])*scale
-          count_years["Acute rheumatic fever"] = len(df[df["ucodint"].isin(list(range(390, 393)))])*scale
-          count_years["Hypertension"] = len(df[df["ucodint"].isin([400, 401, 403])])*scale
-          count_years["Chronic respiratory diseases"] = len(df[df["ucodint"].isin(list(range(490, 494)))])*scale
-          count_years["Ulcer"] = len(df[df["ucodint"].isin(list(range(531, 534)))])*scale
-          count_years["Suicide"] = len(df[df["ucodint"].isin(list(range(950, 960)))])*scale
-          count_years["Homicide"] = len(df[df["ucodint"].isin(list(range(960, 979)))])*scale
+          count_years["Tuberculosis"] = len(df.query(self.icd_query("010-019")))*scale
+          count_years["Diarrhea, enteritis, and colitis"] = len(df.query(self.icd_query("009")))*scale
+          count_years["Cancer"] = len(df.query(self.icd_query("140-209")))*scale
+          count_years["Diabetes"] = len(df.query(self.icd_query("250")))*scale
+          count_years["Heart disease"] = len(df.query(self.icd_query("390-398,402,404,410-429")))*scale
+          count_years["Stroke"] = len(df.query(self.icd_query("430-438")))*scale
+          count_years["Arteriosclerosis"] = len(df.query(self.icd_query("440")))*scale
+          count_years["Influenza and pneumonia"] = len(df.query(self.icd_query("470-474,480-486")))*scale
+          count_years["Cirrhosis of liver"] = len(df.query(self.icd_query("571")))*scale
+          count_years["Kidney disease"] = len(df.query(self.icd_query("580-584")))*scale
+          count_years["Congenital Malformations"] = len(df.query(self.icd_query("740-759")))*scale
+          count_years["Perinatal Conditions"] = len(df.query(self.icd_query("760-769.2,769.4-772,774-778")))*scale
+          count_years["Motor vehicle accidents"] = len(df.query(self.icd_query("810-823")))*scale
+          count_years["Accidents excluding motor vehicles"] = len(df.query(self.icd_query("800-807,825-949")))*scale
+          count_years["Typhoid fever"] = len(df.query(self.icd_query("001")))*scale
+          count_years["Measles"] = len(df.query(self.icd_query("055")))*scale
+          count_years["Whooping cough"] = len(df.query(self.icd_query("033")))*scale
+          count_years["Diphtheria"] = len(df.query(self.icd_query("032")))*scale
+          count_years["Intestinal infections"] = len(df.query(self.icd_query("008,009")))*scale
+          count_years["Meningococcal infections"] = len(df.query(self.icd_query("036")))*scale
+          count_years["Acute poliomyelitis"] = len(df.query(self.icd_query("040-043")))*scale
+          count_years["Syphilis"] = len(df.query(self.icd_query("090-097")))*scale
+          count_years["Acute rheumatic fever"] = len(df.query(self.icd_query("390-392")))*scale
+          count_years["Hypertension"] = len(df.query(self.icd_query("400,401,403")))*scale
+          count_years["Chronic respiratory diseases"] = len(df.query(self.icd_query("490-493")))*scale
+          count_years["Ulcer"] = len(df.query(self.icd_query("531-533")))*scale
+          count_years["Suicide"] = len(df.query(self.icd_query("950-959")))*scale
+          count_years["Homicide"] = len(df.query(self.icd_query("960-978")))*scale
         elif file_year >= 1979 and file_year <= 1998:
-          count_years["Tuberculosis"] = len(df[df["ucodint"].isin(list(range(10, 19)))])*scale
-          count_years["Diarrhea, enteritis, and colitis"] = len(df[df["ucodint"] == 9])*scale
-          count_years["Cancer"] = len(df[df["ucodint"].isin(list(range(140, 209)))])*scale
-          count_years["Diabetes"] = len(df[df["ucodint"] == 250])*scale
-          count_years["Heart disease"] = len(df[df["ucodint"].isin(list(range(390, 399)) + [402, 404] + list(range(410, 430)))])*scale
-          count_years["Stroke"] = len(df[df["ucodint"].isin(list(range(430, 439)))])*scale
-          count_years["Arteriosclerosis"] = len(df[df["ucodint"] == 440])*scale
-          count_years["Influenza and pneumonia"] = len(df[df["ucodint"].isin(list(range(480, 488)))])*scale
-          count_years["Cirrhosis of liver"] = len(df[df["ucodint"] == 571])*scale
-          count_years["Kidney disease"] = len(df[df["ucodint"].isin(list(range(580, 590)))])*scale
-          count_years["Congenital Malformations"] = len(df[df["ucodint"].isin(list(range(740, 750)))])*scale
-          count_years["Perinatal Conditions"] = len(df[df["ucodint"].isin(list(range(760, 780)))])*scale
-          count_years["Motor vehicle accidents"] = len(df[df["ucodint"].isin(list(range(810, 826)))])*scale
-          count_years["Accidents excluding motor vehicles"] = len(df[df["ucodint"].isin(list(range(800, 808)) + list(range(826, 950)))])*scale
-          count_years["Typhoid fever"] = len(df[numpy.isclose(df["ucodfloat"], 2)])*scale
-          count_years["Measles"] = len(df[df["ucodint"] == 55])*scale
-          count_years["Whooping cough"] = len(df[df["ucodint"] == 33])*scale
-          count_years["Diphtheria"] = len(df[df["ucodint"] == 32])*scale
-          count_years["Intestinal infections"] = len(df[df["ucodint"].isin(list(range(7, 10)))])*scale
-          count_years["Meningococcal infections"] = len(df[df["ucodint"] == 36])*scale
-          count_years["Acute poliomyelitis"] = len(df[df["ucodint"] == 45])*scale
-          count_years["Syphilis"] = len(df[df["ucodint"].isin(list(range(90, 98)))])*scale
-          count_years["Acute rheumatic fever"] = len(df[df["ucodint"].isin(list(range(390, 393)))])*scale
-          count_years["Hypertension"] = len(df[df["ucodint"].isin([401, 403])])*scale
-          count_years["Chronic respiratory diseases"] = len(df[df["ucodint"].isin(list(range(490, 497)))])*scale
-          count_years["Ulcer"] = len(df[df["ucodint"].isin(list(range(531, 534)))])*scale
-          count_years["Suicide"] = len(df[df["ucodint"].isin(list(range(950, 960)))])*scale
-          count_years["Homicide"] = len(df[df["ucodint"].isin(list(range(960, 979)))])*scale
+          count_years["Tuberculosis"] = len(df.query(self.icd_query("010-018")))*scale
+          count_years["Diarrhea, enteritis, and colitis"] = len(df.query(self.icd_query("009")))*scale
+          count_years["Cancer"] = len(df.query(self.icd_query("140-208")))*scale
+          count_years["Diabetes"] = len(df.query(self.icd_query("250")))*scale
+          count_years["Heart disease"] = len(df.query(self.icd_query("390-398,402,404,410-429")))*scale
+          count_years["Stroke"] = len(df.query(self.icd_query("430-438")))*scale
+          count_years["Arteriosclerosis"] = len(df.query(self.icd_query("440")))*scale
+          count_years["Influenza and pneumonia"] = len(df.query(self.icd_query("480-487")))*scale
+          count_years["Cirrhosis of liver"] = len(df.query(self.icd_query("571")))*scale
+          count_years["Kidney disease"] = len(df.query(self.icd_query("580-589")))*scale
+          count_years["Congenital Malformations"] = len(df.query(self.icd_query("740-759")))*scale
+          count_years["Perinatal Conditions"] = len(df.query(self.icd_query("760-779")))*scale
+          count_years["Motor vehicle accidents"] = len(df.query(self.icd_query("810-825")))*scale
+          count_years["Accidents excluding motor vehicles"] = len(df.query(self.icd_query("800-807,826-949")))*scale
+          count_years["Typhoid fever"] = len(df.query(self.icd_query("002.0")))*scale
+          count_years["Measles"] = len(df.query(self.icd_query("055")))*scale
+          count_years["Whooping cough"] = len(df.query(self.icd_query("033")))*scale
+          count_years["Diphtheria"] = len(df.query(self.icd_query("032")))*scale
+          count_years["Intestinal infections"] = len(df.query(self.icd_query("007-009")))*scale
+          count_years["Meningococcal infections"] = len(df.query(self.icd_query("036")))*scale
+          count_years["Acute poliomyelitis"] = len(df.query(self.icd_query("045")))*scale
+          count_years["Syphilis"] = len(df.query(self.icd_query("090-097")))*scale
+          count_years["Acute rheumatic fever"] = len(df.query(self.icd_query("390-392")))*scale
+          count_years["Hypertension"] = len(df.query(self.icd_query("401,403")))*scale
+          count_years["Chronic respiratory diseases"] = len(df.query(self.icd_query("490-496")))*scale
+          count_years["Ulcer"] = len(df.query(self.icd_query("531-533")))*scale
+          count_years["Suicide"] = len(df.query(self.icd_query("950-959")))*scale
+          count_years["Homicide"] = len(df.query(self.icd_query("960-978")))*scale
         elif file_year >= 1999:
-          count_years["Tuberculosis"] = len(df[df["ucodint"].isin(list(range(ICD.toint("A16"), ICD.toint("A20"))))])*scale
-          count_years["Diarrhea, enteritis, and colitis"] = len(df[df["ucodint"] == ICD.toint("A09")])*scale
-          count_years["Cancer"] = len(df[df["ucodint"].isin(list(range(ICD.toint("C00"), ICD.toint("C98"))))])*scale
-          count_years["Diabetes"] = len(df[df["ucodint"].isin(list(range(ICD.toint("E10"), ICD.toint("E15"))))])*scale
-          count_years["Heart disease"] = len(df[df["ucodint"].isin(list(range(ICD.toint("I00"), ICD.toint("I10"))) + [ICD.toint("I11"), ICD.toint("I13")] + list(range(ICD.toint("I20"), ICD.toint("I52"))))])*scale
-          count_years["Stroke"] = len(df[df["ucodint"].isin(list(range(ICD.toint("I60"), ICD.toint("I70"))) + [ICD.toint("G45")])])*scale
-          count_years["Arteriosclerosis"] = len(df[df["ucodint"] == ICD.toint("I70")])*scale
-          count_years["Influenza and pneumonia"] = len(df[df["ucodint"].isin(list(range(ICD.toint("J10"), ICD.toint("J19"))))])*scale
-          count_years["Cirrhosis of liver"] = len(df[df["ucodint"].isin(list(range(ICD.toint("K73"), ICD.toint("K75"))) + [ICD.toint("K70")])])*scale
-          count_years["Kidney disease"] = len(df[df["ucodint"].isin(list(range(ICD.toint("N00"), ICD.toint("N08"))) + list(range(ICD.toint("N17"), ICD.toint("N20"))) + list(range(ICD.toint("N25"), ICD.toint("N28"))))])*scale
-          count_years["Congenital Malformations"] = len(df[df["ucodint"].isin(list(range(ICD.toint("Q00"), ICD.toint("Q99", addone=True))))])*scale
-          count_years["Perinatal Conditions"] = len(df[df["ucodint"].isin(list(range(ICD.toint("P00"), ICD.toint("P97"))) + [ICD.toint("A33")])])*scale
-          count_years["Motor vehicle accidents"] = len(df[((df["ucodint"] >= ICD.toint("V02")) & (df["ucodint"] <= ICD.toint("V04"))) | ((df["ucodint"] >= ICD.toint("V12")) & (df["ucodint"] <= ICD.toint("V14"))) | ((df["ucodfloat"] >= ICD.tofloat("V19.0")) & (df["ucodfloat"] < ICD.tofloat("V19.3"))) | ((df["ucodfloat"] > ICD.tofloat("V19.3")) & (df["ucodfloat"] < ICD.tofloat("V19.7"))) | ((df["ucodint"] >= ICD.toint("V20")) & (df["ucodint"] <= ICD.toint("V79"))) | ((df["ucodfloat"] > ICD.tofloat("V80.2")) & (df["ucodfloat"] < ICD.tofloat("V80.6"))) | ((df["ucodfloat"] >= ICD.tofloat("V81.0")) & (df["ucodfloat"] < ICD.tofloat("V81.2"))) | ((df["ucodfloat"] >= ICD.tofloat("V82.0")) & (df["ucodfloat"] < ICD.tofloat("V82.2"))) | ((df["ucodint"] >= ICD.toint("V83")) & (df["ucodint"] <= ICD.toint("V86"))) | ((df["ucodfloat"] >= ICD.tofloat("V87.0")) & (df["ucodfloat"] < ICD.tofloat("V87.9"))) | ((df["ucodfloat"] >= ICD.tofloat("V88.0")) & (df["ucodfloat"] < ICD.tofloat("V88.9"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V09.0"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V89.0"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V09.2"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V89.2")))])*scale
-          count_years["Accidents excluding motor vehicles"] = len(df[((df["ucodint"] >= ICD.toint("V05")) & (df["ucodint"] <= ICD.toint("V08"))) | ((df["ucodfloat"] > ICD.tofloat("V09.2")) & (df["ucodint"] <= ICD.toint("V11"))) | ((df["ucodint"] >= ICD.toint("V15")) & (df["ucodint"] <= ICD.toint("V18"))) | ((df["ucodfloat"] > ICD.tofloat("V19.6")) & (df["ucodfloat"] < ICD.tofloat("V20"))) | ((df["ucodfloat"] >= ICD.tofloat("V80.0")) & (df["ucodfloat"] < ICD.tofloat("V80.3"))) | ((df["ucodfloat"] > ICD.tofloat("V80.5")) & (df["ucodfloat"] < ICD.tofloat("V81"))) | ((df["ucodfloat"] > ICD.tofloat("V81.1")) & (df["ucodfloat"] < ICD.tofloat("V82"))) | ((df["ucodfloat"] > ICD.tofloat("V82.1")) & (df["ucodfloat"] < ICD.tofloat("V83"))) | ((df["ucodfloat"] > ICD.tofloat("V89.2")) & (df["ucodint"] <= ICD.toint("X59"))) | ((df["ucodint"] >= ICD.toint("Y85")) & (df["ucodint"] <= ICD.toint("Y86"))) | (df["ucodint"] == ICD.toint("V01")) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V09.1"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V19.3"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V87.9"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V88.9"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("V89.1")))])*scale
-          count_years["Typhoid fever"] = len(df[numpy.isclose(df["ucodfloat"], ICD.tofloat("A01.0"))])*scale
-          count_years["Measles"] = len(df[df["ucodint"] == ICD.toint("B05")])*scale
-          count_years["Whooping cough"] = len(df[df["ucodint"] == ICD.toint("A37")])*scale
-          count_years["Diphtheria"] = len(df[df["ucodint"] == ICD.toint("A36")])*scale
-          count_years["Intestinal infections"] = len(df[df["ucodint"].isin(list(range(ICD.toint("A07"), ICD.toint("A10"))) + [ICD.toint("A04")])])*scale
-          count_years["Meningococcal infections"] = len(df[df["ucodint"] == ICD.toint("A39")])*scale
-          count_years["Acute poliomyelitis"] = len(df[df["ucodint"] == ICD.toint("A80")])*scale
-          count_years["Syphilis"] = len(df[df["ucodint"].isin(list(range(ICD.toint("A50"), ICD.toint("A54"))))])*scale
-          count_years["Acute rheumatic fever"] = len(df[df["ucodint"].isin(list(range(ICD.toint("I00"), ICD.toint("I03"))))])*scale
-          count_years["Hypertension"] = len(df[df["ucodint"].isin(list(range(ICD.toint("I10"), ICD.toint("I13"))))])*scale
-          count_years["Chronic respiratory diseases"] = len(df[df["ucodint"].isin(list(range(ICD.toint("J40"), ICD.toint("J48"))) + [ICD.toint("J67")])])*scale
-          count_years["Ulcer"] = len(df[df["ucodint"].isin(list(range(ICD.toint("K25"), ICD.toint("K29"))))])*scale
-          count_years["Suicide"] = len(df[((df["ucodint"] >= ICD.toint("X60")) & (df["ucodint"] <= ICD.toint("X84"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("Y87.0")))])*scale
-          count_years["Homicide"] = len(df[((df["ucodint"] >= ICD.toint("X85")) & (df["ucodint"] <= ICD.toint("Y09"))) | (df["ucodint"] == ICD.toint("Y35")) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("Y87.1"))) | (numpy.isclose(df["ucodfloat"], ICD.tofloat("Y89.0")))])*scale
+          count_years["Tuberculosis"] = len(df.query(self.icd_query("A16-A19")))*scale
+          count_years["Diarrhea, enteritis, and colitis"] = len(df.query(self.icd_query("A09")))*scale
+          count_years["Cancer"] = len(df.query(self.icd_query("C00-C97")))*scale
+          count_years["Diabetes"] = len(df.query(self.icd_query("E10-E14")))*scale
+          count_years["Heart disease"] = len(df.query(self.icd_query("I00-I09,I11,I13,I20-I51")))*scale
+          count_years["Stroke"] = len(df.query(self.icd_query("I60-I69,G45")))*scale
+          count_years["Arteriosclerosis"] = len(df.query(self.icd_query("I70")))*scale
+          count_years["Influenza and pneumonia"] = len(df.query(self.icd_query("J10-J18")))*scale
+          count_years["Cirrhosis of liver"] = len(df.query(self.icd_query("K70,K73-K74")))*scale
+          count_years["Kidney disease"] = len(df.query(self.icd_query("N00-N07,N17-N19,N25-N27")))*scale
+          count_years["Congenital Malformations"] = len(df.query(self.icd_query("Q00-Q99")))*scale
+          count_years["Perinatal Conditions"] = len(df.query(self.icd_query("P00-P96, A33")))*scale
+          count_years["Motor vehicle accidents"] = len(df.query(self.icd_query("V02-V04,V09.0,V09.2,V12-V14,V19.0-V19.2,V19.4-V19.6,V20-V79,V80.3-V80.5,V81.0-V81.1,V82.0-V82.1,V83-V86,V87.0-V87.8,V88.0-V88.8,V89.0,V89.2")))*scale
+          count_years["Accidents excluding motor vehicles"] = len(df.query(self.icd_query("V01,V05-V08,V09.1,V09.3-V11,V15-V18,V19.3,V19.7-V19.9,V80.0-V80.2,V80.6-V80.9,V81.2-V81.9,V82.2-V82.9,V87.9,V88.9,V89.1,V89.3-X59,Y85-Y86")))*scale
+          count_years["Typhoid fever"] = len(df.query(self.icd_query("A01.0")))*scale
+          count_years["Measles"] = len(df.query(self.icd_query("B05")))*scale
+          count_years["Whooping cough"] = len(df.query(self.icd_query("A37")))*scale
+          count_years["Diphtheria"] = len(df.query(self.icd_query("A36")))*scale
+          count_years["Intestinal infections"] = len(df.query(self.icd_query("A04,A07-A09")))*scale
+          count_years["Meningococcal infections"] = len(df.query(self.icd_query("A39")))*scale
+          count_years["Acute poliomyelitis"] = len(df.query(self.icd_query("A80")))*scale
+          count_years["Syphilis"] = len(df.query(self.icd_query("A50-A53")))*scale
+          count_years["Acute rheumatic fever"] = len(df.query(self.icd_query("I00-I02")))*scale
+          count_years["Hypertension"] = len(df.query(self.icd_query("I10, I12")))*scale
+          count_years["Chronic respiratory diseases"] = len(df.query(self.icd_query("J40-J47,J67")))*scale
+          count_years["Ulcer"] = len(df.query(self.icd_query("K25-K28")))*scale
+          count_years["Suicide"] = len(df.query(self.icd_query("X60-X84,Y87.0")))*scale
+          count_years["Homicide"] = len(df.query(self.icd_query("X85-Y09,Y35,Y87.1,Y89.0")))*scale
 
     df = pandas.DataFrame.from_dict(counts, orient="index")
     output_file = os.path.abspath("data/ucod/united_states/comparable_data_since_1959.xlsx")

@@ -25,6 +25,8 @@ Example:
 
 ### United States
 
+As of 2019-03-03, the unzipped mortality data consumes ~36GB of disk.
+
 #### Long-term, comparable, leading causes of death
 
 Generate `data/ucod/united_states/comparable_data_since_1959.xlsx` for
