@@ -167,12 +167,14 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=1)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
+      parser.add_argument("--no-data-type-subdir", help="Do not create an output subdirectory based on the data type", dest="data_type_subdir", action="store_false")
       parser.add_argument("-o", "--output-dir", help="output directory", default="output")
       parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
       parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
       parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
       parser.set_defaults(
         show_graphs=False,
+        data_type_subdir=True,
       )
       self.options = parser.parse_args(args)
       
@@ -216,8 +218,8 @@ class DataSource(object, metaclass=abc.ABCMeta):
     
     b = self.predict()
     
-    sum = b[self.predict_column_name].sum()
-    b[self.predict_column_name] = b[self.predict_column_name].divide(sum)
+    predict_sum = b[self.predict_column_name].sum()
+    b[self.predict_column_name] = b[self.predict_column_name].divide(predict_sum)
 
     if manual_scales is not None:
       b = b.join(manual_scales)
@@ -297,7 +299,12 @@ class DataSource(object, metaclass=abc.ABCMeta):
                .replace("?", "_") \
                .replace(",", "") \
                .replace("*", "_")
-    return os.path.join(self.options.output_dir, name)
+    outputdir = self.options.output_dir
+    if self.options.data_type is not None and self.options.data_type_subdir:
+      outputdir = os.path.join(outputdir, self.options.data_type.name)
+      if not os.path.exists(outputdir):
+        os.makedirs(outputdir)
+    return os.path.join(outputdir, name)
   
   def write_spreadsheet(self, df, name):
     df.to_csv(self.create_output_name(name + ".csv"))
