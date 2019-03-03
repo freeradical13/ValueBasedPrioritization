@@ -188,7 +188,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     # ETS requires a specific frequency so we forward-fill any missing
     # years. If there's already an anual frequency, no change is made
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
-    df = df.resample("AS").ffill()
+    df = df.resample("AS").ffill().dropna()
     return df
   
   def set_or_append(self, df, append):
