@@ -27,13 +27,17 @@ from vbp.ucod.icd import ICD
 
 class DataType(enum.Enum):
   
-  # Group Results By “Year” And By “ICD Sub-Chapter”; Check “Export Results”; Uncheck “Show Totals”
+  # Group Results By "Year" And By "ICD Sub-Chapter"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
   UCOD_1999_2017_SUB_CHAPTERS = enum.auto()
 
-  # Group Results By “Year” And By Cause of death”; Check “Export Results”; Uncheck “Show Totals”
+  # Group Results By "Year" And By "Cause of death"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
   UCOD_1999_2017_UNGROUPED = enum.auto()
+  
+  # Group Results By "Year" And By "ICD Chapter"; Check "Export Results"; Uncheck "Show Totals"
+  # https://wonder.cdc.gov/ucd-icd10.html
+  UCOD_1999_2017_CHAPTERS = enum.auto()
   
   UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
 
@@ -100,6 +104,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("--download", help="If not files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
     parser.add_argument("--file-ucod-1999-2017-sub-chapters", help="Path to file for UCOD_1999_2017_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
+    parser.add_argument("--file-ucod-1999-2017-chapters", help="Path to file for UCOD_1999_2017_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_Chapters.txt")
     parser.add_argument("--file-ucod-1999-2017-ungrouped", help="Path to file for UCOD_1999_2017_UNGROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_Ungrouped.txt")
     parser.add_argument("--file-ucod-longterm-comparable-leading", help="Path to file for UCOD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
     parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
@@ -122,7 +127,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     return DataType.UCOD_1999_2017_SUB_CHAPTERS
 
   def run_load(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
+       self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       df = pandas.read_csv(
              self.get_data_file(),
              sep="\t",
@@ -155,6 +162,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def get_action_column_name(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
       return "ICD Sub-Chapter"
+    elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+      return "ICD Chapter"
     elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
       return "Cause of death"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
@@ -165,6 +174,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def get_code_column_name(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
       return "ICD Sub-Chapter Code"
+    elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+      return "ICD Chapter Code"
     elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
       return "Cause of death Code"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
@@ -175,6 +186,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def get_data_file(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
       return self.options.file_ucod_1999_2017_sub_chapters
+    elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+      return self.options.file_ucod_1999_2017_chapters
     elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
       return self.options.file_ucod_1999_2017_ungrouped
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
@@ -809,7 +822,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     average_range = self.options.average_age_range
     min_year = self.data["Year"].max() - self.options.average_age_range + 1
     
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
+       self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       icd_codes = self.data[self.get_code_column_name()].unique()
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
@@ -855,7 +870,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     agesbygroup["SumAgeYears"] = agesbygroup["SumAgeMinutes"] / 525960
     agesbygroup["Count"] = subset.groupby(codescol).apply(lambda row: row["Count"].sum())
 
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
+       self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[self.get_code_column_name()] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(ulcl_codes[ulcl_codes == row.name].index.values[0]), raw=True, axis="columns")

@@ -1,0 +1,422 @@
+"Notes"	"Year"	"Year Code"	"ICD Chapter"	"ICD Chapter Code"	Deaths	Population	Crude Rate
+	"1999"	"1999"	"Certain infectious and parasitic diseases"	"A00-B99"	59984	279040168	21.5
+	"1999"	"1999"	"Neoplasms"	"C00-D48"	563065	279040168	201.8
+	"1999"	"1999"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9067	279040168	3.2
+	"1999"	"1999"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	92872	279040168	33.3
+	"1999"	"1999"	"Mental and behavioural disorders"	"F01-F99"	42128	279040168	15.1
+	"1999"	"1999"	"Diseases of the nervous system"	"G00-G98"	84077	279040168	30.1
+	"1999"	"1999"	"Diseases of the eye and adnexa"	"H00-H57"	44	279040168	0.0
+	"1999"	"1999"	"Diseases of the ear and mastoid process"	"H60-H93"	74	279040168	0.0
+	"1999"	"1999"	"Diseases of the circulatory system"	"I00-I99"	954339	279040168	342.0
+	"1999"	"1999"	"Diseases of the respiratory system"	"J00-J98"	229863	279040168	82.4
+	"1999"	"1999"	"Diseases of the digestive system"	"K00-K92"	82876	279040168	29.7
+	"1999"	"1999"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3697	279040168	1.3
+	"1999"	"1999"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13347	279040168	4.8
+	"1999"	"1999"	"Diseases of the genitourinary system"	"N00-N98"	53127	279040168	19.0
+	"1999"	"1999"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	406	279040168	0.1
+	"1999"	"1999"	"Certain conditions originating in the perinatal period"	"P00-P96"	14259	279040168	5.1
+	"1999"	"1999"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10393	279040168	3.7
+	"1999"	"1999"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	26672	279040168	9.6
+	"1999"	"1999"	"External causes of morbidity and mortality"	"V01-Y89"	151109	279040168	54.2
+	"2000"	"2000"	"Certain infectious and parasitic diseases"	"A00-B99"	59007	281421906	21.0
+	"2000"	"2000"	"Neoplasms"	"C00-D48"	566637	281421906	201.3
+	"2000"	"2000"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9315	281421906	3.3
+	"2000"	"2000"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	94345	281421906	33.5
+	"2000"	"2000"	"Mental and behavioural disorders"	"F01-F99"	46015	281421906	16.4
+	"2000"	"2000"	"Diseases of the nervous system"	"G00-G98"	91014	281421906	32.3
+	"2000"	"2000"	"Diseases of the eye and adnexa"	"H00-H57"	59	281421906	0.0
+	"2000"	"2000"	"Diseases of the ear and mastoid process"	"H60-H93"	67	281421906	0.0
+	"2000"	"2000"	"Diseases of the circulatory system"	"I00-I99"	941526	281421906	334.6
+	"2000"	"2000"	"Diseases of the respiratory system"	"J00-J98"	231079	281421906	82.1
+	"2000"	"2000"	"Diseases of the digestive system"	"K00-K92"	84015	281421906	29.9
+	"2000"	"2000"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3753	281421906	1.3
+	"2000"	"2000"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13764	281421906	4.9
+	"2000"	"2000"	"Diseases of the genitourinary system"	"N00-N98"	54560	281421906	19.4
+	"2000"	"2000"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	404	281421906	0.1
+	"2000"	"2000"	"Certain conditions originating in the perinatal period"	"P00-P96"	14069	281421906	5.0
+	"2000"	"2000"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10578	281421906	3.8
+	"2000"	"2000"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	31876	281421906	11.3
+	"2000"	"2000"	"External causes of morbidity and mortality"	"V01-Y89"	151268	281421906	53.8
+	"2001"	"2001"	"Certain infectious and parasitic diseases"	"A00-B99"	60336	284968955	21.2
+	"2001"	"2001"	"Neoplasms"	"C00-D48"	567444	284968955	199.1
+	"2001"	"2001"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9535	284968955	3.3
+	"2001"	"2001"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	96820	284968955	34.0
+	"2001"	"2001"	"Mental and behavioural disorders"	"F01-F99"	50811	284968955	17.8
+	"2001"	"2001"	"Diseases of the nervous system"	"G00-G98"	96524	284968955	33.9
+	"2001"	"2001"	"Diseases of the eye and adnexa"	"H00-H57"	37	284968955	0.0
+	"2001"	"2001"	"Diseases of the ear and mastoid process"	"H60-H93"	75	284968955	0.0
+	"2001"	"2001"	"Diseases of the circulatory system"	"I00-I99"	926999	284968955	325.3
+	"2001"	"2001"	"Diseases of the respiratory system"	"J00-J98"	230009	284968955	80.7
+	"2001"	"2001"	"Diseases of the digestive system"	"K00-K92"	85833	284968955	30.1
+	"2001"	"2001"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3749	284968955	1.3
+	"2001"	"2001"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	14057	284968955	4.9
+	"2001"	"2001"	"Diseases of the genitourinary system"	"N00-N98"	57026	284968955	20.0
+	"2001"	"2001"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	416	284968955	0.1
+	"2001"	"2001"	"Certain conditions originating in the perinatal period"	"P00-P96"	13887	284968955	4.9
+	"2001"	"2001"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10442	284968955	3.7
+	"2001"	"2001"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	32326	284968955	11.3
+	"2001"	"2001"	"Codes for special purposes"	"U00-U99"	2926	284968955	1.0
+	"2001"	"2001"	"External causes of morbidity and mortality"	"V01-Y89"	157173	284968955	55.2
+	"2002"	"2002"	"Certain infectious and parasitic diseases"	"A00-B99"	63981	287625193	22.2
+	"2002"	"2002"	"Neoplasms"	"C00-D48"	570570	287625193	198.4
+	"2002"	"2002"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9661	287625193	3.4
+	"2002"	"2002"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	99458	287625193	34.6
+	"2002"	"2002"	"Mental and behavioural disorders"	"F01-F99"	55788	287625193	19.4
+	"2002"	"2002"	"Diseases of the nervous system"	"G00-G98"	103064	287625193	35.8
+	"2002"	"2002"	"Diseases of the eye and adnexa"	"H00-H57"	40	287625193	0.0
+	"2002"	"2002"	"Diseases of the ear and mastoid process"	"H60-H93"	69	287625193	0.0
+	"2002"	"2002"	"Diseases of the circulatory system"	"I00-I99"	923339	287625193	321.0
+	"2002"	"2002"	"Diseases of the respiratory system"	"J00-J98"	234629	287625193	81.6
+	"2002"	"2002"	"Diseases of the digestive system"	"K00-K92"	86710	287625193	30.1
+	"2002"	"2002"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3937	287625193	1.4
+	"2002"	"2002"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	14400	287625193	5.0
+	"2002"	"2002"	"Diseases of the genitourinary system"	"N00-N98"	58334	287625193	20.3
+	"2002"	"2002"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	379	287625193	0.1
+	"2002"	"2002"	"Certain conditions originating in the perinatal period"	"P00-P96"	14254	287625193	5.0
+	"2002"	"2002"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10687	287625193	3.7
+	"2002"	"2002"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	29975	287625193	10.4
+	"2002"	"2002"	"Codes for special purposes"	"U00-U99"	1	287625193	Unreliable
+	"2002"	"2002"	"External causes of morbidity and mortality"	"V01-Y89"	164111	287625193	57.1
+	"2003"	"2003"	"Certain infectious and parasitic diseases"	"A00-B99"	64661	290107933	22.3
+	"2003"	"2003"	"Neoplasms"	"C00-D48"	570465	290107933	196.6
+	"2003"	"2003"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9585	290107933	3.3
+	"2003"	"2003"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	100443	290107933	34.6
+	"2003"	"2003"	"Mental and behavioural disorders"	"F01-F99"	60058	290107933	20.7
+	"2003"	"2003"	"Diseases of the nervous system"	"G00-G98"	109640	290107933	37.8
+	"2003"	"2003"	"Diseases of the eye and adnexa"	"H00-H57"	41	290107933	0.0
+	"2003"	"2003"	"Diseases of the ear and mastoid process"	"H60-H93"	72	290107933	0.0
+	"2003"	"2003"	"Diseases of the circulatory system"	"I00-I99"	907180	290107933	312.7
+	"2003"	"2003"	"Diseases of the respiratory system"	"J00-J98"	235935	290107933	81.3
+	"2003"	"2003"	"Diseases of the digestive system"	"K00-K92"	87764	290107933	30.3
+	"2003"	"2003"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4132	290107933	1.4
+	"2003"	"2003"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	14489	290107933	5.0
+	"2003"	"2003"	"Diseases of the genitourinary system"	"N00-N98"	60081	290107933	20.7
+	"2003"	"2003"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	545	290107933	0.2
+	"2003"	"2003"	"Certain conditions originating in the perinatal period"	"P00-P96"	14378	290107933	5.0
+	"2003"	"2003"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10518	290107933	3.6
+	"2003"	"2003"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	31444	290107933	10.8
+	"2003"	"2003"	"External causes of morbidity and mortality"	"V01-Y89"	166857	290107933	57.5
+	"2004"	"2004"	"Certain infectious and parasitic diseases"	"A00-B99"	64618	292805298	22.1
+	"2004"	"2004"	"Neoplasms"	"C00-D48"	567468	292805298	193.8
+	"2004"	"2004"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9424	292805298	3.2
+	"2004"	"2004"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	99042	292805298	33.8
+	"2004"	"2004"	"Mental and behavioural disorders"	"F01-F99"	61524	292805298	21.0
+	"2004"	"2004"	"Diseases of the nervous system"	"G00-G98"	111751	292805298	38.2
+	"2004"	"2004"	"Diseases of the eye and adnexa"	"H00-H57"	43	292805298	0.0
+	"2004"	"2004"	"Diseases of the ear and mastoid process"	"H60-H93"	61	292805298	0.0
+	"2004"	"2004"	"Diseases of the circulatory system"	"I00-I99"	865863	292805298	295.7
+	"2004"	"2004"	"Diseases of the respiratory system"	"J00-J98"	227093	292805298	77.6
+	"2004"	"2004"	"Diseases of the digestive system"	"K00-K92"	86337	292805298	29.5
+	"2004"	"2004"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4180	292805298	1.4
+	"2004"	"2004"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	14284	292805298	4.9
+	"2004"	"2004"	"Diseases of the genitourinary system"	"N00-N98"	60326	292805298	20.6
+	"2004"	"2004"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	697	292805298	0.2
+	"2004"	"2004"	"Certain conditions originating in the perinatal period"	"P00-P96"	14213	292805298	4.9
+	"2004"	"2004"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10498	292805298	3.6
+	"2004"	"2004"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	30126	292805298	10.3
+	"2004"	"2004"	"External causes of morbidity and mortality"	"V01-Y89"	170067	292805298	58.1
+	"2005"	"2005"	"Certain infectious and parasitic diseases"	"A00-B99"	66507	295516599	22.5
+	"2005"	"2005"	"Neoplasms"	"C00-D48"	573022	295516599	193.9
+	"2005"	"2005"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9591	295516599	3.2
+	"2005"	"2005"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	103152	295516599	34.9
+	"2005"	"2005"	"Mental and behavioural disorders"	"F01-F99"	71466	295516599	24.2
+	"2005"	"2005"	"Diseases of the nervous system"	"G00-G98"	120713	295516599	40.8
+	"2005"	"2005"	"Diseases of the eye and adnexa"	"H00-H57"	45	295516599	0.0
+	"2005"	"2005"	"Diseases of the ear and mastoid process"	"H60-H93"	58	295516599	0.0
+	"2005"	"2005"	"Diseases of the circulatory system"	"I00-I99"	860843	295516599	291.3
+	"2005"	"2005"	"Diseases of the respiratory system"	"J00-J98"	239680	295516599	81.1
+	"2005"	"2005"	"Diseases of the digestive system"	"K00-K92"	87391	295516599	29.6
+	"2005"	"2005"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4234	295516599	1.4
+	"2005"	"2005"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	14418	295516599	4.9
+	"2005"	"2005"	"Diseases of the genitourinary system"	"N00-N98"	62773	295516599	21.2
+	"2005"	"2005"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	760	295516599	0.3
+	"2005"	"2005"	"Certain conditions originating in the perinatal period"	"P00-P96"	14549	295516599	4.9
+	"2005"	"2005"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10410	295516599	3.5
+	"2005"	"2005"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	31999	295516599	10.8
+	"2005"	"2005"	"External causes of morbidity and mortality"	"V01-Y89"	176406	295516599	59.7
+	"2006"	"2006"	"Certain infectious and parasitic diseases"	"A00-B99"	66993	298379912	22.5
+	"2006"	"2006"	"Neoplasms"	"C00-D48"	574010	298379912	192.4
+	"2006"	"2006"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	8834	298379912	3.0
+	"2006"	"2006"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	99204	298379912	33.2
+	"2006"	"2006"	"Mental and behavioural disorders"	"F01-F99"	91761	298379912	30.8
+	"2006"	"2006"	"Diseases of the nervous system"	"G00-G98"	122965	298379912	41.2
+	"2006"	"2006"	"Diseases of the eye and adnexa"	"H00-H57"	51	298379912	0.0
+	"2006"	"2006"	"Diseases of the ear and mastoid process"	"H60-H93"	62	298379912	0.0
+	"2006"	"2006"	"Diseases of the circulatory system"	"I00-I99"	827741	298379912	277.4
+	"2006"	"2006"	"Diseases of the respiratory system"	"J00-J98"	226661	298379912	76.0
+	"2006"	"2006"	"Diseases of the digestive system"	"K00-K92"	87607	298379912	29.4
+	"2006"	"2006"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3862	298379912	1.3
+	"2006"	"2006"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13930	298379912	4.7
+	"2006"	"2006"	"Diseases of the genitourinary system"	"N00-N98"	63581	298379912	21.3
+	"2006"	"2006"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	760	298379912	0.3
+	"2006"	"2006"	"Certain conditions originating in the perinatal period"	"P00-P96"	14442	298379912	4.8
+	"2006"	"2006"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10489	298379912	3.5
+	"2006"	"2006"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	31725	298379912	10.6
+	"2006"	"2006"	"External causes of morbidity and mortality"	"V01-Y89"	181586	298379912	60.9
+	"2007"	"2007"	"Certain infectious and parasitic diseases"	"A00-B99"	66850	301231207	22.2
+	"2007"	"2007"	"Neoplasms"	"C00-D48"	577079	301231207	191.6
+	"2007"	"2007"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9745	301231207	3.2
+	"2007"	"2007"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	99028	301231207	32.9
+	"2007"	"2007"	"Mental and behavioural disorders"	"F01-F99"	90280	301231207	30.0
+	"2007"	"2007"	"Diseases of the nervous system"	"G00-G98"	126997	301231207	42.2
+	"2007"	"2007"	"Diseases of the eye and adnexa"	"H00-H57"	45	301231207	0.0
+	"2007"	"2007"	"Diseases of the ear and mastoid process"	"H60-H93"	65	301231207	0.0
+	"2007"	"2007"	"Diseases of the circulatory system"	"I00-I99"	810257	301231207	269.0
+	"2007"	"2007"	"Diseases of the respiratory system"	"J00-J98"	227307	301231207	75.5
+	"2007"	"2007"	"Diseases of the digestive system"	"K00-K92"	89151	301231207	29.6
+	"2007"	"2007"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3883	301231207	1.3
+	"2007"	"2007"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13917	301231207	4.6
+	"2007"	"2007"	"Diseases of the genitourinary system"	"N00-N98"	64743	301231207	21.5
+	"2007"	"2007"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	769	301231207	0.3
+	"2007"	"2007"	"Certain conditions originating in the perinatal period"	"P00-P96"	14599	301231207	4.8
+	"2007"	"2007"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10421	301231207	3.5
+	"2007"	"2007"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	33500	301231207	11.1
+	"2007"	"2007"	"External causes of morbidity and mortality"	"V01-Y89"	185076	301231207	61.4
+	"2008"	"2008"	"Certain infectious and parasitic diseases"	"A00-B99"	68432	304093966	22.5
+	"2008"	"2008"	"Neoplasms"	"C00-D48"	579939	304093966	190.7
+	"2008"	"2008"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9873	304093966	3.2
+	"2008"	"2008"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	99326	304093966	32.7
+	"2008"	"2008"	"Mental and behavioural disorders"	"F01-F99"	104617	304093966	34.4
+	"2008"	"2008"	"Diseases of the nervous system"	"G00-G98"	136607	304093966	44.9
+	"2008"	"2008"	"Diseases of the eye and adnexa"	"H00-H57"	51	304093966	0.0
+	"2008"	"2008"	"Diseases of the ear and mastoid process"	"H60-H93"	80	304093966	0.0
+	"2008"	"2008"	"Diseases of the circulatory system"	"I00-I99"	808525	304093966	265.9
+	"2008"	"2008"	"Diseases of the respiratory system"	"J00-J98"	245099	304093966	80.6
+	"2008"	"2008"	"Diseases of the digestive system"	"K00-K92"	91097	304093966	30.0
+	"2008"	"2008"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3983	304093966	1.3
+	"2008"	"2008"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13871	304093966	4.6
+	"2008"	"2008"	"Diseases of the genitourinary system"	"N00-N98"	63130	304093966	20.8
+	"2008"	"2008"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	795	304093966	0.3
+	"2008"	"2008"	"Certain conditions originating in the perinatal period"	"P00-P96"	13933	304093966	4.6
+	"2008"	"2008"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10288	304093966	3.4
+	"2008"	"2008"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	38522	304093966	12.7
+	"2008"	"2008"	"External causes of morbidity and mortality"	"V01-Y89"	183816	304093966	60.4
+	"2009"	"2009"	"Certain infectious and parasitic diseases"	"A00-B99"	69558	306771529	22.7
+	"2009"	"2009"	"Neoplasms"	"C00-D48"	582233	306771529	189.8
+	"2009"	"2009"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9644	306771529	3.1
+	"2009"	"2009"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	97984	306771529	31.9
+	"2009"	"2009"	"Mental and behavioural disorders"	"F01-F99"	106242	306771529	34.6
+	"2009"	"2009"	"Diseases of the nervous system"	"G00-G98"	134168	306771529	43.7
+	"2009"	"2009"	"Diseases of the eye and adnexa"	"H00-H57"	43	306771529	0.0
+	"2009"	"2009"	"Diseases of the ear and mastoid process"	"H60-H93"	59	306771529	0.0
+	"2009"	"2009"	"Diseases of the circulatory system"	"I00-I99"	784742	306771529	255.8
+	"2009"	"2009"	"Diseases of the respiratory system"	"J00-J98"	238636	306771529	77.8
+	"2009"	"2009"	"Diseases of the digestive system"	"K00-K92"	89415	306771529	29.1
+	"2009"	"2009"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4014	306771529	1.3
+	"2009"	"2009"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13329	306771529	4.3
+	"2009"	"2009"	"Diseases of the genitourinary system"	"N00-N98"	63538	306771529	20.7
+	"2009"	"2009"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	960	306771529	0.3
+	"2009"	"2009"	"Certain conditions originating in the perinatal period"	"P00-P96"	13116	306771529	4.3
+	"2009"	"2009"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9883	306771529	3.2
+	"2009"	"2009"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	39829	306771529	13.0
+	"2009"	"2009"	"External causes of morbidity and mortality"	"V01-Y89"	179770	306771529	58.6
+	"2010"	"2010"	"Certain infectious and parasitic diseases"	"A00-B99"	67583	308745538	21.9
+	"2010"	"2010"	"Neoplasms"	"C00-D48"	589660	308745538	191.0
+	"2010"	"2010"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	9774	308745538	3.2
+	"2010"	"2010"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	98891	308745538	32.0
+	"2010"	"2010"	"Mental and behavioural disorders"	"F01-F99"	120821	308745538	39.1
+	"2010"	"2010"	"Diseases of the nervous system"	"G00-G98"	141106	308745538	45.7
+	"2010"	"2010"	"Diseases of the eye and adnexa"	"H00-H57"	53	308745538	0.0
+	"2010"	"2010"	"Diseases of the ear and mastoid process"	"H60-H93"	65	308745538	0.0
+	"2010"	"2010"	"Diseases of the circulatory system"	"I00-I99"	784454	308745538	254.1
+	"2010"	"2010"	"Diseases of the respiratory system"	"J00-J98"	237433	308745538	76.9
+	"2010"	"2010"	"Diseases of the digestive system"	"K00-K92"	91314	308745538	29.6
+	"2010"	"2010"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	3995	308745538	1.3
+	"2010"	"2010"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13323	308745538	4.3
+	"2010"	"2010"	"Diseases of the genitourinary system"	"N00-N98"	65676	308745538	21.3
+	"2010"	"2010"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	825	308745538	0.3
+	"2010"	"2010"	"Certain conditions originating in the perinatal period"	"P00-P96"	12128	308745538	3.9
+	"2010"	"2010"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9673	308745538	3.1
+	"2010"	"2010"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	38360	308745538	12.4
+	"2010"	"2010"	"External causes of morbidity and mortality"	"V01-Y89"	183301	308745538	59.4
+	"2011"	"2011"	"Certain infectious and parasitic diseases"	"A00-B99"	68818	311591917	22.1
+	"2011"	"2011"	"Neoplasms"	"C00-D48"	591688	311591917	189.9
+	"2011"	"2011"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10158	311591917	3.3
+	"2011"	"2011"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	105144	311591917	33.7
+	"2011"	"2011"	"Mental and behavioural disorders"	"F01-F99"	135949	311591917	43.6
+	"2011"	"2011"	"Diseases of the nervous system"	"G00-G98"	144920	311591917	46.5
+	"2011"	"2011"	"Diseases of the eye and adnexa"	"H00-H57"	49	311591917	0.0
+	"2011"	"2011"	"Diseases of the ear and mastoid process"	"H60-H93"	77	311591917	0.0
+	"2011"	"2011"	"Diseases of the circulatory system"	"I00-I99"	783475	311591917	251.4
+	"2011"	"2011"	"Diseases of the respiratory system"	"J00-J98"	248742	311591917	79.8
+	"2011"	"2011"	"Diseases of the digestive system"	"K00-K92"	94096	311591917	30.2
+	"2011"	"2011"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4147	311591917	1.3
+	"2011"	"2011"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13702	311591917	4.4
+	"2011"	"2011"	"Diseases of the genitourinary system"	"N00-N98"	61592	311591917	19.8
+	"2011"	"2011"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	931	311591917	0.3
+	"2011"	"2011"	"Certain conditions originating in the perinatal period"	"P00-P96"	12036	311591917	3.9
+	"2011"	"2011"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9702	311591917	3.1
+	"2011"	"2011"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	40184	311591917	12.9
+	"2011"	"2011"	"External causes of morbidity and mortality"	"V01-Y89"	190048	311591917	61.0
+	"2012"	"2012"	"Certain infectious and parasitic diseases"	"A00-B99"	68409	313914040	21.8
+	"2012"	"2012"	"Neoplasms"	"C00-D48"	597679	313914040	190.4
+	"2012"	"2012"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10474	313914040	3.3
+	"2012"	"2012"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	105926	313914040	33.7
+	"2012"	"2012"	"Mental and behavioural disorders"	"F01-F99"	147917	313914040	47.1
+	"2012"	"2012"	"Diseases of the nervous system"	"G00-G98"	146187	313914040	46.6
+	"2012"	"2012"	"Diseases of the eye and adnexa"	"H00-H57"	59	313914040	0.0
+	"2012"	"2012"	"Diseases of the ear and mastoid process"	"H60-H93"	65	313914040	0.0
+	"2012"	"2012"	"Diseases of the circulatory system"	"I00-I99"	787431	313914040	250.8
+	"2012"	"2012"	"Diseases of the respiratory system"	"J00-J98"	246311	313914040	78.5
+	"2012"	"2012"	"Diseases of the digestive system"	"K00-K92"	95284	313914040	30.4
+	"2012"	"2012"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4201	313914040	1.3
+	"2012"	"2012"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13725	313914040	4.4
+	"2012"	"2012"	"Diseases of the genitourinary system"	"N00-N98"	62030	313914040	19.8
+	"2012"	"2012"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	990	313914040	0.3
+	"2012"	"2012"	"Certain conditions originating in the perinatal period"	"P00-P96"	11917	313914040	3.8
+	"2012"	"2012"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9636	313914040	3.1
+	"2012"	"2012"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	42050	313914040	13.4
+	"2012"	"2012"	"External causes of morbidity and mortality"	"V01-Y89"	192988	313914040	61.5
+	"2013"	"2013"	"Certain infectious and parasitic diseases"	"A00-B99"	70601	316128839	22.3
+	"2013"	"2013"	"Neoplasms"	"C00-D48"	600113	316128839	189.8
+	"2013"	"2013"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10216	316128839	3.2
+	"2013"	"2013"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	109159	316128839	34.5
+	"2013"	"2013"	"Mental and behavioural disorders"	"F01-F99"	156415	316128839	49.5
+	"2013"	"2013"	"Diseases of the nervous system"	"G00-G98"	151784	316128839	48.0
+	"2013"	"2013"	"Diseases of the eye and adnexa"	"H00-H57"	43	316128839	0.0
+	"2013"	"2013"	"Diseases of the ear and mastoid process"	"H60-H93"	71	316128839	0.0
+	"2013"	"2013"	"Diseases of the circulatory system"	"I00-I99"	800937	316128839	253.4
+	"2013"	"2013"	"Diseases of the respiratory system"	"J00-J98"	261071	316128839	82.6
+	"2013"	"2013"	"Diseases of the digestive system"	"K00-K92"	98364	316128839	31.1
+	"2013"	"2013"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4330	316128839	1.4
+	"2013"	"2013"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13534	316128839	4.3
+	"2013"	"2013"	"Diseases of the genitourinary system"	"N00-N98"	64085	316128839	20.3
+	"2013"	"2013"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	1138	316128839	0.4
+	"2013"	"2013"	"Certain conditions originating in the perinatal period"	"P00-P96"	12084	316128839	3.8
+	"2013"	"2013"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9583	316128839	3.0
+	"2013"	"2013"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	37752	316128839	11.9
+	"2013"	"2013"	"Codes for special purposes"	"U00-U99"	3	316128839	Unreliable
+	"2013"	"2013"	"External causes of morbidity and mortality"	"V01-Y89"	195710	316128839	61.9
+	"2014"	"2014"	"Certain infectious and parasitic diseases"	"A00-B99"	70413	318857056	22.1
+	"2014"	"2014"	"Neoplasms"	"C00-D48"	607739	318857056	190.6
+	"2014"	"2014"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10744	318857056	3.4
+	"2014"	"2014"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	112738	318857056	35.4
+	"2014"	"2014"	"Mental and behavioural disorders"	"F01-F99"	151048	318857056	47.4
+	"2014"	"2014"	"Diseases of the nervous system"	"G00-G98"	165434	318857056	51.9
+	"2014"	"2014"	"Diseases of the eye and adnexa"	"H00-H57"	34	318857056	0.0
+	"2014"	"2014"	"Diseases of the ear and mastoid process"	"H60-H93"	56	318857056	0.0
+	"2014"	"2014"	"Diseases of the circulatory system"	"I00-I99"	807775	318857056	253.3
+	"2014"	"2014"	"Diseases of the respiratory system"	"J00-J98"	258333	318857056	81.0
+	"2014"	"2014"	"Diseases of the digestive system"	"K00-K92"	100975	318857056	31.7
+	"2014"	"2014"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4457	318857056	1.4
+	"2014"	"2014"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13344	318857056	4.2
+	"2014"	"2014"	"Diseases of the genitourinary system"	"N00-N98"	66165	318857056	20.8
+	"2014"	"2014"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	1123	318857056	0.4
+	"2014"	"2014"	"Certain conditions originating in the perinatal period"	"P00-P96"	11897	318857056	3.7
+	"2014"	"2014"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9609	318857056	3.0
+	"2014"	"2014"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	32242	318857056	10.1
+	"2014"	"2014"	"External causes of morbidity and mortality"	"V01-Y89"	202292	318857056	63.4
+	"2015"	"2015"	"Certain infectious and parasitic diseases"	"A00-B99"	72090	321418820	22.4
+	"2015"	"2015"	"Neoplasms"	"C00-D48"	612207	321418820	190.5
+	"2015"	"2015"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10699	321418820	3.3
+	"2015"	"2015"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	118532	321418820	36.9
+	"2015"	"2015"	"Mental and behavioural disorders"	"F01-F99"	136656	321418820	42.5
+	"2015"	"2015"	"Diseases of the nervous system"	"G00-G98"	190512	321418820	59.3
+	"2015"	"2015"	"Diseases of the eye and adnexa"	"H00-H57"	45	321418820	0.0
+	"2015"	"2015"	"Diseases of the ear and mastoid process"	"H60-H93"	81	321418820	0.0
+	"2015"	"2015"	"Diseases of the circulatory system"	"I00-I99"	836546	321418820	260.3
+	"2015"	"2015"	"Diseases of the respiratory system"	"J00-J98"	271229	321418820	84.4
+	"2015"	"2015"	"Diseases of the digestive system"	"K00-K92"	104624	321418820	32.6
+	"2015"	"2015"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4759	321418820	1.5
+	"2015"	"2015"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13669	321418820	4.3
+	"2015"	"2015"	"Diseases of the genitourinary system"	"N00-N98"	69373	321418820	21.6
+	"2015"	"2015"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	1140	321418820	0.4
+	"2015"	"2015"	"Certain conditions originating in the perinatal period"	"P00-P96"	11715	321418820	3.6
+	"2015"	"2015"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10017	321418820	3.1
+	"2015"	"2015"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	32042	321418820	10.0
+	"2015"	"2015"	"Codes for special purposes"	"U00-U99"	5	321418820	Unreliable
+	"2015"	"2015"	"External causes of morbidity and mortality"	"V01-Y89"	216689	321418820	67.4
+	"2016"	"2016"	"Certain infectious and parasitic diseases"	"A00-B99"	70052	323127513	21.7
+	"2016"	"2016"	"Neoplasms"	"C00-D48"	613832	323127513	190.0
+	"2016"	"2016"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10927	323127513	3.4
+	"2016"	"2016"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	121258	323127513	37.5
+	"2016"	"2016"	"Mental and behavioural disorders"	"F01-F99"	132604	323127513	41.0
+	"2016"	"2016"	"Diseases of the nervous system"	"G00-G98"	202352	323127513	62.6
+	"2016"	"2016"	"Diseases of the eye and adnexa"	"H00-H57"	47	323127513	0.0
+	"2016"	"2016"	"Diseases of the ear and mastoid process"	"H60-H93"	83	323127513	0.0
+	"2016"	"2016"	"Diseases of the circulatory system"	"I00-I99"	840678	323127513	260.2
+	"2016"	"2016"	"Diseases of the respiratory system"	"J00-J98"	266037	323127513	82.3
+	"2016"	"2016"	"Diseases of the digestive system"	"K00-K92"	105916	323127513	32.8
+	"2016"	"2016"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4925	323127513	1.5
+	"2016"	"2016"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13799	323127513	4.3
+	"2016"	"2016"	"Diseases of the genitourinary system"	"N00-N98"	70316	323127513	21.8
+	"2016"	"2016"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	1231	323127513	0.4
+	"2016"	"2016"	"Certain conditions originating in the perinatal period"	"P00-P96"	11493	323127513	3.6
+	"2016"	"2016"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	10131	323127513	3.1
+	"2016"	"2016"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	33373	323127513	10.3
+	"2016"	"2016"	"External causes of morbidity and mortality"	"V01-Y89"	235194	323127513	72.8
+	"2017"	"2017"	"Certain infectious and parasitic diseases"	"A00-B99"	69385	325719178	21.3
+	"2017"	"2017"	"Neoplasms"	"C00-D48"	614932	325719178	188.8
+	"2017"	"2017"	"Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism"	"D50-D89"	10790	325719178	3.3
+	"2017"	"2017"	"Endocrine, nutritional and metabolic diseases"	"E00-E88"	127947	325719178	39.3
+	"2017"	"2017"	"Mental and behavioural disorders"	"F01-F99"	135772	325719178	41.7
+	"2017"	"2017"	"Diseases of the nervous system"	"G00-G98"	216353	325719178	66.4
+	"2017"	"2017"	"Diseases of the eye and adnexa"	"H00-H57"	48	325719178	0.0
+	"2017"	"2017"	"Diseases of the ear and mastoid process"	"H60-H93"	73	325719178	0.0
+	"2017"	"2017"	"Diseases of the circulatory system"	"I00-I99"	859125	325719178	263.8
+	"2017"	"2017"	"Diseases of the respiratory system"	"J00-J98"	278673	325719178	85.6
+	"2017"	"2017"	"Diseases of the digestive system"	"K00-K92"	107653	325719178	33.1
+	"2017"	"2017"	"Diseases of the skin and subcutaneous tissue"	"L00-L98"	4993	325719178	1.5
+	"2017"	"2017"	"Diseases of the musculoskeletal system and connective tissue"	"M00-M99"	13840	325719178	4.2
+	"2017"	"2017"	"Diseases of the genitourinary system"	"N00-N98"	71453	325719178	21.9
+	"2017"	"2017"	"Pregnancy, childbirth and the puerperium"	"O00-O99"	1208	325719178	0.4
+	"2017"	"2017"	"Certain conditions originating in the perinatal period"	"P00-P96"	11108	325719178	3.4
+	"2017"	"2017"	"Congenital malformations, deformations and chromosomal abnormalities"	"Q00-Q99"	9902	325719178	3.0
+	"2017"	"2017"	"Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified"	"R00-R99"	32750	325719178	10.1
+	"2017"	"2017"	"Codes for special purposes"	"U00-U99"	2	325719178	Unreliable
+	"2017"	"2017"	"External causes of morbidity and mortality"	"V01-Y89"	247496	325719178	76.0
+"---"
+"Dataset: Underlying Cause of Death, 1999-2017"
+"Query Parameters:"
+"Group By: Year; ICD Chapter"
+"Show Totals: False"
+"Show Zero Values: False"
+"Show Suppressed: False"
+"Calculate Rates Per: 100,000"
+"Rate Options: Default intercensal populations for years 2001-2009 (except Infant Age Groups)"
+"---"
+"Help: See http://wonder.cdc.gov/wonder/help/ucd.html for more information."
+"---"
+"Query Date: Mar 3, 2019 1:46:48 PM"
+"---"
+"Suggested Citation: Centers for Disease Control and Prevention, National Center for Health Statistics. Underlying Cause of Death"
+"1999-2017 on CDC WONDER Online Database, released December, 2018. Data are from the Multiple Cause of Death Files, 1999-2017, as"
+"compiled from data provided by the 57 vital statistics jurisdictions through the Vital Statistics Cooperative Program. Accessed"
+"at http://wonder.cdc.gov/ucd-icd10.html on Mar 3, 2019 1:46:48 PM"
+"---"
+Messages:
+"1. Rows with zero Deaths are hidden. Use Quick Options above to show zero rows."
+"---"
+Caveats:
+"1. As of April 3, 2017, the underlying cause of death has been revised for 125 deaths in 2014. More information:"
+"http://wonder.cdc.gov/wonder/help/ucd.html#2014-Revision."
+"2. Circumstances in Georgia for the years 2008 and 2009 have resulted in unusually high death counts for the ICD-10 cause of"
+"death code R99, ""Other ill-defined and unspecified causes of mortality."" Caution should be used in interpreting these data."
+"More information: http://wonder.cdc.gov/wonder/help/ucd.html#Georgia-Reporting-Anomalies."
+"3. Circumstances in New Jersey for the year 2009 have resulted in unusually high death counts for the ICD-10 cause of death code"
+"R99, ""Other ill-defined and unspecified causes of mortality"" and therefore unusually low death counts in other ICD-10 codes,"
+"most notably R95, ""Sudden Infant Death Syndrome"" and X40-X49, ""Unintentional poisoning."" Caution should be used in"
+"interpreting these data. More information: http://wonder.cdc.gov/wonder/help/ucd.html#New-Jersey-Reporting-Anomalies."
+"4. Circumstances in California resulted in unusually high death counts for the ICD-10 cause of death code R99, ""Other"
+"ill-defined and unspecified causes of mortality"" for deaths occurring in years 2000 and 2001. Caution should be used in"
+"interpreting these data. More information: http://wonder.cdc.gov/wonder/help/ucd.html#California-Reporting-Anomalies."
+"5. Death rates are flagged as Unreliable when the rate is calculated with a numerator of 20 or less. More information:"
+"http://wonder.cdc.gov/wonder/help/ucd.html#Unreliable."
+"6. The population figures for year 2017 are bridged-race estimates of the July 1 resident population, from the Vintage 2017"
+"postcensal series released by NCHS on June 27, 2018. The population figures for year 2016 are bridged-race estimates of the July"
+"1 resident population, from the Vintage 2016 postcensal series released by NCHS on June 26, 2017. The population figures for"
+"year 2015 are bridged-race estimates of the July 1 resident population, from the Vintage 2015 postcensal series released by NCHS"
+"on June 28, 2016. The population figures for year 2014 are bridged-race estimates of the July 1 resident population, from the"
+"Vintage 2014 postcensal series released by NCHS on June 30, 2015. The population figures for year 2013 are bridged-race"
+"estimates of the July 1 resident population, from the Vintage 2013 postcensal series released by NCHS on June 26, 2014. The"
+"population figures for year 2012 are bridged-race estimates of the July 1 resident population, from the Vintage 2012 postcensal"
+"series released by NCHS on June 13, 2013. The population figures for year 2011 are bridged-race estimates of the July 1 resident"
+"population, from the Vintage 2011 postcensal series released by NCHS on July 18, 2012. Population figures for 2010 are April 1"
+"Census counts. The population figures for years 2001 - 2009 are bridged-race estimates of the July 1 resident population, from"
+"the revised intercensal county-level 2000 - 2009 series released by NCHS on October 26, 2012. Population figures for 2000 are"
+"April 1 Census counts. Population figures for 1999 are from the 1990-1999 intercensal series of July 1 estimates. Population"
+"figures for the infant age groups are the number of live births. <br/><b>Note:</b> Rates and population figures for years 2001 -"
+"2009 differ slightly from previously published reports, due to use of the population estimates which were available at the time"
+"of release."
+"7. The population figures used in the calculation of death rates for the age group 'under 1 year' are the estimates of the"
+"resident population that is under one year of age. More information: http://wonder.cdc.gov/wonder/help/ucd.html#Age Group."
