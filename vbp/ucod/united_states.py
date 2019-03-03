@@ -41,6 +41,10 @@ class DataType(enum.Enum):
   
   UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
 
+  # Group Results By "Year" And By "ICD-10 113 Cause List"; Check "Export Results"; Uncheck "Show Totals"
+  # https://wonder.cdc.gov/ucd-icd10.html
+  UCOD_1999_2017_ICD10_113_CAUSES = enum.auto()
+
   def __str__(self):
     return self.name
   
@@ -106,6 +110,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     parser.add_argument("--file-ucod-1999-2017-sub-chapters", help="Path to file for UCOD_1999_2017_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_ICD10_Sub-Chapters.txt")
     parser.add_argument("--file-ucod-1999-2017-chapters", help="Path to file for UCOD_1999_2017_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_Chapters.txt")
     parser.add_argument("--file-ucod-1999-2017-ungrouped", help="Path to file for UCOD_1999_2017_UNGROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_Ungrouped.txt")
+    parser.add_argument("--file-ucod-1999-2017-icd10-113-causes", help="Path to file for UCOD_1999_2017_ICD10_113_CAUSES", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_ICD10_113_CAUSES.txt")
     parser.add_argument("--file-ucod-longterm-comparable-leading", help="Path to file for UCOD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
     parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
     parser.add_argument("--ols", help="Ordinary least squares", dest="ols", action="store_true")
@@ -129,16 +134,24 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def run_load(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+
       df = pandas.read_csv(
              self.get_data_file(),
              sep="\t",
-             usecols=["Year", self.get_action_column_name(), self.get_code_column_name(), "Deaths", "Population"],
+             usecols=["Year", "Deaths", "Population"] + self.get_read_columns(),
              na_values=["Unreliable"],
              parse_dates=[0],
              encoding="ISO-8859-1",
            ).dropna(how="all")
+
+      if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+        df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[x.rfind("(")+1:][:-1])
+        df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[:x.rfind("(")-1].replace("#", ""))
+
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+
       df = pandas.read_excel(
         self.get_data_file(),
         index_col=0,
@@ -149,6 +162,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       df = df.reset_index().melt(id_vars=["Year"], value_vars=melt_cols, var_name=self.get_action_column_name(), value_name="Deaths").sort_values(by=["Year", self.get_action_column_name()])
       df.Year = df.Year
       df["Population"] = df.Year.apply(lambda y: self.mortality_uspopulation.loc[y.year]["Population"])
+
     else:
       raise NotImplementedError()
     
@@ -168,6 +182,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       return "Cause of death"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death"
+    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+      return "ICD-10 113 Cause List"
     else:
       raise NotImplementedError()
   
@@ -180,6 +196,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       return "Cause of death Code"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death Code"
+    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+      return "Cause of death Codes"
     else:
       raise NotImplementedError()
   
@@ -192,14 +210,22 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       return self.options.file_ucod_1999_2017_ungrouped
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return self.options.file_ucod_longterm_comparable_leading
+    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+      return self.options.file_ucod_1999_2017_icd10_113_causes
     else:
       raise NotImplementedError()
   
+  def get_read_columns(self):
+    if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+      return [self.get_action_column_name()]
+    else:
+      return [self.get_action_column_name(), self.get_code_column_name()]
+    
   def run_get_action_data(self, action):
     df = self.data[self.data[self.get_action_column_name()] == action]
     df = df.set_index("Date")
     # ETS requires a specific frequency so we forward-fill any missing
-    # years. If there's already an anual frequency, no change is made
+    # years. If there's already an annual frequency, no change is made
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
     df = df.resample("AS").ffill().dropna()
     return df
@@ -824,6 +850,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       icd_codes = self.data[self.get_code_column_name()].unique()
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
@@ -872,6 +899,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[self.get_code_column_name()] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
