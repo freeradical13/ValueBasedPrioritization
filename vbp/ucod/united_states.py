@@ -521,6 +521,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       raise ValueError("--raw-files-directory is not a directory")
 
   def run_prepare_data(self):
+    self.options.data_type = DataType.UCOD_LONGTERM_COMPARABLE_LEADING
     self.check_raw_files_directory()
     if self.options.comparable_ratios:
       self.create_comparable()
