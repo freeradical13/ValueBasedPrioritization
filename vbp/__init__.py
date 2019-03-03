@@ -136,6 +136,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
     raise NotImplementedError()
   
   @abc.abstractmethod
+  def get_value_column_name(self):
+    raise NotImplementedError()
+  
+  @abc.abstractmethod
   def run_predict(self):
     raise NotImplementedError()
 
@@ -153,12 +157,17 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser.add_argument("-b", "--best-fit", choices=["lowest_aic", "lowest_aicc", "lowest_bic"], default="lowest_aicc", help="Best fitting model algorithm")
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
+      data_type_choices = self.get_data_types_enum()
+      if data_type_choices is None:
+        data_type_choices = []
+      else:
+        data_type_choices = list(data_type_choices)
       parser.add_argument(
         "--data-type",
         help="The type of data to process",
         type=self.get_data_types_enum() if self.get_data_types_enum() is not None else str,
         default=self.get_data_types_enum_default(),
-        choices=list(self.get_data_types_enum()),
+        choices=data_type_choices,
       )
       parser.add_argument("--debug", action="store_true", help="Debug", default=False)
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
@@ -390,7 +399,33 @@ class DataSource(object, metaclass=abc.ABCMeta):
     return "_all_" + name
 
   def run_prophet(self):
-    raise NotImplementedError()
+    import fbprophet
+    results = {
+      self.predict_column_name: [],
+    }
+    actions = self.get_possible_actions().tolist()
+    for action in actions:
+      df = self.get_action_data(action)
+      
+      df = df[[self.get_value_column_name()]]
+      df.reset_index(inplace=True)
+      df.rename(columns={"index": "ds", self.get_value_column_name(): "y"}, inplace=True)
+
+      prophet = fbprophet.Prophet()
+      prophet.fit(df)
+      future = prophet.make_future_dataframe(periods=self.options.predict, freq="Y")
+      forecast = prophet.predict(future)
+
+      prophet.plot(forecast)
+      self.save_plot_image(action, "forecast")
+      
+      prophet.plot_components(forecast)
+      self.save_plot_image(action, "components")
+
+      forecast = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+      results[self.predict_column_name].append(forecast.iloc[-1]["yhat"])
+
+    return pandas.DataFrame(results, index=actions)
 
   def run_prepare_data(self):
     return False
@@ -403,3 +438,13 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def get_enum_names(self, e):
     return list(map(lambda x: x.name, list(e)))
+
+  def run_get_action_data(self, action):
+    return self.data[self.data[self.get_action_column_name()] == action]
+
+  def save_plot_image(self, action, context):
+    matplotlib.pyplot.tight_layout()
+    matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(self.get_obfuscated_name(action), context)), dpi=100)
+    
+    if self.options.show_graphs:
+      matplotlib.pyplot.show()

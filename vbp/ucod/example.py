@@ -1,46 +1,39 @@
-import io
+import vbp
+import enum
+import numpy
 import pandas
+import datetime
 import matplotlib
-import statsmodels
-import matplotlib.pyplot
-import statsmodels.tsa.api
 
-cause = "Malignant neoplasms"
-csv_data = """Year,CrudeRate
-1999,197.0
-2000,196.5
-2001,194.3
-2002,193.7
-2003,192.0
-2004,189.2
-2005,189.3
-2006,187.6
-2007,186.9
-2008,186.0
-2009,185.0
-2010,186.2
-2011,185.1
-2012,185.6
-2013,185.0
-2014,185.6
-2015,185.4
-2016,185.1
-2017,183.9
-"""
+class ExampleDataSource(vbp.DataSource):
+  def initialize_parser(self, parser):
+    parser.add_argument("--random-action", help="Create a random action", action="append", default=["Action1"])
+    parser.add_argument("--example-flag", help="Example flag True", action="store_true")
+    parser.add_argument("--no-example-flag", help="Example flag False", action="store_false")
+    parser.add_argument("--years", help="Number of years to generate", type=int, default=100)
+    parser.set_defaults(
+      example_flag=True,
+    )
 
-def ets_non_seasonal(df, color, predict, exponential=False, damped=False, damping_slope=0.98):
-  fit = statsmodels.tsa.api.Holt(df, exponential=exponential, damped=damped).fit(damping_slope=damping_slope if damped else None)
-  fit.fittedvalues.plot(color=color, style="--", label='_nolegend_')
-  title = "ETS(A,{}{},N)".format("M" if exponential else "A", "_d" if damped else "")
-  forecast = fit.forecast(predict).rename("${}$".format(title))
-  forecast.plot(color=color, legend=True, style="--")
-  print("{}={}".format(title, fit.aicc))
+  def run_load(self):
+    end_year = datetime.datetime.now().year
+    years = [pandas.to_datetime(i, format="%Y") for i in range(end_year - self.options.years + 1, end_year + 1) for j in range(1, len(self.options.random_action) + 1)]
+    actions = [j for i in range(end_year - self.options.years + 1, end_year + 1) for j in self.options.random_action]
+    values = numpy.random.random_sample(self.options.years * len(self.options.random_action)).tolist()
+    df = pandas.DataFrame(
+      {
+        self.get_action_column_name(): actions,
+        self.get_value_column_name(): values,
+      },
+      index=years,
+    )
+    return df
 
-df = pandas.read_csv(io.StringIO(csv_data), index_col="Year", parse_dates=True)
-df.plot(color="black", marker="o", legend=True)
-ets_non_seasonal(df, "red", 5, exponential=False, damped=False, damping_slope=0.98)
-ets_non_seasonal(df, "cyan", 5, exponential=False, damped=True, damping_slope=0.98)
-ets_non_seasonal(df, "green", 5, exponential=True, damped=False, damping_slope=0.98)
-ets_non_seasonal(df, "blue", 5, exponential=True, damped=True, damping_slope=0.98)
-matplotlib.pyplot.legend()
-matplotlib.pyplot.show()
+  def get_action_column_name(self):
+    return "Action"
+  
+  def get_value_column_name(self):
+    return "Value"
+  
+  def run_predict(self):
+    return self.prophet()

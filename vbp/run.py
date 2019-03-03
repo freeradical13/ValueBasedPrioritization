@@ -10,6 +10,7 @@ import matplotlib
 import matplotlib.pyplot
 
 # Import all subclasses of DataSource so that they are options
+import vbp.ucod.example
 import vbp.ucod.united_states
 
 def add_data_source_arg(parser, data_source_names):
@@ -95,8 +96,8 @@ if __name__ == "__main__":
     subparser = subparsers.add_parser("action_data", help="Print data for an action")
     add_data_source_arg(subparser, data_source_names)
     add_all_arg(subparser)
-    subparser.add_argument("action", help="Action")
     add_remainder_arg(subparser)
+    subparser.add_argument("action", help="Action")
     
     subparser = subparsers.add_parser("manual_scale_functions", help="Generate scale functions table")
     add_data_source_arg(subparser, data_source_names)

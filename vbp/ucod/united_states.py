@@ -187,6 +187,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     else:
       raise NotImplementedError()
   
+  def get_value_column_name(self):
+    return "Crude Rate"
+  
   def get_code_column_name(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
       return "ICD Sub-Chapter Code"
