@@ -346,6 +346,18 @@
   note         = {Accessed: 2019-02-23},
 }
 
+@article{mathers2006projections,
+  title        = {Projections of global mortality and burden of disease from 2002 to 2030},
+  author       = {Mathers, Colin D and Loncar, Dejan},
+  journal      = {PLoS medicine},
+  volume       = {3},
+  number       = {11},
+  pages        = {e442},
+  year         = {2006},
+  publisher    = {Public Library of Science},
+  note         = {\url{https://journals.plos.org/plosmedicine/article/file?id=10.1371/journal.pmed.0030442\&type=printable}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -473,7 +485,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, etc.):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson regression, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -511,6 +523,7 @@ First, outline the parameters:
         \phi=0.98
       \end{gathered}
     \end{equation*}
+    Commonly used alternative models include poisson log-bilinear regressions\cite{mathers2006projections}.
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
@@ -683,6 +696,8 @@ Calculate the product of each action's $B(t_F)$ and its scale function values to
 \section{Discussion}
 
 The example modeling methods are crude and are ripe for more detailed approaches.
+
+\enquote{Substantial research remains to develop robust and unbiased methods for measuring trends in case fatality rates, survival times, and disability due to specific causes, let alone collecting such data across all regions of the world. Despite these uncertainties, projections provide a useful perspective on population health trends and health policies, provided that they are interpreted with a degree of caution. Projections enable us to appreciate better the implications for health and health policy of currently observed trends, and the likely impact of fairly certain future trends, such as the ageing of the population, and the continuation of the epidemiological transition in developing countries.}\cite{mathers2006projections}
 
 %%%%%%%%%%%%%%
 % References %
