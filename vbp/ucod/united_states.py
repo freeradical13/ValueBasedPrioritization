@@ -25,7 +25,7 @@ import statsmodels.tools.eval_measures
 
 from vbp.ucod.icd import ICD
 
-class DataType(enum.Enum):
+class DataType(vbp.DataSourceDataType):
   
   # Group Results By "Year" And By "ICD Sub-Chapter"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
@@ -44,15 +44,6 @@ class DataType(enum.Enum):
   # Group Results By "Year" And By "ICD-10 113 Cause List"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
   UCOD_1999_2017_ICD10_113_CAUSES = enum.auto()
-
-  def __str__(self):
-    return self.name
-  
-  @classmethod
-  def _missing_(cls, name):
-    for member in cls:
-      if member.name.lower() == name.lower():
-        return member
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 

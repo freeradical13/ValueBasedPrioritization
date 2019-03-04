@@ -1,6 +1,7 @@
 import os
 import abc
 import sys
+import enum
 import math
 import numpy
 import pandas
@@ -72,6 +73,16 @@ def print_full_columns(df):
     with pandas.option_context("display.max_colwidth", sys.maxsize):
       print(df)
 
+class DataSourceDataType(enum.Enum):
+  def __str__(self):
+    return self.name
+  
+  @classmethod
+  def _missing_(cls, name):
+    for member in cls:
+      if member.name.lower() == name.lower():
+        return member
+  
 class DataSource(object, metaclass=abc.ABCMeta):
   ##############
   # Attributes #
