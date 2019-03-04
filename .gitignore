@@ -8,6 +8,8 @@ value_based_prioritization.bib
 *.pyc
 __pycache__
 
+.~*
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

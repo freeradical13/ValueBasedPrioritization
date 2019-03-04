@@ -361,7 +361,10 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     if not damped:
       damping_slope = None
-      
+
+    # Holt throws errors with 0 or NaN values
+    df = df[df != 0].resample("AS").interpolate("linear")
+    
     fit = statsmodels.tsa.api.Holt(df, exponential=exponential, damped=damped).fit(damping_slope=damping_slope)
     fit.fittedvalues.plot(color=color, style="--", label="_nolegend_")
     title = "ETS(A,"
