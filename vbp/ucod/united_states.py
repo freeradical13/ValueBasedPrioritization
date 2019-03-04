@@ -140,6 +140,10 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
         df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[x.rfind("(")+1:][:-1])
         df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[:x.rfind("(")-1].replace("#", ""))
+      elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+        # Lookup by action_column_name but these aren't unique in this data set,
+        # so append the codes.
+        df[self.get_action_column_name()] = df.apply(lambda row: "{} ({})".format(row[self.get_action_column_name()], row[self.get_code_column_name()]), axis="columns")
 
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
 
@@ -225,7 +229,13 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     return df
   
   def set_or_append(self, df, append):
-    return append if df is None else pandas.concat([df, append], sort=False)
+    if df is None:
+      return append
+    else:
+      if append is None:
+        return df
+      else:
+        return pandas.concat([df, append], sort=False)
   
   def get_causes(self):
     causes = self.options.cause
@@ -302,6 +312,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
   def create_model_ets(self, action, predict, i, count):
     print("Creating ETS model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
     df = self.run_get_action_data(action)
+
+    if len(df) <= 1:
+      return None
     
     df = df[["Crude Rate"]]
     ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), grid=True, kind="line")
@@ -364,7 +377,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
     # Holt throws errors with 0 or NaN values
     df = df[df != 0].resample("AS").interpolate("linear")
-    
+
     fit = statsmodels.tsa.api.Holt(df, exponential=exponential, damped=damped).fit(damping_slope=damping_slope)
     fit.fittedvalues.plot(color=color, style="--", label="_nolegend_")
     title = "ETS(A,"

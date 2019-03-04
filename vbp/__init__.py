@@ -181,6 +181,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
         choices=data_type_choices,
       )
       parser.add_argument("--debug", action="store_true", help="Debug", default=False)
+      parser.add_argument("--do-not-exit-on-warning", dest="exit_on_warning", action="store_false", help="Do not exit on a warning")
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=1)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
@@ -192,6 +193,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser.set_defaults(
         show_graphs=False,
         data_type_subdir=True,
+        exit_on_warning=True,
       )
       self.options = parser.parse_args(args)
       
@@ -369,7 +371,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
       raise ValueError("Empty best fit model for {}".format(result))
     elif len(result) > 1:
       # Multiple results, so just print a warning and pick the first one
-      print_warning("More than one model matches {}: {}".format(self.options.best_fit, result))
+      self.print_warning("More than one model matches {}: {}".format(self.options.best_fit, result))
       result = result.iloc[[0]]
 
     if self.options.verbose:
@@ -405,6 +407,8 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def print_warning(self, message):
     print("WARNING: {}".format(message))
+    if self.options.exit_on_warning:
+      sys.exit(1)
 
   def prefix_all(self, name):
     return "_all_" + name
