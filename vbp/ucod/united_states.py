@@ -120,7 +120,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
   @staticmethod
   def get_data_types_enum_default():
-    return DataType.UCOD_1999_2017_SUB_CHAPTERS
+    return DataType.UCOD_1999_2017_ICD10_113_CAUSES
 
   def run_load(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
@@ -138,6 +138,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
            ).dropna(how="all")
 
       if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+        # Drop any causes that do not have a # prefix (i.e. not designated rankable)
+        #df.drop(df[~df[self.get_action_column_name()].str.contains("#")].index, inplace=True)
+        
         df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[x.rfind("(")+1:][:-1])
         df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[:x.rfind("(")-1].replace("#", ""))
       elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
@@ -315,7 +318,18 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
     if len(df) <= 1:
       return None
+
+    # First create an image with raw data and no predictions because
+    # an exponential prediction may make it difficult to see the
+    # raw data trend
     
+    df = df[["Crude Rate"]]
+    ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), grid=True, kind="line")
+    ax.set_ylabel("Crude Rate")
+    fig = matplotlib.pyplot.gcf()
+    self.save_plot_image(action, "ets_nopredictions", fig, True)
+    
+    # Now built the plot with everything and the predictions
     df = df[["Crude Rate"]]
     ax = df.plot(color="black", marker="o", legend=True, title="Deaths from {}".format(self.get_obfuscated_name(action)), grid=True, kind="line")
     ax.set_ylabel("Crude Rate")
@@ -343,27 +357,17 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     resultdf = pandas.DataFrame(model_map)
     resultdf.index.rename([self.obfuscated_column_name, "Model"], inplace=True)
     
-    # https://stackoverflow.com/questions/54791323/
-    matplotlib.pyplot.legend()
-
-    matplotlib.pyplot.tight_layout()
-    matplotlib.pyplot.savefig(self.create_output_name("{}_ets.png".format(self.get_obfuscated_name(action))), dpi=100)
-    
-    if self.options.show_graphs:
-      matplotlib.pyplot.show()
-
-    matplotlib.pyplot.close(fig)
+    self.save_plot_image(action, "ets", fig, True)
     
     for title, result in results.items():
       fig, ax = matplotlib.pyplot.subplots()
       ax.scatter(result[0].fittedvalues, result[0].resid)
       ax.set_title("Residuals of {} (${}$)".format(self.get_obfuscated_name(action), title))
-      matplotlib.pyplot.tight_layout()
-      matplotlib.pyplot.savefig(self.create_output_name("{}_{}_ets_residuals.png".format(self.get_obfuscated_name(action), title)), dpi=100)
-      matplotlib.pyplot.close(fig)
+      self.save_plot_image(action, "{}_ets_residuals".format(title), fig)
       
     self.write_spreadsheet(df, "{}_etsdata".format(self.get_obfuscated_name(action)))
     self.write_spreadsheet(resultdf, "{}_etsresults".format(self.get_obfuscated_name(action)))
+    
     return resultdf
       
   def run_ets(self, df, color, predict, exponential=False, damped=False, damping_slope=0.98):
@@ -461,10 +465,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     fig, ax = matplotlib.pyplot.subplots()
     ax.scatter(predicted_values, residuals)
     ax.set_title("Residuals of {} ($x^{}$)".format(self.get_obfuscated_name(action), degree))
-    matplotlib.pyplot.tight_layout()
-    #matplotlib.pyplot.show()
-    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_ols_residuals.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
-    matplotlib.pyplot.close(fig)
+
+    self.save_plot_image(action, "{}_ols_residuals".format(degree), fig)
 
     # Normal probability plot
     # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.probplot.html
@@ -502,15 +504,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     fig = matplotlib.pyplot.gcf()
     fig.autofmt_xdate(bottom=0.2, rotation=30, ha="right", which="both")
     ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%d"))
-    #fig.set_size_inches(10, 5)
-    matplotlib.pyplot.tight_layout()
-    matplotlib.pyplot.legend()
-    matplotlib.pyplot.savefig(self.create_output_name("{}_{}_ols.png".format(self.get_obfuscated_name(action), degree)), dpi=100)
-    
-    if self.options.show_graphs:
-      matplotlib.pyplot.show()
-      
-    matplotlib.pyplot.close(fig)
+
+    self.save_plot_image(action, "{}_ols".format(degree), fig, True)
 
     resultdf = pandas.DataFrame(model_map)
     resultdf.index.rename([self.obfuscated_column_name, "Model"], inplace=True)

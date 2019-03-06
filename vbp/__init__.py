@@ -185,7 +185,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
       parser.add_argument("--debug", action="store_true", help="Debug", default=False)
       parser.add_argument("--do-not-exit-on-warning", dest="exit_on_warning", action="store_false", help="Do not exit on a warning")
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
-      parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=1)
+      parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=5)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.add_argument("--no-data-type-subdir", help="Do not create an output subdirectory based on the data type", dest="data_type_subdir", action="store_false")
       parser.add_argument("-o", "--output-dir", help="output directory", default="output")
@@ -472,9 +472,18 @@ class DataSource(object, metaclass=abc.ABCMeta):
   def run_get_action_data(self, action):
     return self.data[self.data[self.get_action_column_name()] == action]
 
-  def save_plot_image(self, action, context):
+  def save_plot_image(self, action, context, fig=None, legend=False):
+    
+    if legend:
+      # https://stackoverflow.com/questions/54791323/
+      matplotlib.pyplot.legend()
+    
+    #fig.set_size_inches(10, 5)
     matplotlib.pyplot.tight_layout()
     matplotlib.pyplot.savefig(self.create_output_name("{}_{}.png".format(self.get_obfuscated_name(action), context)), dpi=100)
     
     if self.options.show_graphs:
       matplotlib.pyplot.show()
+
+    if fig is not None:
+      matplotlib.pyplot.close(fig)
