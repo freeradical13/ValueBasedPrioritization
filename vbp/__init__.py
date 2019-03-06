@@ -94,6 +94,8 @@ class DataSource(object, metaclass=abc.ABCMeta):
   obfuscated_action_names = {}
   obfuscated_action_names_count = 0
   available_obfuscated_names = None
+  model_fit_algorithms = {"lowest_aic": "AIC", "lowest_aicc": "AICc", "lowest_bic": "BIC"}
+  default_model_fit_algorithm = "lowest_aicc"
 
   #######################
   # Main Public Methods #
@@ -165,7 +167,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
     if not hasattr(self, "options"):
       parser = create_parser()
       self.initialize_parser(parser)
-      parser.add_argument("-b", "--best-fit", choices=["lowest_aic", "lowest_aicc", "lowest_bic"], default="lowest_aicc", help="Best fitting model algorithm")
+      parser.add_argument("-b", "--best-fit", choices=list(self.model_fit_algorithms.keys()), default=self.default_model_fit_algorithm, help="Best fitting model algorithm")
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
       data_type_choices = self.get_data_types_enum()
@@ -362,16 +364,16 @@ class DataSource(object, metaclass=abc.ABCMeta):
     
     return result
       
-  def best_fitting_model_grouped(self, df):
+  def best_fitting_model_grouped(self, df, algorithm):
     if self.options.verbose:
       print("=================\nGrouped Incoming:\n{}\n".format(df))
       
-    result = getattr(self, "best_fitting_model_{}".format(self.options.best_fit))(df)
+    result = getattr(self, "best_fitting_model_{}".format(algorithm))(df)
     if result.empty:
       raise ValueError("Empty best fit model for {}".format(result))
     elif len(result) > 1:
-      # Multiple results, so just print a warning and pick the first one
-      self.print_warning("More than one model matches {}: {}".format(self.options.best_fit, result))
+      # Multiple results, so just print a message and pick the first one
+      self.print_info("More than one model matches {}:\n{}".format(algorithm, result))
       result = result.iloc[[0]]
 
     if self.options.verbose:
@@ -384,8 +386,16 @@ class DataSource(object, metaclass=abc.ABCMeta):
       print("=========\nIncoming:\n{}\n".format(df))
       
     # For each ModelType, select the best model. We end up
-    # with a single row for each ModelType
-    result = df.groupby("ModelType").apply(lambda x: self.best_fitting_model_grouped(x))
+    # with a single row for each ModelType. We start with
+    # the selected (or default) fit algorithm, but if the result
+    # is infinity, then we move onto the next one.
+    algorithms = list(self.model_fit_algorithms.keys()).copy()
+    algorithms.remove(self.options.best_fit)
+    algorithms.insert(0, self.options.best_fit)
+    for algorithm in algorithms:
+      result = df.groupby("ModelType").apply(lambda x: self.best_fitting_model_grouped(x, algorithm))
+      if not numpy.isinf(result[self.model_fit_algorithms[algorithm]][0]):
+        break
 
     if len(result) > 1:
       # Finally we take the averages across model groups
@@ -409,6 +419,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
     print("WARNING: {}".format(message))
     if self.options.exit_on_warning:
       sys.exit(1)
+
+  def print_info(self, message):
+    print("INFO: {}".format(message))
 
   def prefix_all(self, name):
     return "_all_" + name
