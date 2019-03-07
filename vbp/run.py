@@ -228,16 +228,7 @@ if __name__ == "__main__":
         ds = create_data_source(data_source_classes, options)
         ds.load(options.args)
 
-        nameaddition = ""
-        datatype = ds.options.data_type
-        if datatype is None:
-          datatype = ds.get_data_types_enum_default()
-          
-        if datatype is not None:
-          nameaddition = "_{}".format(datatype.name)
-          
-        outputname = options.output
-        outputname = outputname[:outputname.rindex(".")] + nameaddition + outputname[outputname.rindex("."):]
+        outputname = ds.get_manual_scales_file(options.output)
 
         actions = numpy.sort(ds.get_possible_actions())
         

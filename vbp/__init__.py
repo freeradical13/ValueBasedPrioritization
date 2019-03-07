@@ -228,11 +228,16 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
   def run_modeled_value_based_prioritization(self):
     manual_scales = None
+    
     if self.options.manual_scales is not None:
-      if self.options.manual_scales.endswith("xlsx"):
-        manual_scales = pandas.read_excel(self.options.manual_scales)
-      elif self.options.manual_scales.endswith("csv"):
-        manual_scales = pandas.read_csv(self.options.manual_scales)
+      manual_scales_file = self.get_manual_scales_file(self.options.manual_scales)
+      if not os.path.exists(manual_scales_file):
+        manual_scales_file = self.options.manual_scales
+      
+      if manual_scales_file.endswith("xlsx"):
+        manual_scales = pandas.read_excel(manual_scales_file)
+      elif manual_scales_file.endswith("csv"):
+        manual_scales = pandas.read_csv(manual_scales_file)
       else:
         raise ValueError("Could not infer type of manually calculated scale function file (expecting extension .xlsx or .csv)")
       
@@ -490,6 +495,19 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
     if fig is not None:
       matplotlib.pyplot.close(fig)
+      
+  def get_manual_scales_file(self, filename):
+    nameaddition = ""
+    datatype = self.options.data_type
+    if datatype is None:
+      datatype = self.get_data_types_enum_default()
+      
+    if datatype is not None:
+      nameaddition = "_{}".format(datatype.name)
+      
+    outputname = filename
+    outputname = outputname[:outputname.rindex(".")] + nameaddition + outputname[outputname.rindex("."):]
+    return outputname
 
 class DictTree(collections.defaultdict):
   def __init__(self, d={}, value=None, **kwargs):
