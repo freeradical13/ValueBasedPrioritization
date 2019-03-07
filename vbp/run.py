@@ -105,11 +105,12 @@ if __name__ == "__main__":
     
     subparser = subparsers.add_parser("manual_scale_functions", help="Generate scale functions table")
     add_data_source_arg(subparser, data_source_names)
-    add_output_arg(subparser)
-    subparser.add_argument("-t", "--type", choices=["csv", "excel"], help="Output type", default="csv")
+    add_all_arg(subparser)
+    subparser.add_argument("-n", "--sheet_name", help="Excel sheet name", default="Sheet1")
+    subparser.add_argument("-o", "--output", help="Output file")
     subparser.add_argument("-p", "--prefix", help="Action prefix")
     subparser.add_argument("-s", "--suffix", help="Action suffix")
-    subparser.add_argument("-n", "--sheet_name", help="Excel sheet name", default="Sheet1")
+    subparser.add_argument("-t", "--type", choices=["csv", "excel"], help="Output type", default="csv")
     subparser.add_argument("column", help="Column", nargs="+")
     add_remainder_arg(subparser)
 
@@ -210,47 +211,71 @@ if __name__ == "__main__":
       
     elif options.command_name == "manual_scale_functions":
       
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
+      if options.output is None:
+        raise ValueError("-o/--output FILE is required")
       
-      actions = numpy.sort(ds.get_possible_actions())
-      
-      data = {ds.obfuscated_column_name: actions}
-      
-      for column in options.column:
-        data[column] = numpy.ones(len(actions))
-        
-      df = pandas.DataFrame(data, range(1, len(actions) + 1))
+      data_types = get_data_types(data_source_classes, options)
+      first = True
+      for i, data_type in enumerate(data_types):
+        if len(data_types) > 1:
+          if data_type is not None:
+            if i > 0:
+              print("")
+            print("Data type {}:".format(data_type))
+            print("")
 
-      df.index.name = ds.action_number_column_name
-      
-      if options.prefix is not None or options.suffix is not None:
-        df[ds.pretty_action_column_name] = df[ds.obfuscated_column_name]
+        options = get_options_with_data_type(parser, data_type, args, first)
+        ds = create_data_source(data_source_classes, options)
+        ds.load(options.args)
+
+        nameaddition = ""
+        datatype = ds.options.data_type
+        if datatype is None:
+          datatype = ds.get_data_types_enum_default()
+          
+        if datatype is not None:
+          nameaddition = "_{}".format(datatype.name)
+          
+        outputname = options.output
+        outputname = outputname[:outputname.rindex(".")] + nameaddition + outputname[outputname.rindex("."):]
+
+        actions = numpy.sort(ds.get_possible_actions())
         
-        # Re-order columns so that pretty_action_column_name is first,
-        # obfuscated_column_name is last, and all other columns are
-        # in between.
-        df = df.reindex(columns=([ds.pretty_action_column_name] + list([x for x in df.columns if x != ds.pretty_action_column_name and x != ds.obfuscated_column_name] + [ds.obfuscated_column_name])))
+        data = {ds.obfuscated_column_name: actions}
         
-        if options.prefix is not None:
-          df[ds.pretty_action_column_name] = options.prefix + df[ds.pretty_action_column_name]
+        for column in options.column:
+          data[column] = numpy.ones(len(actions))
+          
+        df = pandas.DataFrame(data, range(1, len(actions) + 1))
+
+        df.index.name = ds.action_number_column_name
         
-        if options.suffix is not None:
-          df[ds.pretty_action_column_name] = df[ds.pretty_action_column_name] + options.suffix
-      
-      if options.type == "csv":
-        write_str(options.output, df.to_csv())
-      elif options.type == "excel":
-        output = io.BytesIO()
-        writer = pandas.ExcelWriter(output, engine="xlsxwriter")
-        df.to_excel(writer, sheet_name=options.sheet_name)
-        writer.save()
-        xlsx_data = output.getvalue()
-        options.output.write(xlsx_data)
-      else:
-        raise NotImplementedError()
-      
-      options.output.close()
+        if options.prefix is not None or options.suffix is not None:
+          df[ds.pretty_action_column_name] = df[ds.obfuscated_column_name]
+          
+          # Re-order columns so that pretty_action_column_name is first,
+          # obfuscated_column_name is last, and all other columns are
+          # in between.
+          df = df.reindex(columns=([ds.pretty_action_column_name] + list([x for x in df.columns if x != ds.pretty_action_column_name and x != ds.obfuscated_column_name] + [ds.obfuscated_column_name])))
+          
+          if options.prefix is not None:
+            df[ds.pretty_action_column_name] = options.prefix + df[ds.pretty_action_column_name]
+          
+          if options.suffix is not None:
+            df[ds.pretty_action_column_name] = df[ds.pretty_action_column_name] + options.suffix
+        
+        if options.type == "csv":
+          df.to_csv(options.outputname)
+          print("Wrote {}".format(outputname))
+        elif options.type == "excel":
+          writer = pandas.ExcelWriter(outputname, engine="xlsxwriter")
+          df.to_excel(writer, sheet_name=options.sheet_name)
+          writer.save()
+          print("Wrote {}".format(outputname))
+        else:
+          raise NotImplementedError()
+
+        first = False
       
     elif options.command_name == "action_data":
       
