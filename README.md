@@ -3,7 +3,7 @@
 ## Article
 
 * PDF: [value_based_prioritization.pdf](value_based_prioritization.pdf)
-* LaTeX Source: [value_based_prioritization.tex](value_based_prioritization.tex)
+* TeX Source: [value_based_prioritization.tex](value_based_prioritization.tex)
 
 ## Source Code
 

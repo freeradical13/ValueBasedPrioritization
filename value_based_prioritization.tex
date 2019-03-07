@@ -583,7 +583,7 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list UnderlyingCa
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run manual\char`_scale\char`_functions -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S4}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run manual\char`_scale\char`_functions -a -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S4}}:
 
 \begin{table}[H]
   \centering
@@ -620,7 +620,7 @@ For example:
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Ischemic heart diseases"}}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}). For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Ischemic heart diseases"}}:
 
 \begin{table}[H]
   \centering
@@ -666,7 +666,7 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
   \label{table:choosem}
 \end{table}
 
-Use each $M(A(t_F))$ to calculate the predicted value and then generate all of the relative $B(t_F)$ values (setting negative values to 0) and any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example:
+Use each $M(A(t_F))$'s predicted value and generate all of the relative $B(t_F)$ values (setting negative values to 0) along with any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example:
 
 \begin{table}[H]
   \centering
@@ -674,8 +674,8 @@ Use each $M(A(t_F))$ to calculate the predicted value and then generate all of t
     \toprule
       Action  & $B(t_F)$ & $S_1$  & $S_3$  \\
     \midrule
-      Action1 & 0.17     & 1.0    & 0.57   \\
-      Action2 & 0.09     & 1.0    & 1      \\
+      Action1 & 0.09     & 1.0    & 0.54   \\
+      Action2 & 0.07     & 1.0    & 0.80   \\
       \ldots  & \ldots   & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
@@ -691,8 +691,8 @@ Combine the table above with the manually calculated scale functions table \ref{
     \toprule
       Action  & $B(t_F)$ & $S_1$  & $S_2$  & $S_3$  & $S_4$  \\
     \midrule
-      Action1 & 0.17     & 1.0    & 0.39   & 0.57   & 1      \\
-      Action2 & 0.09     & 1.0    & 0.62   & 1      & 1      \\
+      Action1 & 0.09     & 1.0    & 0.39   & 0.54   & 1      \\
+      Action2 & 0.07     & 1.0    & 0.54   & 0.80   & 1      \\
       \ldots  & \ldots   & \ldots & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
@@ -700,7 +700,7 @@ Combine the table above with the manually calculated scale functions table \ref{
   \label{table:btablewithall}
 \end{table}
 
-Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the result is\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
+Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the result is\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates -k 1 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
 
 \begin{table}[H]
   \centering
@@ -708,7 +708,7 @@ Calculate the product of each action's $B(t_F)$ and its scale function values to
     \toprule
       $k$ & Action          & $Z(t_F)$ \\
     \midrule
-      1   & Eliminate: TODO & 0.08     \\
+      1   & Eliminate: TODO & 0.03     \\
     \bottomrule
   \end{tabular}
   \caption{Example $Z(t_F)$ table}
