@@ -23,9 +23,21 @@ import statsmodels.formula.api
 import statsmodels.stats.diagnostic
 import statsmodels.tools.eval_measures
 
+from vbp import DictTree
 from vbp.ucod.icd import ICD
 
 class DataType(vbp.DataSourceDataType):
+  
+  # Group Results By "Year" And By "ICD-10 113 Cause List"; Check "Export Results"; Uncheck "Show Totals"
+  # https://wonder.cdc.gov/ucd-icd10.html
+  UCOD_1999_2017_ICD10_113_CAUSES_ALL = enum.auto()
+
+  # Same as above but only the leaves of the tree. For some reason, this is not exactly 113, but 117.
+  UCOD_1999_2017_ICD10_113_CAUSES_LEAVES = enum.auto()
+
+  # Group Results By "Year" And By "ICD Chapter"; Check "Export Results"; Uncheck "Show Totals"
+  # https://wonder.cdc.gov/ucd-icd10.html
+  UCOD_1999_2017_CHAPTERS = enum.auto()
   
   # Group Results By "Year" And By "ICD Sub-Chapter"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
@@ -35,15 +47,9 @@ class DataType(vbp.DataSourceDataType):
   # https://wonder.cdc.gov/ucd-icd10.html
   UCOD_1999_2017_UNGROUPED = enum.auto()
   
-  # Group Results By "Year" And By "ICD Chapter"; Check "Export Results"; Uncheck "Show Totals"
-  # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_CHAPTERS = enum.auto()
-  
+  # Built from https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf and Mortality data >= 1959 and comparability ratios
+  # from https://www.cdc.gov/nchs/data/dvs/comp2.pdf
   UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
-
-  # Group Results By "Year" And By "ICD-10 113 Cause List"; Check "Export Results"; Uncheck "Show Totals"
-  # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_ICD10_113_CAUSES = enum.auto()
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
@@ -90,6 +96,163 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     index=mortality_uspopulation_years
   )
   
+  # https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf (Page 19)
+  icd10_ucod113 = DictTree({
+    1: "Salmonella infections (A01-A02)",
+    2: "Shigellosis and amebiasis (A03,A06)",
+    3: "Certain other intestinal infections (A04,A07-A09)",
+    4: DictTree(value="Tuberculosis (A16-A19)", d={
+      5: "Respiratory tuberculosis (A16)",
+      6: "Other tuberculosis (A17-A19)",
+    }),
+    7: "Whooping cough (A37)",
+    8: "Scarlet fever and erysipelas (A38,A46)",
+    9: "Meningococcal infection (A39)",
+    10: "Septicemia (A40-A41)",
+    11: "Syphilis (A50-A53)",
+    12: "Acute poliomyelitis (A80)",
+    13: "Arthropod-borne viral encephalitis (A83-A84,A85.2)",
+    14: "Measles (B05)",
+    15: "Viral hepatitis (B15-B19)",
+    16: "Human immunodeficiency virus (HIV) disease (B20-B24)",
+    17: "Malaria (B50-B54)",
+    18: "Other and unspecified infectious and parasitic diseases and their sequelae (A00,A05,A20-A36,A42-A44,A48-A49,A54-A79,A81-A82,A85.0-A85.1,A85.8,A86-B04,B06-B09,B25-B49,B55-B99)",
+    19: DictTree(value="Malignant neoplasms (C00-C97)", d={
+      20: "Malignant neoplasms of lip, oral cavity and pharynx (C00-C14)",
+      21: "Malignant neoplasm of esophagus (C15)",
+      22: "Malignant neoplasm of stomach (C16)",
+      23: "Malignant neoplasms of colon, rectum and anus (C18-C21)",
+      24: "Malignant neoplasms of liver and intrahepatic bile ducts (C22)",
+      25: "Malignant neoplasm of pancreas (C25)",
+      26: "Malignant neoplasm of larynx (C32)",
+      27: "Malignant neoplasms of trachea, bronchus and lung (C33-C34)",
+      28: "Malignant melanoma of skin (C43)",
+      29: "Malignant neoplasm of breast (C50)",
+      30: "Malignant neoplasm of cervix uteri (C53)",
+      31: "Malignant neoplasms of corpus uteri and uterus, part unspecified (C54-C55)",
+      32: "Malignant neoplasm of ovary (C56)",
+      33: "Malignant neoplasm of prostate (C61)",
+      34: "Malignant neoplasms of kidney and renal pelvis (C64-C65)",
+      35: "Malignant neoplasm of bladder (C67)",
+      36: "Malignant neoplasms of meninges, brain and other parts of central nervous system (C70-C72)",
+      37: DictTree(value="Malignant neoplasms of lymphoid, hematopoietic and related tissue (C81-C96)", d={
+        38: "Hodgkin's disease (C81)",
+        39: "Non-Hodgkin's lymphoma (C82-C85)",
+        40: "Leukemia (C91-C95)",
+        41: "Multiple myeloma and immunoproliferative neoplasms (C88,C90)",
+        42: "Other and unspecified malignant neoplasms of lymphoid, hematopoietic and related tissue (C96)",
+      }),
+      43: "All other and unspecified malignant neoplasms (C17,C23-C24,C26-C31,C37-C41,C44-C49,C51-C52,C57-C60,C62-C63,C66,C68-C69,C73-C80,C97)",
+    }),
+    44: "In situ neoplasms, benign neoplasms and neoplasms of uncertain or unknown behavior (D00-D48)",
+    45: "Anemias (D50-D64)",
+    46: "Diabetes mellitus (E10-E14)",
+    47: DictTree(value="Nutritional deficiencies (E40-E64)", d={
+      48: "Malnutrition (E40-E46)",
+      49: "Other nutritional deficiencies (E50-E64)",
+    }),
+    50: "Meningitis (G00,G03)",
+    51: "Parkinson's disease (G20-G21)",
+    52: "Alzheimer's disease (G30)",
+    53: DictTree(value="Major cardiovascular diseases (I00-I78)", d={
+      54: DictTree(value="Diseases of heart (I00-I09,I11,I13,I20-I51)", d={
+        55: "Acute rheumatic fever and chronic rheumatic heart diseases (I00-I09)",
+        56: "Hypertensive heart disease (I11)",
+        57: "Hypertensive heart and renal disease (I13)",
+        58: "Ischemic heart diseases (I20-I25)",
+        59: "Acute myocardial infarction (I21-I22)",
+        60: "Other acute ischemic heart diseases (I24)",
+        61: DictTree(value="Other forms of chronic ischemic heart disease (I20,I25)", d={
+          62: "Atherosclerotic cardiovascular disease, so described (I25.0)",
+          63: "All other forms of chronic ischemic heart disease (I20,I25.1-I25.9)",
+        }),
+        64: DictTree(value="Other heart diseases (I26-I51)", d={
+          65: "Acute and subacute endocarditis (I33)",
+          66: "Diseases of pericardium and acute myocarditis (I30-I31,I40)",
+          67: "Heart failure (I50)",
+          68: "All other forms of heart disease (I26-I28,I34-I38,I42-I49,I51)",
+        }),
+      }),
+      69: "Essential (primary) hypertension and hypertensive renal disease (I10,I12,I15)",
+      70: "Cerebrovascular diseases (I60-I69)",
+      71: "Atherosclerosis (I70)",
+      72: DictTree(value="Other diseases of circulatory system (I71-I78)", d={
+        73: "Aortic aneurysm and dissection (I71)",
+        74: "Other diseases of arteries, arterioles and capillaries (I72-I78)",
+      }),
+    }),
+    75: "Other disorders of circulatory system (I80-I99)",
+    76: DictTree(value="Influenza and pneumonia (J09-J18)", d={
+      77: "Influenza (J09-J11)",
+      78: "Pneumonia (J12-J18)",
+    }),
+    79: DictTree(value="Other acute lower respiratory infections (J20-J22,U04)", d={
+      80: "Acute bronchitis and bronchiolitis (J20-J21)",
+      81: "Other and unspecified acute lower respiratory infection (J22,U04)",
+    }),
+    82: DictTree(value="Chronic lower respiratory diseases (J40-J47)", d={
+      83: "Bronchitis, chronic and unspecified (J40-J42)",
+      84: "Emphysema (J43)",
+      85: "Asthma (J45-J46)",
+      86: "Other chronic lower respiratory diseases (J44,J47)",
+    }),
+    87: "Pneumoconioses and chemical effects (J60-J66,J68)",
+    88: "Pneumonitis due to solids and liquids (J69)",
+    89: "Other diseases of respiratory system (J00-J06,J30-J39,J67,J70-J98)",
+    90: "Peptic ulcer (K25-K28)",
+    91: "Diseases of appendix (K35-K38)",
+    92: "Hernia (K40-K46)",
+    93: DictTree(value="Chronic liver disease and cirrhosis (K70,K73-K74)", d={
+      94: "Alcoholic liver disease (K70)",
+      95: "Other chronic liver disease and cirrhosis (K73-K74)",
+    }),
+    96: "Cholelithiasis and other disorders of gallbladder (K80-K82)",
+    97: DictTree(value="Nephritis, nephrotic syndrome and nephrosis (N00-N07,N17-N19,N25-N27)", d={
+      98: "Acute and rapidly progressive nephritic and nephrotic syndrome (N00-N01,N04)",
+      99: "Chronic glomerulonephritis, nephritis and nephropathy not specified as acute or chronic, and renal sclerosis unspecified (N02-N03,N05-N07,N26)",
+      100: "Renal failure (N17-N19)",
+      101: "Other disorders of kidney (N25,N27)",
+      102: "Infections of kidney (N10-N12,N13.6,N15.1)",
+    }),
+    103: "Hyperplasia of prostate (N40)",
+    104: "Inflammatory diseases of female pelvic organs (N70-N76)",
+    105: DictTree(value="Pregnancy, childbirth and the puerperium (O00-O99)", d={
+      106: "Pregnancy with abortive outcome (O00-O07)",
+      107: "Other complications of pregnancy, childbirth and the puerperium (O10-O99)",
+    }),
+    108: "Certain conditions originating in the perinatal period (P00-P96)",
+    109: "Congenital malformations, deformations and chromosomal abnormalities (Q00-Q99)",
+    110: "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified (R00-R99)",
+    111: "All other diseases (Residual) (D65-E07,E15-E34,E65-F99,G04-G14,G23-G25,G31-H93,K00-K22,K29-K31,K50-K66,K71-K72,K75-K76,K83-M99,N13.0-N13.5,N13.7-N13.9,N14,N15.0,N15.8-N15.9,N20-N23,N28-N39,N41-N64,N80-N98)",
+    112: DictTree(value="Accidents (unintentional injuries) (V01-X59,Y85-Y86)", d={
+      113: "Transport accidents (V01-V99,Y85)",
+      114: "Motor vehicle accidents (V02-V04,V09.0,V09.2,V12-V14,V19.0-V19.2,V19.4-V19.6,V20-V79,V80.3-V80.5,V81.0-V81.1,V82.0-V82.1,V83-V86, V87.0-V87.8,V88.0-V88.8,V89.0,V89.2)",
+      115: "Other land transport accidents (V01,V05-V06,V09.1,V09.3-V09.9, V10-V11,V15-V18,V19.3,V19.8-V19.9,V80.0-V80.2,V80.6-V80.9,V81.2-V81.9,V82.2-V82.9,V87.9,V88.9,V89.1,V89.3,V89.9)",
+      116: "Water, air and space, and other and unspecified transport accidents and their sequelae (V90-V99,Y85)",
+      117: "Nontransport accidents (W00-X59,Y86)",
+      118: "Falls (W00-W19)",
+      119: "Accidental discharge of firearms (W32-W34)",
+      120: "Accidental drowning and submersion (W65-W74)",
+      121: "Accidental exposure to smoke, fire and flames (X00-X09)",
+      122: "Accidental poisoning and exposure to noxious substances (X40-X49)",
+      123: "Other and unspecified nontransport accidents and their sequelae (W20-W31,W35-W64,W75-W99,X10-X39,X50-X59,Y86)",
+    }),
+    124: DictTree(value="Intentional self-harm (suicide) (*U03,X60-X84,Y87.0)", d={
+      125: "Intentional self-harm (suicide) by discharge of firearms (X72-X74)",
+      126: "Intentional self-harm (suicide) by other and unspecified means and their sequelae (*U03,X60-X71,X75-X84,Y87.0)",
+    }),
+    127: DictTree(value="Assault (homicide) (*U01-*U02,X85-Y09,Y87.1)", d={
+      128: "Assault (homicide) by discharge of firearms (*U01.4,X93-X95)",
+      129: "Assault (homicide) by other and unspecified means and their sequelae (*U01.0-*U01.3,*U01.5-*U01.9,*U02,X85-X92,X96-Y09,Y87.1)",
+    }),
+    130: "Legal intervention (Y35,Y89.0)",
+    131: "Events of undetermined intent (Y10-Y34,Y87.2,Y89.9)",
+    132: "Discharge of firearms, undetermined intent (Y22-Y24)",
+    133: "Other and unspecified events of undetermined intent and their sequelae (Y10-Y21,Y25-Y34,Y87.2,Y89.9)",
+    134: "Operations of war and their sequelae (Y36,Y89.1)",
+    135: "Complications of medical and surgical care (Y40-Y84,Y88)",
+  })
+  
   def initialize_parser(self, parser):
     parser.add_argument("cause", nargs="*", help="ICD Sub-Chapter")
     parser.add_argument("--average-ages", help="Compute average ages column with the specified column name", default="AverageAge")
@@ -120,12 +283,19 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
   @staticmethod
   def get_data_types_enum_default():
-    return DataType.UCOD_1999_2017_ICD10_113_CAUSES
+    return DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES
+
+  def extract_codes(self, x):
+    return x.strip()[x.strip().rfind("(")+1:][:-1]
+  
+  def extract_name(self, x):
+    return x[:x.rfind("(")-1].replace("#", "").strip()
 
   def run_load(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
 
       df = pandas.read_csv(
@@ -137,12 +307,22 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
              encoding="ISO-8859-1",
            ).dropna(how="all")
 
-      if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+      if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
         # Drop any causes that do not have a # prefix (i.e. not designated rankable)
         #df.drop(df[~df[self.get_action_column_name()].str.contains("#")].index, inplace=True)
         
-        df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[x.rfind("(")+1:][:-1])
-        df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(lambda x: x[:x.rfind("(")-1].replace("#", ""))
+        df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(self.extract_codes)
+        df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(self.extract_name)
+        
+        if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+          
+          keep_queries = list(map(self.icd_query, map(self.extract_codes, self.icd10_ucod113.leaves_list())))
+          df["CodesQuery"] = df[self.get_code_column_name()].apply(self.icd_query)
+          
+          # Drop any non-leaves
+          df.drop(df[~df["CodesQuery"].isin(keep_queries)].index, inplace=True)
+          
       elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
         # Lookup by action_column_name but these aren't unique in this data set,
         # so append the codes.
@@ -180,7 +360,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       return "Cause of death"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death"
-    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
       return "ICD-10 113 Cause List"
     else:
       raise NotImplementedError()
@@ -197,7 +378,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       return "Cause of death Code"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death Code"
-    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
       return "Cause of death Codes"
     else:
       raise NotImplementedError()
@@ -211,13 +393,15 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
       return self.options.file_ucod_1999_2017_ungrouped
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return self.options.file_ucod_longterm_comparable_leading
-    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
       return self.options.file_ucod_1999_2017_icd10_113_causes
     else:
       raise NotImplementedError()
   
   def get_read_columns(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES:
+    if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
       return [self.get_action_column_name()]
     else:
       return [self.get_action_column_name(), self.get_code_column_name()]
@@ -816,35 +1000,38 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
   def icd_query(self, codes):
     result = ""
-    atol = 1e-08
-    codes_pieces = codes.split(",")
-    for codes_piece in codes_pieces:
-      if len(result) > 0:
-        result += " | "
-      result += "("
-      codes_piece = codes_piece.strip()
-      if "-" in codes_piece:
-        range_pieces = codes_piece.split("-")
-        x = range_pieces[0]
-        y = range_pieces[1]
-        if "." in x:
-          floatval = vbp.ucod.icd.ICD.tofloat(x)
-          result += "(ucodfloat >= {})".format(floatval - atol)
+    
+    if codes != "Residual":
+      atol = 1e-08
+      codes = codes.replace("*", "")
+      codes_pieces = codes.split(",")
+      for codes_piece in codes_pieces:
+        if len(result) > 0:
+          result += " | "
+        result += "("
+        codes_piece = codes_piece.strip()
+        if "-" in codes_piece:
+          range_pieces = codes_piece.split("-")
+          x = range_pieces[0].strip()
+          y = range_pieces[1].strip()
+          if "." in x:
+            floatval = vbp.ucod.icd.ICD.tofloat(x)
+            result += "(ucodfloat >= {})".format(floatval - atol)
+          else:
+            result += "(ucodint >= {})".format(vbp.ucod.icd.ICD.toint(x))
+          result += " & "
+          if "." in y:
+            floatval = vbp.ucod.icd.ICD.tofloat(y)
+            result += "(ucodfloat <= {})".format(floatval + atol)
+          else:
+            result += "(ucodint <= {})".format(vbp.ucod.icd.ICD.toint(y))
         else:
-          result += "(ucodint >= {})".format(vbp.ucod.icd.ICD.toint(x))
-        result += " & "
-        if "." in y:
-          floatval = vbp.ucod.icd.ICD.tofloat(y)
-          result += "(ucodfloat <= {})".format(floatval + atol)
-        else:
-          result += "(ucodint <= {})".format(vbp.ucod.icd.ICD.toint(y))
-      else:
-        if "." in codes_piece:
-          floatval = vbp.ucod.icd.ICD.tofloat(codes_piece)
-          result += "(ucodfloat >= {}) & (ucodfloat <= {})".format(floatval - atol, floatval + atol)
-        else:
-          result += "ucodint == {}".format(vbp.ucod.icd.ICD.toint(codes_piece))
-      result += ")"
+          if "." in codes_piece:
+            floatval = vbp.ucod.icd.ICD.tofloat(codes_piece)
+            result += "(ucodfloat >= {}) & (ucodfloat <= {})".format(floatval - atol, floatval + atol)
+          else:
+            result += "ucodint == {}".format(vbp.ucod.icd.ICD.toint(codes_piece))
+        result += ")"
 
     return result
 
@@ -855,7 +1042,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
     
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       icd_codes = self.data[self.get_code_column_name()].unique()
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
@@ -883,8 +1071,9 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
         stats[file_year] = year_stats
         df, scale = self.get_mortality_data(csv, file_year)
         for icd_range, trash in icd_codes_map.items():
-          ages = df.query(self.icd_query(icd_range))["AgeMinutes"]
-          year_stats[icd_range] = {"Sum": ages.sum(), "Max": ages.max(), "Count": ages.count(), "Scale": scale}
+          if icd_range != "Residual":
+            ages = df.query(self.icd_query(icd_range))["AgeMinutes"]
+            year_stats[icd_range] = {"Sum": ages.sum(), "Max": ages.max(), "Count": ages.count(), "Scale": scale}
     
     codescol = "Codes"
     statsdf = self.create_with_multi_index2(stats, ["Year", codescol])
@@ -904,7 +1093,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.DataSource):
 
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[self.get_code_column_name()] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:

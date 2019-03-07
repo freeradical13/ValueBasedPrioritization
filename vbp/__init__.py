@@ -11,6 +11,7 @@ import pathlib
 import argparse
 import datetime
 import matplotlib
+import collections
 import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
@@ -183,6 +184,7 @@ class DataSource(object, metaclass=abc.ABCMeta):
         choices=data_type_choices,
       )
       parser.add_argument("--debug", action="store_true", help="Debug", default=False)
+      parser.add_argument("--do-not-clean", action="store_true", help="Do not clean output data", default=False)
       parser.add_argument("--do-not-exit-on-warning", dest="exit_on_warning", action="store_false", help="Do not exit on a warning")
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=5)
@@ -202,9 +204,10 @@ class DataSource(object, metaclass=abc.ABCMeta):
       clean = self.options.clean
       if self.options.output_dir == "output":
         # Always clean if it's the default output directory
+        # Unless --do-not-clean is explicitly used
         clean = True
-      
-      if clean and os.path.exists(self.options.output_dir):
+
+      if not self.options.do_not_clean and clean and os.path.exists(self.options.output_dir):
         self.clean_files()
         
       if not os.path.exists(self.options.output_dir):
@@ -487,3 +490,42 @@ class DataSource(object, metaclass=abc.ABCMeta):
 
     if fig is not None:
       matplotlib.pyplot.close(fig)
+
+class DictTree(collections.defaultdict):
+  def __init__(self, d={}, value=None, **kwargs):
+    super().__init__(DictTree)
+    self.update(d)
+    self.update(kwargs)
+    self.value = value
+  
+  def leaves_list(self):
+    return self.leaves_list_process(self, [])
+  
+  def leaves_list_process(self, node, accumulator):
+    for k, v in node.items():
+      if isinstance(v, DictTree):
+        accumulator = v.leaves_list_process(v, accumulator)
+      elif isinstance(v, dict):
+        accumulator = self.leaves_list_process(v, accumulator)
+      else:
+        accumulator.append(v)
+    if self.value is not None and len(node) == 0:
+      accumulator.append(self.value)
+    return accumulator
+  
+  def flat_dict(self, leaves=False):
+    result = {}
+    self.flat_dict_process(self, result, leaves, None)
+    return result
+  
+  def flat_dict_process(self, node, accumulator, leaves, key):
+    for k, v in node.items():
+      if isinstance(v, DictTree):
+        v.flat_dict_process(v, accumulator, leaves, k)
+      elif isinstance(v, dict):
+        self.flat_dict_process(v, accumulator, leaves, k)
+      else:
+        accumulator[k] = v
+    if key is not None and self.value is not None:
+      if not leaves or (leaves and len(node) == 0):
+        accumulator[key] = self.value

@@ -237,13 +237,34 @@
   note         = {Accessed: 2019-01-31},
 }
 
-@book{icd10,
+@book{icd10vol1,
   title        = {International statistical classification of diseases and related health problems},
   author       = {World Health Organization},
   year         = {2016},
   publisher    = {World Health Organization},
   edition      = {10th},
+  volume       = {1},
   note         = {\url{https://apps.who.int/iris/bitstream/handle/10665/246208/9789241549165-V1-eng.pdf}},
+}
+
+@book{icd10vol2,
+  title        = {International statistical classification of diseases and related health problems},
+  author       = {World Health Organization},
+  year         = {2010},
+  publisher    = {World Health Organization},
+  edition      = {10th},
+  volume       = {2},
+  note         = {\url{https://www.who.int/classifications/icd/ICD10Volume2_en_2010.pdf}},
+}
+
+@book{icd10vol3,
+  title        = {International statistical classification of diseases and related health problems},
+  author       = {World Health Organization},
+  year         = {2016},
+  publisher    = {World Health Organization},
+  edition      = {10th},
+  volume       = {3},
+  note         = {\url{https://apps.who.int/iris/bitstream/handle/10665/246208/9789241549165-V3-eng.pdf}},
 }
 
 @article{anderson2004model,
@@ -514,8 +535,8 @@ First, outline the parameters:
   \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
   \item \eqref{how-many-actions} $k = $ 1 for a single person (use 2 to hedge the failure of the first action or as a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
-  \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\url{https://www.who.int/topics/mortality/en/}}.
-  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\url{https://otexts.com/fpp2/holt.html}}\textsuperscript{,}\footnote{\url{https://otexts.com/fpp2/ets.html}}\textsuperscript{,}\footnote{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}:
+  \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\scriptsize{\url{https://www.who.int/topics/mortality/en/}}}.
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}}:
     \begin{equation*}
       \begin{gathered}
         \{ETS(A,A,N),ETS(A,A_d,N),\\
@@ -529,7 +550,7 @@ First, outline the parameters:
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
-$A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD-10 sub-chapters\cite{icd10}) of underlying causes of death in the United States\cite{centers2017underlying,censusestimates19001999,worldbankopendata,nbermortality}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count\char`_actions UnderlyingCausesOfDeathUnitedStates}}:
+$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death in the United States. This example starts by looking at the ICD-10\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.} 113 Selected Causes of Death list\cite{centers2017underlying,censusestimates19001999,worldbankopendata,nbermortality}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
   \begin{gathered}
@@ -542,7 +563,7 @@ $A(t)$ is the set of 179 actions which would eliminate the 179 major groups (ICD
   \end{gathered}
 \end{equation*}
 
-Review the list of actions\footnote{\texttt{python3 -m vbp.run list\char`_actions UnderlyingCausesOfDeathUnitedStates}} and hypothesize scale functions. Examples:
+Review the list of actions\footnote{\texttt{python3 -m vbp.run list UnderlyingCausesOfDeathUnitedStates}} and hypothesize scale functions. Examples:
 
 \begin{itemize}
   \item $S_1(A_i) = 1$
@@ -601,7 +622,7 @@ For example:
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
 
 \begin{table}[H]
   \centering
