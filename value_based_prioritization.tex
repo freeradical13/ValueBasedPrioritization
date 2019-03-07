@@ -555,10 +555,9 @@ $A(t)$ is a set of actions which would eliminate the groups of underlying causes
 \begin{equation*}
   \begin{gathered}
     A(t) = \{\\
-    A_1(t) = \textrm{Eliminate: Malignant neoplasms},\\
-    A_2(t) = \textrm{Eliminate: Ischaemic heart diseases},\\
+    A_1(t) = \textrm{Eliminate: Ischemic heart diseases},\\
+    A_2(t) = \textrm{Eliminate: Malignant neoplasms\ldots},\\
     \textrm{\ldots}\\
-    A_{179}(t) = \textrm{Eliminate: Other disorders of ear}\\
     \}
   \end{gathered}
 \end{equation*}
@@ -598,7 +597,7 @@ Create a table listing all actions as rows and all \textit{manually calculated} 
       $A_N$  & 0.99   &        & 0.9    \\
     \bottomrule
   \end{tabular}
-  \caption{Theoretical scale function table}
+  \caption{Theoretical manually calculated scale function table}
   \label{table:scaletable}
 \end{table}
 
@@ -622,7 +621,7 @@ For example:
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"}}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate})\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Ischemic heart diseases"}}:
 
 \begin{table}[H]
   \centering
@@ -630,21 +629,22 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
     \toprule
       Year   & Crude Rate \\
     \midrule
-      1999   &      197.0 \\
+      1999   &      189.8 \\
+      2000   &      183.1 \\
       \ldots &     \ldots \\
-      2017   &      183.9 \\
+      2017   &      112.3 \\
     \bottomrule
   \end{tabular}
-  \caption{Crude rate of deaths per year for \textit{Malignant neoplasms}}
+  \caption{Crude rate of deaths per year for \textit{Ischemic heart diseases}}
   \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Malignant neoplasms}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate -p 10 "Malignant neoplasms"}}:
+Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate -p 10 "Ischemic heart diseases"}}:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{Malignant_neoplasms_ets.png}
-  \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Malignant neoplasms}}\label{fig:neoplasmregs}
+  \includegraphics[width=0.5\textwidth]{Ischemic_heart_diseases_ets.png}
+  \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Ischemic heart diseases}}\label{fig:neoplasmregs}
 \end{figure}
 
 Scedasticity, forecast uncertainty, and outliers are not considered because it's not clear how to automate processing of such data to tune or choose models.
@@ -657,13 +657,13 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
     \toprule
       $R_i(D(A))$       & AICc           & Predicted       \\
     \midrule
-      $ETS(A,A,N)$      & 13.43          & 177.60          \\
-      $ETS(A,A_d,N)$    & 18.78          & 179.19          \\
-      $\bm{ETS(A,M,N)}$ & \textbf{12.44} & \textbf{177.75} \\
-      $ETS(A,M_d,N)$    & 14.35          & 179.17          \\
+      $ETS(A,A,N)$      & 56.78          & 105.01          \\
+      $ETS(A,A_d,N)$    & 63.14          & 105.33          \\
+      $\bm{ETS(A,M,N)}$ & \textbf{51.99} & \textbf{104.74} \\
+      $ETS(A,M_d,N)$    & 57.32          & 105.57          \\
     \bottomrule
   \end{tabular}
-  \caption{Example AICc values of $R_i(D(A))$ for \textit{Malignant neoplasms}}
+  \caption{Example AICc values of $R_i(D(A))$ for \textit{Ischemic heart diseases}}
   \label{table:choosem}
 \end{table}
 
