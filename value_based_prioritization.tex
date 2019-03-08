@@ -564,7 +564,7 @@ First, outline the parameters:
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
-$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death in the United States. This example starts by looking at the ICD-10\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.} 113 Selected Causes of Death list\cite{centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count UnderlyingCausesOfDeathUnitedStates}}:
+$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death in the United States. This example starts by looking at the ICD-10\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.} 113 Selected Causes of Death list for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
   \begin{gathered}
@@ -732,17 +732,17 @@ Calculate the product of each action's $B(t_F)$ and its scale function values to
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_LEAVES/RawName108_ets.png}
-  \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{TODO}}\label{fig:exampleresult1}
+  \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{TODO}}\label{fig:exampleresult1}
 \end{figure}
 
 The same analysis is run on other groupings of causes of death:
 
 \begin{enumerate}
-  \item ICD-10 113 Cause List including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item Longterm comparable leading causes of death\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}:
-  \item ICD-10 20 Chapters\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item ICD-10 179 Sub-Chapters\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item Ungrouped causes of death\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+  \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+  \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}:
+  \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+  \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+  \item Ungrouped causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
 \end{enumerate}
 
 \section{Discussion}
