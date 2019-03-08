@@ -393,6 +393,66 @@
   note         = {Accessed: 2019-03-01},
 }
 
+@book{lopez2006global,
+  title        = {Global burden of disease and risk factors},
+  author       = {Lopez, Alan D and Mathers, Colin D and Ezzati, Majid and Jamison, Dean T and Murray, Christopher JL},
+  year         = {2006},
+  publisher    = {The World Bank},
+  note         = {\url{https://openknowledge.worldbank.org/bitstream/handle/10986/7039/364010PAPER0Gl101OFFICIAL0USE0ONLY1.pdf}},
+}
+
+@article{world2009guide,
+  title        = {WHO guide to identifying the economic consequences of disease and injury},
+  author       = {World Health Organization and others},
+  year         = {2009},
+  publisher    = {World Health Organization},
+  note         = {\url{https://www.who.int/choice/publications/d_economic_impact_guide.pdf}},
+}
+
+@misc{givewellcosteffectiveness,
+  title        = {\textit{Some considerations against more investment in cost-effectiveness estimates}},
+  author       = {{GiveWell.org}},
+  howpublished = {\url{https://blog.givewell.org/2011/11/04/some-considerations-against-more-investment-in-cost-effectiveness-estimates/}},
+  note         = {Accessed: 2019-03-01},
+}
+
+@book{jamison2017disease,
+  title        = {Disease Control Priorities, (Volume 9): Improving Health and Reducing Poverty},
+  author       = {Jamison, Dean T and Gelband, Hellen and Horton, Susan and Jha, Prabhat and Laxminarayan, Ramanan and Mock, Charles N and Nugent, Rachel},
+  year         = {2017},
+  publisher    = {The World Bank},
+  note         = {\url{https://openknowledge.worldbank.org/bitstream/handle/10986/28877/9781464805271.pdf}},
+}
+
+@article{neumann2018comparing,
+  title        = {Comparing the cost-per-QALYs gained and cost-per-DALYs averted literatures},
+  author       = {Neumann, Peter J and Anderson, Jordan E and Panzer, Ari D and Pope, Elle F and D'Cruz, Brittany N and Kim, David D and Cohen, Joshua T},
+  journal      = {Gates open research},
+  volume       = {2},
+  year         = {2018},
+  publisher    = {Gates Foundation-Open Access},
+  note         = {\url{https://dqo52087pnd5x.cloudfront.net/manuscripts/13870/5db9cb3d-9e5e-456b-9276-52dc2973b97b_12786_-_Peter_Neumann_V2.pdf}},
+}
+
+@article{bostrom2013existential,
+  title        = {Existential risk prevention as global priority},
+  author       = {Bostrom, Nick},
+  journal      = {Global Policy},
+  volume       = {4},
+  number       = {1},
+  pages        = {15--31},
+  year         = {2013},
+  publisher    = {Wiley Online Library},
+  note         = {\url{http://www.existential-risk.org/concept.pdf}},
+}
+
+@book{macaskill2015doing,
+  title        = {Doing good better: Effective altruism and a radical new way to make a difference},
+  author       = {MacAskill, William},
+  year         = {2015},
+  publisher    = {Guardian Faber Publishing},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -544,7 +604,7 @@ The following example applies modeled value-based prioritization \eqref{modeled-
 First, outline the parameters:
 
 \begin{itemize}
-  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include morbidity and disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys}), non-human suffering, pre-birth suffering, etc.
+  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include morbidity and disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys,lopez2006global}), non-human suffering, cost effectiveness\cite{jamison2017disease,neumann2018comparing,givewellcosteffectiveness}, economic impact\cite{world2009guide}, existential risks\cite{bostrom2013existential}, pre-birth suffering, working to give\cite{macaskill2015doing}, etc.
   \item \eqref{goal} $G(t) = $ eliminate human death.
   \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
   \item \eqref{how-many-actions} $k = $ 1 for a single person (use 2 to hedge the failure of the first action or as a volunteer activity).
@@ -742,7 +802,7 @@ The same analysis is run on other groupings of causes of death:
   \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}:
   \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
   \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item Ungrouped causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+  \item Minimally grouped causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
 \end{enumerate}
 
 \section{Discussion}
