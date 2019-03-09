@@ -7,34 +7,7 @@ import datetime
 import matplotlib
 
 class UnderlyingCausesOfDeathWorld(vbp.DataSource):
-  def initialize_parser(self, parser):
-    parser.add_argument("--random-action", help="Create a random action", action="append", default=["Action1"])
-    parser.add_argument("--years", help="Number of years to generate", type=int, default=100)
-
   def run_load(self):
-    end_year = datetime.datetime.now().year
-    years = [pandas.to_datetime(i, format="%Y") for i in range(end_year - self.options.years + 1, end_year + 1) for j in range(1, len(self.options.random_action) + 1)]
-    actions = [j for i in range(end_year - self.options.years + 1, end_year + 1) for j in self.options.random_action]
-    values = numpy.random.random_sample(self.options.years * len(self.options.random_action)).tolist()
-    df = pandas.DataFrame(
-      {
-        self.get_action_column_name(): actions,
-        self.get_value_column_name(): values,
-      },
-      index=years,
-    )
-    return df
-
-  def get_action_column_name(self):
-    return "Action"
-  
-  def get_value_column_name(self):
-    return "Value"
-  
-  def run_predict(self):
-    return self.prophet()
-
-  def run_test(self):
     populations = pandas.read_csv(
       "data/ucod/world/pop",
       usecols=["Country", "Year", "Pop1"],
@@ -84,22 +57,31 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     deaths.drop(deaths[deaths["Country"].isin([4310, 4320, 4330])].index, inplace=True)
     
     # Death data is split by sex, so we sum up after grouping:
-    deaths = deaths.groupby(["Country", "Year", "Cause"]).agg({"Deaths1": numpy.sum})
+    deaths = deaths.groupby(["Country", "Year", "Cause"]).agg({"Deaths": numpy.sum})
     
     deaths = pandas.DataFrame(deaths.to_records())
     
     deaths["Population"] = deaths.apply(lambda row: self.find_population(row["Country"], row["Year"], populations, unpopdata, country_codes), axis="columns")
     
-    deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths1": numpy.sum, "Population": numpy.sum})
+    deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
     
-    deaths["Crude Rate"] = (deaths["Deaths1"] / deaths["Population"]) * 100000.0
+    deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * 100000.0
     
     deaths.reset_index(level=deaths.index.names, inplace=True)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
     
-    print(deaths)
-    
+    return deaths
+
+  def get_action_column_name(self):
+    return "Cause"
+  
+  def get_value_column_name(self):
+    return "Deaths"
+  
+  def run_predict(self):
+    return self.prophet()
+
   def read_unpopdata(self, sheet_name):
     # https://population.un.org/wpp/Download/Standard/Population/
     # https://population.un.org/wpp/Publications/Files/WPP2017_Methodology.pdf (Pages 30-31)
@@ -151,7 +133,7 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
       return country_data.loc[str(year)]
     
   def read_icd10(self, file):
-    return pandas.read_csv(
+    df = pandas.read_csv(
       file,
       usecols=["Country", "Year", "List", "Cause", "Deaths1"],
       dtype={
@@ -159,3 +141,5 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
         "Cause": str,
       },
     )
+    df.rename(columns={"Deaths1": "Deaths"}, inplace=True)
+    return df

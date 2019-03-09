@@ -138,10 +138,6 @@ class DataSource(object, metaclass=abc.ABCMeta):
   # Abstract Methods #
   ####################
   @abc.abstractmethod
-  def initialize_parser(self, parser):
-    raise NotImplementedError()
-
-  @abc.abstractmethod
   def run_load(self):
     raise NotImplementedError()
 
@@ -160,6 +156,9 @@ class DataSource(object, metaclass=abc.ABCMeta):
   #################
   # Other Methods #
   #################
+  def initialize_parser(self, parser):
+    return None
+
   def prepare(self, args):
     self.ensure_options(args)
     self.ensure_loaded()
