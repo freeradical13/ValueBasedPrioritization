@@ -335,13 +335,32 @@ class DataSource(object, metaclass=abc.ABCMeta):
         os.makedirs(outputdir)
     return os.path.join(outputdir, name)
   
-  def write_spreadsheet(self, df, name):
+  def write_spreadsheet(self, df, name, use_digits_grouping_number_format=False):
     df.to_csv(self.create_output_name(name + ".csv"))
 
     df.to_pickle(self.create_output_name(name + ".pkl"))
     
     writer = pandas.ExcelWriter(self.create_output_name(name + ".xlsx"), engine="xlsxwriter")
-    df.to_excel(writer)
+    
+    sheet_name = "Sheet1"
+    df.to_excel(writer, sheet_name=sheet_name)
+    
+    digits_grouping_format = None
+    if use_digits_grouping_number_format:
+      digits_grouping_format = writer.book.add_format({"num_format": "#,##0.00"})
+
+    # Set column widths based on longest values
+    # https://stackoverflow.com/a/40535454/11030758
+    worksheet = writer.sheets[sheet_name]
+    df2 = df.reset_index(level=df.index.names)
+    for idx, col in enumerate(df2):  # loop through all columns
+        series = df2[col]
+        max_len = max((
+                    series.astype(str).map(len).max(),  # len of largest item
+                    len(str(series.name))  # len of column name/header
+                  )) + 1  # adding a little extra space
+        worksheet.set_column(idx, idx, max_len, digits_grouping_format)  # set column width
+    
     writer.save()
   
   def write_verbose(self, file, obj):

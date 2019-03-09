@@ -1,0 +1,228 @@
+country,name
+1010,Algeria
+1020,Angola
+1025,Benin
+1030,Botswana
+1035,Burkina Faso
+1040,Burundi
+1045,Cameroon
+1060,Cape Verde
+1070,Central African Republic
+1080,Chad
+1090,Comoros
+1100,Congo
+1115,Cote d'Ivoire
+1120,Djibouti
+1125,Egypt
+1130,Equatorial Guinea
+1135,Eritrea
+1140,Ethiopia
+1160,Gabon
+1170,Gambia
+1180,Ghana
+1190,Guinea
+1192,Guinea-Bissau
+1220,Kenya
+1230,Lesotho
+1240,Liberia
+1250,Libyan Arab Jamahiriya
+1260,Madagascar
+1270,Malawi
+1280,Mali
+1290,Mauritania
+1300,Mauritius
+1303,Mayotte
+1310,Morocco
+1320,Mozambique
+1325,Namibia
+1330,Niger
+1340,Nigeria
+1360,Reunion
+1365,Rodrigues
+1370,Rwanda
+1385,Sao Tome and Principe
+1390,Senegal
+1400,Seychelles
+1410,Sierra Leone
+1420,Somalia
+1430,South Africa
+1460,South Sudan
+1465,Sudan
+1470,"Sudan, Former"
+1480,Swaziland
+1510,Togo
+1520,Tunisia
+1530,Uganda
+1546,United Republic of Tanzania
+1555,Democratic Republic of the Congo
+1560,Zambia
+1570,Zimbabwe
+2005,Anguilla
+2010,Antigua and Barbuda
+2020,Argentina
+2025,Aruba
+2030,Bahamas
+2040,Barbados
+2045,Belize
+2050,Bermuda
+2060,Bolivia
+2070,Brazil
+2085,British Virgin Islands
+2090,Canada
+2110,Cayman Islands
+2120,Chile
+2130,Colombia
+2140,Costa Rica
+2150,Cuba
+2160,Dominica
+2170,Dominican Republic
+2180,Ecuador
+2190,El Salvador
+2200,Falkland Islands (Malvinas)
+2210,French Guiana
+2230,Grenada
+2240,Guadeloupe
+2250,Guatemala
+2260,Guyana
+2270,Haiti
+2280,Honduras
+2290,Jamaica
+2300,Martinique
+2310,Mexico
+2320,Montserrat
+2330,Netherlands Antilles
+2340,Nicaragua
+2350,Panama
+2360,Paraguay
+2370,Peru
+2380,Puerto Rico
+2385,Saint Kitts and Nevis
+2400,Saint Lucia
+2410,Saint Pierre and Miquelon
+2420,Saint Vincent and Grenadines
+2430,Suriname
+2440,Trinidad and Tobago
+2445,Turks and Caicos Islands
+2450,United States of America
+2455,Virgin Islands (USA)
+2460,Uruguay
+2470,Venezuela
+3010,Afghanistan
+3020,Bahrain
+3025,Bangladesh
+3027,Bhutan
+3030,Brunei Darussalam
+3050,Cambodia
+3068,China
+3070,China: Province of Taiwan only
+3080,Cyprus
+3083,Democratic Peoples's Republic of Korea
+3090,Hong Kong SAR
+3100,India
+3110,Indonesia
+3130,Iran (Islamic Republic of)
+3140,Iraq
+3150,Israel
+3160,Japan
+3170,Jordan
+3190,Kuwait
+3200,Lao People's Democratic Republic
+3210,Lebanon
+3220,Macau
+3236,Malaysia
+3255,Maldives
+3260,Mongolia
+3270,Myanmar
+3280,Nepal
+3283,Occupied Palestinian Territory
+3285,Oman
+3290,Pakistan
+3300,Philippines
+3320,Qatar
+3325,Republic of Korea
+3330,Ryu Kyu Islands
+3340,Saudi Arabia
+3350,Singapore
+3365,Sri Lanka
+3370,Syrian Arab Republic
+3380,Thailand
+3400,Turkey
+3405,United Arab Emirates
+3408,Viet Nam
+3420,Yemen
+4005,Albania
+4007,Armenia
+4008,Andorra
+4010,Austria
+4012,Azerbaijan
+4018,Belarus
+4020,Belgium
+4025,Bosnia and Herzegovina
+4030,Bulgaria
+4038,Croatia
+4040,"Czechoslovakia, Former"
+4045,Czech Republic
+4050,Denmark
+4055,Estonia
+4070,Finland
+4080,France
+4084,Georgia
+4085,Germany
+4090,"Germany, Former Democratic Republic"
+4100,"Germany, Former Federal Republic"
+4120,"Germany, West Berlin"
+4140,Greece
+4150,Hungary
+4160,Iceland
+4170,Ireland
+4180,Italy
+4182,Kazakhstan
+4184,Kyrgyzstan
+4186,Latvia
+4188,Lithuania
+4190,Luxembourg
+4195,TFYR Macedonia
+4200,Malta
+4205,Monaco
+4207,Montenegro
+4210,Netherlands
+4220,Norway
+4230,Poland
+4240,Portugal
+4260,Republic of Moldova
+4270,Romania
+4272,Russian Federation
+4273,Serbia
+4274,Slovakia
+4275,San Marino
+4276,Slovenia
+4280,Spain
+4290,Sweden
+4300,Switzerland
+4301,Tajikistan
+4302,Turkmenistan
+4303,Ukraine
+4304,"USSR, Former"
+4308,United Kingdom
+4310,"United Kingdom, England and Wales"
+4320,"United Kingdom, Northern Ireland"
+4330,"United Kingdom, Scotland"
+4335,Uzbekistan
+4340,"Yugoslavia, Former"
+4350,"Serbia and Montenegro, Former"
+5020,Australia
+5060,Cook Islands
+5070,Fiji
+5105,Kiribati
+5107,Marshall Islands
+5108,Micronesia (Federated States of)
+5110,Nauru
+5150,New Zealand
+5170,Niue
+5180,Palau
+5195,Papua New Guinea
+5197,Samoa
+5198,Solomon Islands
+5200,Tonga
+5205,Tuvalu
+5207,Vanuatu
