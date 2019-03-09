@@ -77,6 +77,10 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     #  treating data of former entities which split up or merged together
     #  to form new entities."
     # https://www.who.int/healthinfo/statistics/documentation.zip
+    # Therefore, we drop:
+    # 4310,"United Kingdom, England and Wales"
+    # 4320,"United Kingdom, Northern Ireland"
+    # 4330,"United Kingdom, Scotland"
     deaths.drop(deaths[deaths["Country"].isin([4310, 4320, 4330])].index, inplace=True)
     
     # Death data is split by sex, so we sum up after grouping:
@@ -90,7 +94,7 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     
     deaths["Crude Rate"] = (deaths["Deaths1"] / deaths["Population"]) * 100000.0
     
-    deaths.reset_index(level=death.index.names, inplace=True)
+    deaths.reset_index(level=deaths.index.names, inplace=True)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
     
@@ -113,7 +117,6 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     return unpopdata
   
   def map_un_country_to_who_country(self, c):
-    
     # Replace the UN country name with the WHO country name
     return c.strip() \
             .replace("Réunion", "Reunion") \
@@ -127,6 +130,7 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
   
   def find_population(self, country_code, year, populations, unpopdata, country_codes):
     if (country_code, year) in populations.index:
+      # Population might be split up by sex, so we sum it up
       return populations.loc[(country_code, year), "Pop1"].sum()
     else:
       country_name = country_codes.loc[country_code]
