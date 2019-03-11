@@ -4,6 +4,7 @@ import vbp
 import sys
 import numpy
 import pandas
+import inspect
 import argparse
 import traceback
 import matplotlib
@@ -63,11 +64,21 @@ def get_options_with_data_type(parser, data_type, args, clean):
   
   return options
 
+def add_data_source_subclasses(array, cl):
+  data_sources = vbp.DataSource.__subclasses__()
+  subclasses = cl.__subclasses__()
+  if subclasses is not None:
+    for subclass in subclasses:
+      if not inspect.isabstract(subclass):
+        array.append(subclass)
+      add_data_source_subclasses(array, subclass)
+
 if __name__ == "__main__":
   try:
     args = sys.argv[1:]
     
-    data_sources = vbp.DataSource.__subclasses__()
+    data_sources = []
+    add_data_source_subclasses(data_sources, vbp.DataSource)
     data_source_names = [data_source.__name__ for data_source in data_sources]
     data_source_classes = {data_source.__name__: data_source for data_source in data_sources}
 

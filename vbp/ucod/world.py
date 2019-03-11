@@ -6,7 +6,7 @@ import pandas
 import datetime
 import matplotlib
 
-class UnderlyingCausesOfDeathWorld(vbp.DataSource):
+class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
   def run_load(self):
     populations = pandas.read_csv(
       "data/ucod/world/pop",
@@ -68,6 +68,10 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * 100000.0
     
     deaths.reset_index(level=deaths.index.names, inplace=True)
+    
+    deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
+    
+    deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
     
@@ -93,9 +97,11 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     )
     
     unpopdata.drop(columns=["Index", "Variant", "Notes", "Country code"], inplace=True)
+    
     unpopdata.index = unpopdata.index.map(self.map_un_country_to_who_country)
     
     unpopdata = unpopdata * 1000
+    
     return unpopdata
   
   def map_un_country_to_who_country(self, c):
@@ -143,3 +149,7 @@ class UnderlyingCausesOfDeathWorld(vbp.DataSource):
     )
     df.rename(columns={"Deaths1": "Deaths"}, inplace=True)
     return df
+
+  def run_test(self):
+    self.ensure_loaded()
+    return None
