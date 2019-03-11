@@ -7,14 +7,19 @@ import datetime
 import matplotlib
 
 class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
-  def run_load(self):
+  def initialize_parser(self, parser):
+    super().initialize_parser(parser)
+    parser.add_argument("--max-year", help="The maximum year to use data from because not all data is reported", type=int, default=2015)
+
+  def load_who_populations(self):
     populations = pandas.read_csv(
       "data/ucod/world/pop",
       usecols=["Country", "Year", "Pop1"],
     )
-    
     populations.set_index(["Country", "Year"], inplace=True)
+    return populations
 
+  def load_un_populations(self):
     future_unpopdata = self.read_unpopdata("MEDIUM VARIANT")
     
     # Drop 2015 because it's also in the ESTIMATES sheet so the join would fail
@@ -24,8 +29,9 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     
     unpopdata.sort_index(inplace=True)
     
-    self.write_spreadsheet(unpopdata, self.prefix_all("unpopdata"), use_digits_grouping_number_format=True)
-    
+    return unpopdata
+
+  def load_country_codes(self):
     country_codes = pandas.read_csv(
       "data/ucod/world/country_codes",
       index_col=0,
@@ -33,7 +39,9 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     )
     
     country_codes = country_codes.apply(str.strip)
-    
+    return country_codes
+
+  def load_deaths(self, populations, unpopdata, country_codes):
     deaths = pandas.concat([
       self.read_icd10("data/ucod/world/Morticd10_part1"),
       self.read_icd10("data/ucod/world/Morticd10_part2"),
@@ -42,6 +50,9 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     # Drop any with non-vanilla ICD-10 codes
     # https://www.who.int/healthinfo/statistics/documentation.zip
     deaths.drop(deaths[~deaths["List"].isin(["101", "103", "104"])].index, inplace=True)
+    
+    # Drop everything after the last year of full data
+    deaths.drop(deaths[deaths["Year"] > self.options.max_year].index, inplace=True)
     
     # "Except United Kingdom which include data for England and Wales, 
     #  Northern Ireland and Scotland which are also presented separately, 
@@ -72,6 +83,19 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
     
     deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
+    
+    return deaths
+
+  def run_load(self):
+    populations = self.load_with_cache("who_populations", self.load_who_populations)
+
+    unpopdata = self.load_with_cache("un_populations", self.load_un_populations)
+
+    self.write_spreadsheet(unpopdata, self.prefix_all("unpopdata"), use_digits_grouping_number_format=True)
+    
+    country_codes = self.load_with_cache("who_country_codes", self.load_country_codes)
+    
+    deaths = self.load_with_cache("who_deaths", self.load_deaths, populations, unpopdata, country_codes)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
     
@@ -81,11 +105,8 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     return "Cause"
   
   def get_value_column_name(self):
-    return "Deaths"
+    return "Crude Rate"
   
-  def run_predict(self):
-    return self.prophet()
-
   def read_unpopdata(self, sheet_name):
     # https://population.un.org/wpp/Download/Standard/Population/
     # https://population.un.org/wpp/Publications/Files/WPP2017_Methodology.pdf (Pages 30-31)
@@ -145,11 +166,15 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
       dtype={
         "List": str,
         "Cause": str,
+        "Deaths1": numpy.float64,
       },
     )
     df.rename(columns={"Deaths1": "Deaths"}, inplace=True)
     return df
 
+  def get_action_title_prefix(self):
+    return "Deaths from "
+  
   def run_test(self):
     self.ensure_loaded()
     return None

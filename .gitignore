@@ -3,6 +3,7 @@ value_based_prioritization.bib
 /*csv*
 /work
 /output
+/cache
 /data/ucod/united_states/mort/
 
 *.pyc

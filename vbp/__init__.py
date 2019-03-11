@@ -10,6 +10,7 @@ import shutil
 import pathlib
 import argparse
 import datetime
+import traceback
 import matplotlib
 import collections
 import matplotlib.offsetbox
@@ -168,6 +169,7 @@ class DataSource(abc.ABC):
       parser = create_parser()
       self.initialize_parser(parser)
       parser.add_argument("-b", "--best-fit", choices=list(self.model_fit_algorithms.keys()), default=self.default_model_fit_algorithm, help="Best fitting model algorithm")
+      parser.add_argument("--cachedir", help="cache directory", default="cache")
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
       data_type_choices = self.get_data_types_enum()
@@ -535,6 +537,28 @@ class DataSource(abc.ABC):
         return df
       else:
         return pandas.concat([df, append], sort=False)
+
+  def check_cache(self, name):
+    if not os.path.exists(self.options.cachedir):
+      os.makedirs(self.options.cachedir)
+    path = os.path.join(self.options.cachedir, name + ".pkl")
+    if os.path.exists(path):
+      return pandas.read_pickle(path)
+    else:
+      return None
+  
+  def write_cache(self, name, df):
+    if not os.path.exists(self.options.cachedir):
+      os.makedirs(self.options.cachedir)
+    path = os.path.join(self.options.cachedir, name + ".pkl")
+    df.to_pickle(path)
+    
+  def load_with_cache(self, name, loadfunc, *args):
+    result = self.check_cache(name)
+    if result is None:
+      result = loadfunc(*args)
+      self.write_cache(name, result)
+    return result
 
 class TimeSeriesDataSource(DataSource):
   def initialize_parser(self, parser):
