@@ -563,6 +563,8 @@ class DataSource(abc.ABC):
 class TimeSeriesDataSource(DataSource):
   def initialize_parser(self, parser):
     parser.add_argument("action", nargs="*", help="Action name")
+    parser.add_argument("--base-column", help="Name of the base column", default="S1")
+    parser.add_argument("--derivative-column", help="Name of the derivative column", default="SD")
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
     parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
     parser.add_argument("--ols", help="Ordinary least squares", dest="ols", action="store_true")
@@ -621,16 +623,16 @@ class TimeSeriesDataSource(DataSource):
       
       m = self.find_best_fitting_models(model_results)
       
-      m["S1"] = 1.0
+      m[self.options.base_column] = 1.0
       
       if len(m) > 1:
-        m["S3"] = normalize(m.PredictedDerivative.values, 0.5, 1.0)
+        m[self.options.derivative_column] = normalize(m.PredictedDerivative.values, 0.5, 1.0)
       else:
-        m["S3"] = 1.0
+        m[self.options.derivative_column] = 1.0
       
       self.write_spreadsheet(m, self.prefix_all("m"))
 
-      extra_columns = ["S1", "S3"]
+      extra_columns = [self.options.base_column, self.options.derivative_column]
       final_columns = [self.predict_column_name]
 
       extra_columns.sort()
