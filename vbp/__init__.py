@@ -7,15 +7,21 @@ import numpy
 import pandas
 import random
 import shutil
+import logging
 import pathlib
 import argparse
 import datetime
+import warnings
+import fbprophet
 import traceback
 import matplotlib
 import collections
 import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
+
+#warnings.filterwarnings("ignore")
+#logging.getLogger("fbprophet").setLevel(logging.ERROR)
 
 VERSION = "0.1.0"
 numpy.seterr("raise")
@@ -115,8 +121,8 @@ class DataSource(abc.ABC):
   def get_possible_actions(self):
     return self.run_get_possible_actions()
   
-  def get_action_data(self, action):
-    return self.run_get_action_data(action)
+  def get_action_data(self, action, interpolate=True):
+    return self.run_get_action_data(action, interpolate)
   
   def prepare_data(self):
     return self.run_prepare_data()
@@ -452,9 +458,8 @@ class DataSource(abc.ABC):
     return "_all_" + name
 
   def create_model_prophet(self, action, i, count):
-    import fbprophet
     print("Creating Prophet model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
-    df = self.get_action_data(action)
+    df = self.get_action_data(action, interpolate=False)
     
     model_map = self.get_model_map_base()
 
@@ -465,7 +470,7 @@ class DataSource(abc.ABC):
     df["floor"] = 0
 
     prophet = fbprophet.Prophet(growth="linear", yearly_seasonality=False, weekly_seasonality=False, daily_seasonality=False)
-    prophet.fit(df)
+    prophet.fit(df, algorithm="Newton") # https://github.com/facebook/prophet/issues/870
     future = prophet.make_future_dataframe(periods=self.options.predict, freq="Y")
     forecast = prophet.predict(future)
     
@@ -512,7 +517,7 @@ class DataSource(abc.ABC):
   def get_enum_names(self, e):
     return list(map(lambda x: x.name, list(e)))
 
-  def run_get_action_data(self, action):
+  def run_get_action_data(self, action, interpolate):
     return self.data[self.data[self.get_action_column_name()] == action]
 
   def save_plot_image(self, action, context, fig=None, legend=False):
@@ -600,13 +605,15 @@ class TimeSeriesDataSource(DataSource):
       actions = self.get_possible_actions()
     return actions
 
-  def run_get_action_data(self, action):
+  def run_get_action_data(self, action, interpolate):
     df = self.data[self.data[self.get_action_column_name()] == action]
-    df = df.set_index("Date")
-    # ETS requires a specific frequency so we forward-fill any missing
-    # years. If there's already an annual frequency, no change is made
-    # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
-    df = df.resample("AS").ffill().dropna()
+    if df.index.name != "Date":
+      df = df.set_index("Date")
+    if interpolate:
+      # ETS requires a specific frequency so we forward-fill any missing
+      # years. If there's already an annual frequency, no change is made
+      # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
+      df = df.resample("AS").ffill().dropna()
     return df
   
   def run_predict(self):
@@ -665,9 +672,8 @@ class TimeSeriesDataSource(DataSource):
     else:
       return None
   
-  @abc.abstractmethod
   def get_action_title_prefix(self):
-    raise NotImplementedError()
+    return ""
   
   def get_model_map_base(self):
     return {
@@ -683,7 +689,7 @@ class TimeSeriesDataSource(DataSource):
   
   def create_model_ets(self, action, predict, i, count):
     print("Creating ETS model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
-    df = self.run_get_action_data(action)
+    df = self.get_action_data(action)
 
     if len(df) <= 1:
       return None
@@ -770,7 +776,7 @@ class TimeSeriesDataSource(DataSource):
     return {title: [fit, forecast, slope]}
 
   def create_model_ols(self, action, degree, predict, i, count):
-    df = self.run_get_action_data(action)
+    df = self.get_action_data(action)
     df = df.reset_index()
     
     model_map = self.get_model_map_base()

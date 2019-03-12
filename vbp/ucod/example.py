@@ -5,8 +5,9 @@ import pandas
 import datetime
 import matplotlib
 
-class ExampleDataSource(vbp.DataSource):
+class ExampleDataSource(vbp.TimeSeriesDataSource):
   def initialize_parser(self, parser):
+    super().initialize_parser(parser)
     parser.add_argument("--random-action", help="Create a random action", action="append", default=["Action1"])
     parser.add_argument("--years", help="Number of years to generate", type=int, default=100)
 
@@ -22,6 +23,8 @@ class ExampleDataSource(vbp.DataSource):
       },
       index=years,
     )
+    df.index.names = ["Date"]
+    df["Year"] = df.index.map(lambda d: d.year)
     return df
 
   def get_action_column_name(self):
@@ -29,6 +32,3 @@ class ExampleDataSource(vbp.DataSource):
   
   def get_value_column_name(self):
     return "Value"
-  
-  def run_predict(self):
-    return self.prophet()

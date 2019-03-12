@@ -460,6 +460,18 @@
   note         = {Accessed: 2019-03-01},
 }
 
+@article{de200625,
+  title        = {25 years of time series forecasting},
+  author       = {De Gooijer, Jan G and Hyndman, Rob J},
+  journal      = {International journal of forecasting},
+  volume       = {22},
+  number       = {3},
+  pages        = {443--473},
+  year         = {2006},
+  publisher    = {Elsevier},
+  note         = {\url{http://www.est.uc3m.es/esp/nueva_docencia/comp_col_get/lade/tecnicas_prediccion/Practicas0708/Practica1/25\%20years\%20of\%20time\%20series\%20forecasting\%20(Gooijer\%20and\%20Hyndman).pdf}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -596,7 +608,7 @@ Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to eac
   \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection} (or forecasting)\cite{hyndman2018forecasting,taylor2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
+The models are compared using \textbf{model selection} (or forecasting)\cite{de200625,hyndman2018forecasting,taylor2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
 For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
@@ -727,7 +739,7 @@ Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ische
   \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Ischemic heart diseases}}\label{fig:neoplasmregs}
 \end{figure}
 
-Scedasticity, forecast uncertainty, and outliers are not considered because it's not clear how to automate processing of such data to tune or choose models.
+Scedasticity, forecast uncertainty, and cross-validation are not considered because it's not clear how to automate processing of such data to tune or choose models.
 
 For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc. For example:
 
