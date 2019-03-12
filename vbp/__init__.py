@@ -614,6 +614,8 @@ class TimeSeriesDataSource(DataSource):
       # years. If there's already an annual frequency, no change is made
       # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#dateoffset-objects
       df = df.resample("AS").ffill().dropna()
+    if "Year" not in df.columns:
+      df["Year"] = df.index.map(lambda d: d.year)
     return df
   
   def run_predict(self):

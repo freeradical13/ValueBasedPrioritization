@@ -13,19 +13,20 @@ class ExampleDataSource(vbp.TimeSeriesDataSource):
 
   def run_load(self):
     end_year = datetime.datetime.now().year
+
     dates = [pandas.to_datetime(i, format="%Y") for i in range(end_year - self.options.years + 1, end_year + 1) for j in range(1, len(self.options.random_action) + 1)]
-    years = list(map(lambda d: d.year, dates))
     actions = [j for i in range(end_year - self.options.years + 1, end_year + 1) for j in self.options.random_action]
     values = numpy.random.random_sample(self.options.years * len(self.options.random_action)).tolist()
+
     df = pandas.DataFrame(
       {
         self.get_action_column_name(): actions,
         self.get_value_column_name(): values,
-        "Year": years,
       },
       index=dates,
     )
     df.index.name = "Date"
+
     return df
 
   def get_action_column_name(self):
