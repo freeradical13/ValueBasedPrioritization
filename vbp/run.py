@@ -126,10 +126,6 @@ if __name__ == "__main__":
     subparser.add_argument("column", help="Column", nargs="+")
     add_remainder_arg(subparser)
 
-    subparser = subparsers.add_parser("prophet", help="Run prophet")
-    add_data_source_arg(subparser, data_source_names)
-    add_remainder_arg(subparser)
-    
     subparser = subparsers.add_parser("test", help="Test")
     add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
@@ -285,12 +281,6 @@ if __name__ == "__main__":
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       print(ds.get_action_data(options.action))
-      
-    elif options.command_name == "prophet":
-      
-      ds = create_data_source(data_source_classes, options)
-      ds.load(options.args)
-      ds.prophet()
       
     elif options.command_name == "prepare_data":
       

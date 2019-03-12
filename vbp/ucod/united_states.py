@@ -400,31 +400,6 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
   def get_action_title_prefix(self):
     return "Deaths from "
   
-  def run_prophet(self):
-    import fbprophet
-    actions = self.get_actions()
-    for action in actions:
-      df = self.get_action_data(action)
-      df.reset_index(inplace=True)
-      df = df[["Date", "Crude Rate"]]
-      df.rename(columns={"Date": "ds", "Crude Rate": "y"}, inplace=True)
-      # https://facebook.github.io/prophet/docs/saturating_forecasts.html
-      df["floor"] = 0
-      df["cap"] = 100000
-      prophet = fbprophet.Prophet()
-      prophet.fit(df)
-      future = prophet.make_future_dataframe(periods=10, freq="Y")
-      forecast = prophet.predict(future)
-
-      prophet.plot(forecast)
-      
-      prophet.plot_components(forecast)
-
-      matplotlib.pyplot.show()
-      
-      forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
-      print(forecast)
-      
   def download_raw_files(self):
     print("Downloading raw files from https://www.nber.org/data/vital-statistics-mortality-data-multiple-cause-of-death.html")
     if not os.path.exists(self.options.raw_files_directory):

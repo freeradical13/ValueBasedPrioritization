@@ -453,6 +453,13 @@
   publisher    = {Guardian Faber Publishing},
 }
 
+@misc{whomortality,
+  title        = {\textit{WHO Mortality Database}},
+  author       = {{World Health Organization}},
+  howpublished = {\url{https://www.who.int/healthinfo/statistics/mortality_rawdata/en/}},
+  note         = {Accessed: 2019-03-01},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -774,25 +781,26 @@ Combine the table above with the manually calculated scale functions table \ref{
   \label{table:btablewithall}
 \end{table}
 
-Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the result is\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates -k 1 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
+Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates -k 2 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
 
 \begin{table}[H]
   \centering
   \begin{tabular}{clc}
     \toprule
-      $k$ & Action          & $Z(t_F)$ \\
+      $k$ & Action                & $Z(t_F)$ \\
     \midrule
-      1   & Eliminate: TODO & 0.03     \\
+      1   & Eliminate: RawName127 & 0.03     \\
+      2   & Eliminate: RawName001 & 0.02     \\
     \bottomrule
   \end{tabular}
-  \caption{Example $Z(t_F)$ table}
-  \label{table:ztable}
+  \caption{$Z(t_F)$ table for the highest priority actions from the 113 Selected Causes of Death list for the United States}
+  \label{table:ztable1}
 \end{table}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_LEAVES/RawName108_ets.png}
-  \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{TODO}}\label{fig:exampleresult1}
+  \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_LEAVES/RawName127_ets.png}
+  \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{RawName127}}\label{fig:k1}
 \end{figure}
 
 The same analysis is run on other groupings of causes of death:
@@ -802,7 +810,21 @@ The same analysis is run on other groupings of causes of death:
   \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}:
   \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
   \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item Minimally grouped causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+  \item Minimally grouped (5,264) causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.}:
+  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action                  & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: TODO         & TODO     \\
+          2   & Eliminate: TODO         & TODO     \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the minimally grouped causes of death for the World}
+      \label{table:ztable2}
+    \end{table}
 \end{enumerate}
 
 \section{Discussion}

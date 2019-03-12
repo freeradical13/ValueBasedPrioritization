@@ -118,9 +118,6 @@ class DataSource(abc.ABC):
   def get_action_data(self, action):
     return self.run_get_action_data(action)
   
-  def prophet(self):
-    return self.run_prophet()
-
   def prepare_data(self):
     return self.run_prepare_data()
 
@@ -454,36 +451,54 @@ class DataSource(abc.ABC):
   def prefix_all(self, name):
     return "_all_" + name
 
-  def run_prophet(self):
+  def create_model_prophet(self, action, i, count):
     import fbprophet
-    results = {
-      self.predict_column_name: [],
-    }
-    actions = self.get_possible_actions().tolist()
-    for action in actions:
-      df = self.get_action_data(action)
+    print("Creating Prophet model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
+    df = self.get_action_data(action)
+    
+    model_map = self.get_model_map_base()
+
+    df = df[[self.get_value_column_name()]]
+    df.reset_index(inplace=True)
+    df.rename(columns={"Date": "ds", self.get_value_column_name(): "y"}, inplace=True)
+    # https://facebook.github.io/prophet/docs/saturating_forecasts.html
+    df["floor"] = 0
+
+    prophet = fbprophet.Prophet(growth="linear", yearly_seasonality=False, weekly_seasonality=False, daily_seasonality=False)
+    prophet.fit(df)
+    future = prophet.make_future_dataframe(periods=self.options.predict, freq="Y")
+    forecast = prophet.predict(future)
+    
+    prophet.plot(forecast, xlabel="Date", ylabel=self.get_value_column_name())
+    self.save_plot_image(action, "forecast")
+    
+    prophet.plot_components(forecast)
+    self.save_plot_image(action, "components")
+
+    self.write_spreadsheet(forecast, "{}_prophetforecast".format(self.get_obfuscated_name(action)))
+    forecast = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]]
+    
+    index = (self.get_obfuscated_name(action), "Prophet")
+    model_map["ModelType"][index] = "Prophet"
+    model_map[self.predict_column_name + "Year"][index] = forecast.iloc[-1]["ds"].year
+    model_map[self.predict_column_name][index] = forecast.iloc[-1]["yhat"]
+    
+    lasttwopoints = forecast.iloc[-2::,]
+    slope = (lasttwopoints.iloc[1,]["yhat"] - lasttwopoints.iloc[0,]["yhat"]) / (lasttwopoints.iloc[1,]["ds"].year - lasttwopoints.iloc[0,]["ds"].year)
+    
+    model_map[self.predict_column_name + "Derivative"][index] = slope
+    model_map["AIC"][index] = 0
+    model_map["AICc"][index] = 0
+    model_map["BIC"][index] = 0
+    model_map["SSE"][index] = 0
       
-      df = df[[self.get_value_column_name()]]
-      df.reset_index(inplace=True)
-      df.rename(columns={"index": "ds", self.get_value_column_name(): "y"}, inplace=True)
-      # https://facebook.github.io/prophet/docs/saturating_forecasts.html
-      df["floor"] = 0
+    resultdf = pandas.DataFrame(model_map)
+    resultdf.index.rename([self.obfuscated_column_name, "Model"], inplace=True)
 
-      prophet = fbprophet.Prophet()
-      prophet.fit(df)
-      future = prophet.make_future_dataframe(periods=self.options.predict, freq="Y")
-      forecast = prophet.predict(future)
+    self.write_spreadsheet(df, "{}_prophetdata".format(self.get_obfuscated_name(action)))
+    self.write_spreadsheet(resultdf, "{}_prophetresults".format(self.get_obfuscated_name(action)))
 
-      prophet.plot(forecast)
-      self.save_plot_image(action, "forecast")
-      
-      prophet.plot_components(forecast)
-      self.save_plot_image(action, "components")
-
-      forecast = forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]]
-      results[self.predict_column_name].append(forecast.iloc[-1]["yhat"])
-
-    return pandas.DataFrame(results, index=actions)
+    return resultdf
 
   def run_prepare_data(self):
     return False
@@ -571,9 +586,12 @@ class TimeSeriesDataSource(DataSource):
     parser.add_argument("--no-ols", help="Ordinary least squares", dest="ols", action="store_false")
     parser.add_argument("--ols-min-degrees", help="minimum polynomial degree", type=int, default=1)
     parser.add_argument("--ols-max-degrees", help="maximum polynomial degree", type=int, default=1)
+    parser.add_argument("--prophet", help="Run prophet algorithm", dest="prophet", action="store_true")
+    parser.add_argument("--no-prophet", help="Do not run the prophet algorithm", dest="prophet", action="store_false")
     parser.set_defaults(
       ets=True,
       ols=False,
+      prophet=False,
     )
 
   def get_actions(self):
@@ -609,6 +627,8 @@ class TimeSeriesDataSource(DataSource):
             model_results = self.set_or_append(model_results, self.create_model_ols(action, i, self.options.predict, action_count, count))
         if self.options.ets:
           model_results = self.set_or_append(model_results, self.create_model_ets(action, self.options.predict, action_count, count))
+        if self.options.prophet:
+          model_results = self.set_or_append(model_results, self.create_model_prophet(action, action_count, count))
       except:
         if self.options.verbose:
           print(action)
