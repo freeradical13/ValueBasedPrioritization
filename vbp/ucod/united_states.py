@@ -45,7 +45,7 @@ class DataType(vbp.DataSourceDataType):
 
   # Group Results By "Year" And By "Cause of death"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_UNGROUPED = enum.auto()
+  UCOD_1999_2017_MINIMALLY_GROUPED = enum.auto()
   
   # Built from https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf and Mortality data >= 1959 and comparability ratios
   # from https://www.cdc.gov/nchs/data/dvs/comp2.pdf
@@ -262,7 +262,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--file-ucod-1999-2017-sub-chapters", help="Path to file for UCOD_1999_2017_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_SUB_CHAPTERS.txt")
     parser.add_argument("--file-ucod-1999-2017-chapters", help="Path to file for UCOD_1999_2017_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_CHAPTERS.txt")
-    parser.add_argument("--file-ucod-1999-2017-ungrouped", help="Path to file for UCOD_1999_2017_UNGROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_UNGROUPED.txt")
+    parser.add_argument("--file-ucod-1999-2017-minimally-grouped", help="Path to file for UCOD_1999_2017_MINIMALLY_GROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_MINIMALLY_GROUPED.txt")
     parser.add_argument("--file-ucod-1999-2017-icd10-113-causes", help="Path to file for UCOD_1999_2017_ICD10_113_CAUSES", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_ICD10_113_CAUSES.txt")
     parser.add_argument("--file-ucod-longterm-comparable-leading", help="Path to file for UCOD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
     parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/united_states/mort/")
@@ -284,7 +284,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
 
   def run_load(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
-       self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
@@ -314,7 +314,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
           # Drop any non-leaves
           df.drop(df[~df["CodesQuery"].isin(keep_queries)].index, inplace=True)
           
-      elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+      elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
         # Lookup by action_column_name but these aren't unique in this data set,
         # so append the codes.
         df[self.get_action_column_name()] = df.apply(lambda row: "{} ({})".format(row[self.get_action_column_name()], row[self.get_code_column_name()]), axis="columns")
@@ -347,7 +347,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
       return "ICD Sub-Chapter"
     elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       return "ICD Chapter"
-    elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+    elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
       return "Cause of death"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death"
@@ -365,7 +365,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
       return "ICD Sub-Chapter Code"
     elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       return "ICD Chapter Code"
-    elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
+    elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
       return "Cause of death Code"
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death Code"
@@ -380,8 +380,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
       return self.options.file_ucod_1999_2017_sub_chapters
     elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       return self.options.file_ucod_1999_2017_chapters
-    elif self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED:
-      return self.options.file_ucod_1999_2017_ungrouped
+    elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
+      return self.options.file_ucod_1999_2017_minimally_grouped
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return self.options.file_ucod_longterm_comparable_leading
     elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
@@ -718,7 +718,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
     min_year = self.data["Year"].max() - self.options.average_age_range + 1
     
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
-       self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
@@ -769,7 +769,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
     agesbygroup["Count"] = subset.groupby(codescol).apply(lambda row: row["Count"].sum())
 
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
-       self.options.data_type == DataType.UCOD_1999_2017_UNGROUPED or \
+       self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
