@@ -597,7 +597,7 @@ The first $k$ actions in $Z(t)$ should be executed in descending priority/propor
 
 \section{Modeled Value-Based Prioritization}
 
-Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F} (e.g. the average time actions will take to ramp up implementation).
+Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F}.
 
 If each action has historical data $D(A)$:
 
@@ -635,10 +635,10 @@ First, outline the parameters:
   \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include morbidity and disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys,lopez2006global}), non-human suffering, cost effectiveness\cite{jamison2017disease,neumann2018comparing,givewellcosteffectiveness}, economic impact\cite{world2009guide}, existential risks\cite{bostrom2013existential}, pre-birth suffering, working to give\cite{macaskill2015doing}, etc.
   \item \eqref{goal} $G(t) = $ eliminate human death.
   \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
-  \item \eqref{how-many-actions} $k = $ 1 for a single person (use 2 to hedge the failure of the first action or as a volunteer activity).
+  \item \eqref{how-many-actions} $k = $ 1 for a single person (or 2 to hedge the failure of the first action or to add a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
   \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\scriptsize{\url{https://www.who.int/topics/mortality/en/}}}.
-  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}}\footnote{$ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.}:
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}}\footnote{$ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.}:
     \begin{equation*}
       \begin{gathered}
         \{ETS(A,A,N),ETS(A,A_d,N)\},\\
@@ -651,7 +651,7 @@ First, outline the parameters:
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
-$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death in the United States. This example starts by looking at the ICD-10\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.} 113 Selected Causes of Death list for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count UnderlyingCausesOfDeathUnitedStates}}:
+$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death. This example starts by looking at the ICD-10\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.} 113 Selected Causes of Death list for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count UnderlyingCausesOfDeathUnitedStates}}:
 
 \begin{equation*}
   \begin{gathered}
@@ -682,7 +682,7 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list UnderlyingCa
                   Essentially remove actions that are primarily political and/or cultural.
 \end{itemize}
 
-The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because all medical actions are predicted to be in the same order of magnitude for those scales and all other actions are primarily political so they have a low score, rendering those scales moot.
+The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
 
 Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run manual\char`_scale\char`_functions -a -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S4}}:
 
@@ -821,7 +821,7 @@ Calculate the product of each action's $B(t_F)$ and its scale function values to
   \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{RawName127}}\label{fig:k1}
 \end{figure}
 
-The same analysis is run on other groupings of causes of death:
+The same analysis is run on other mutually exclusive groupings of causes of death:
 
 \begin{enumerate}
   \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
