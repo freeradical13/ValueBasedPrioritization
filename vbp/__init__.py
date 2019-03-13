@@ -97,7 +97,7 @@ class DataSource(abc.ABC):
   ##############
   pretty_action_column_name = "Action"
   action_number_column_name = "ActionNumber"
-  obfuscated_column_name = "RawName"
+  obfuscated_column_name = "Name"
   predict_column_name = "Predicted"
   obfuscated_action_names = {}
   obfuscated_action_names_count = 0
