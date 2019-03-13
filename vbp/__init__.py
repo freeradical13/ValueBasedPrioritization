@@ -905,34 +905,19 @@ class DictTree(collections.defaultdict):
     self.update(kwargs)
     self.value = value
   
-  def leaves_list(self):
-    return self.leaves_list_process(self, [])
-  
-  def leaves_list_process(self, node, accumulator):
-    for k, v in node.items():
-      if isinstance(v, DictTree):
-        accumulator = v.leaves_list_process(v, accumulator)
-      elif isinstance(v, dict):
-        accumulator = self.leaves_list_process(v, accumulator)
-      else:
-        accumulator.append(v)
-    if self.value is not None and len(node) == 0:
-      accumulator.append(self.value)
+  def recursive_list(self, leaves_only):
+    accumulator = []
+    self.recursive_list_process(self, leaves_only, accumulator)
     return accumulator
   
-  def flat_dict(self, leaves=False):
-    result = {}
-    self.flat_dict_process(self, result, leaves, None)
-    return result
-  
-  def flat_dict_process(self, node, accumulator, leaves, key):
+  def recursive_list_process(self, node, leaves_only, accumulator):
     for k, v in node.items():
       if isinstance(v, DictTree):
-        v.flat_dict_process(v, accumulator, leaves, k)
+        v.recursive_list_process(v, leaves_only, accumulator)
       elif isinstance(v, dict):
-        self.flat_dict_process(v, accumulator, leaves, k)
+        self.recursive_list_process(v, leaves_only, accumulator)
       else:
-        accumulator[k] = v
-    if key is not None and self.value is not None:
-      if not leaves or (leaves and len(node) == 0):
-        accumulator[key] = self.value
+        accumulator.append(v)
+    if self == node and self.value is not None:
+      if not leaves_only or (leaves_only and len(node) == 0):
+        accumulator.append(self.value)

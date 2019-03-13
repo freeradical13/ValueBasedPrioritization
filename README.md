@@ -94,3 +94,9 @@ Process `comparable_ucod_estimates.xlsx` with its
 Final output:
 
     python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates --data-type UCOD_LONGTERM_COMPARABLE_LEADING
+
+### World
+
+As of 2019-03-01, the unzipped World mortality data consumes ~320MB of
+disk. It will be downloaded and unzipped automatically when a function
+is used that needs it.

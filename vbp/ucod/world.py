@@ -210,4 +210,5 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
   
   def run_test(self):
     self.ensure_loaded()
+    #print(len(list(map(self.icd_query, map(self.extract_codes, ICD.icd10_chapters_and_subchapters.recursive_list(True))))))
     return None

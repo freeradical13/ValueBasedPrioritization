@@ -308,7 +308,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
         
         if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
           
-          keep_queries = list(map(self.icd_query, map(self.extract_codes, self.icd10_ucod113.leaves_list())))
+          keep_queries = list(map(self.icd_query, map(self.extract_codes, self.icd10_ucod113.recursive_list(True))))
           df["CodesQuery"] = df[self.get_code_column_name()].apply(self.icd_query)
           
           # Drop any non-leaves
