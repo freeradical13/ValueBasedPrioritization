@@ -586,6 +586,8 @@ class TimeSeriesDataSource(DataSource):
     parser.add_argument("--base-column", help="Name of the base column", default="S1")
     parser.add_argument("--derivative-column", help="Name of the derivative column", default="SD")
     parser.add_argument("--ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_true")
+    parser.add_argument("--ets-no-additive-models", help="Do not use additive models", action="store_true", default=False)
+    parser.add_argument("--ets-no-multiplicative-models", help="Do not use multiplicative models", action="store_true", default=False)
     parser.add_argument("--no-ets", help="Exponential smoothing using Holt's linear trend method", dest="ets", action="store_false")
     parser.add_argument("--ols", help="Ordinary least squares", dest="ols", action="store_true")
     parser.add_argument("--no-ols", help="Ordinary least squares", dest="ols", action="store_false")
@@ -717,10 +719,12 @@ class TimeSeriesDataSource(DataSource):
     model_map = self.get_model_map_base()
     
     results = {}
-    results.update(self.run_ets(df[self.get_value_column_name()], color="red", predict=predict, exponential=False, damped=False))
-    results.update(self.run_ets(df[self.get_value_column_name()], color="cyan", predict=predict, exponential=False, damped=True))
-    results.update(self.run_ets(df[self.get_value_column_name()], color="green", predict=predict, exponential=True, damped=False))
-    results.update(self.run_ets(df[self.get_value_column_name()], color="blue", predict=predict, exponential=True, damped=True))
+    if not self.options.ets_no_additive_models:
+      results.update(self.run_ets(df[self.get_value_column_name()], color="red", predict=predict, exponential=False, damped=False))
+      results.update(self.run_ets(df[self.get_value_column_name()], color="cyan", predict=predict, exponential=False, damped=True))
+    if not self.options.ets_no_multiplicative_models:
+      results.update(self.run_ets(df[self.get_value_column_name()], color="green", predict=predict, exponential=True, damped=False))
+      results.update(self.run_ets(df[self.get_value_column_name()], color="blue", predict=predict, exponential=True, damped=True))
     
     for title, result in results.items():
       index = (self.get_obfuscated_name(action), title)
