@@ -11,7 +11,7 @@ import matplotlib
 import matplotlib.pyplot
 
 # Import all subclasses of DataSource so that they are options
-import vbp.ucod.example
+import vbp.example
 import vbp.ucod.united_states
 import vbp.ucod.world
 
