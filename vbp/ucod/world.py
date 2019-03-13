@@ -9,12 +9,23 @@ import datetime
 import matplotlib
 import urllib.request
 
+class DataType(vbp.DataSourceDataType):
+  ICD10_MINIMALLY_GROUPED = enum.auto()
+
 class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
   def initialize_parser(self, parser):
     super().initialize_parser(parser)
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--max-year", help="The maximum year to use data from because not all data is reported", type=int, default=2015)
     parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/world/")
+
+  @staticmethod
+  def get_data_types_enum():
+    return DataType
+
+  @staticmethod
+  def get_data_types_enum_default():
+    return DataType.ICD10_MINIMALLY_GROUPED
 
   def load_who_populations(self):
     populations = pandas.read_csv(
