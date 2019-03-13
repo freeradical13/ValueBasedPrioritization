@@ -1,15 +1,20 @@
+import os
 import vbp
 import sys
 import enum
 import numpy
 import pandas
+import zipfile
 import datetime
 import matplotlib
+import urllib.request
 
 class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
   def initialize_parser(self, parser):
     super().initialize_parser(parser)
+    parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--max-year", help="The maximum year to use data from because not all data is reported", type=int, default=2015)
+    parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/world/")
 
   def load_who_populations(self):
     populations = pandas.read_csv(
@@ -41,10 +46,35 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     country_codes = country_codes.apply(str.strip)
     return country_codes
 
+  def download_raw_files(self):
+    print("Downloading raw files from https://www.who.int/healthinfo/statistics/mortality_rawdata/en/")
+    if not os.path.exists(self.options.raw_files_directory):
+      os.makedirs(self.options.raw_files_directory)
+    
+    for i in ["Morticd10_part1.zip", "Morticd10_part2.zip"]:
+      print("Downloading {}...".format(i))
+      downloaded_file = os.path.join(self.options.raw_files_directory, i)
+      urllib.request.urlretrieve("https://www.who.int/healthinfo/statistics/{}".format(i), downloaded_file)
+      with zipfile.ZipFile(downloaded_file, "r") as zfile:
+        print("Unzipping {}".format(i))
+        zfile.extractall(self.options.raw_files_directory)
+        os.remove(downloaded_file)
+  
+  def check_raw_files_directory(self):
+    if self.options.raw_files_directory is None:
+      raise ValueError("--raw-files-directory required")
+    if not os.path.exists(self.options.raw_files_directory):
+      if self.options.download:
+        self.download_raw_files()
+      else:
+        raise ValueError("--raw-files-directory does not exist")
+    if not os.path.isdir(self.options.raw_files_directory):
+      raise ValueError("--raw-files-directory is not a directory")
+
   def load_deaths(self, populations, unpopdata, country_codes):
     deaths = pandas.concat([
-      self.read_icd10("data/ucod/world/Morticd10_part1"),
-      self.read_icd10("data/ucod/world/Morticd10_part2"),
+      self.read_icd10(os.path.join(self.options.raw_files_directory, "Morticd10_part1")),
+      self.read_icd10(os.path.join(self.options.raw_files_directory, "Morticd10_part2")),
     ], sort=False, ignore_index=True)
 
     # Drop any with non-vanilla ICD-10 codes
@@ -87,6 +117,9 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     return deaths
 
   def run_load(self):
+    
+    self.check_raw_files_directory()
+    
     populations = self.load_with_cache("who_populations", self.load_who_populations)
 
     unpopdata = self.load_with_cache("un_populations", self.load_un_populations)

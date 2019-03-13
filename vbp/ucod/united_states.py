@@ -259,7 +259,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
     parser.add_argument("--average-age-range", help="Range over which to calculate the average age", type=int, default=5)
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
     parser.add_argument("--comparable-ratios-input-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
-    parser.add_argument("--download", help="If not files in --raw-files-directory, download and extract", action="store_true", default=True)
+    parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
     parser.add_argument("--file-ucod-1999-2017-sub-chapters", help="Path to file for UCOD_1999_2017_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_SUB_CHAPTERS.txt")
     parser.add_argument("--file-ucod-1999-2017-chapters", help="Path to file for UCOD_1999_2017_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_CHAPTERS.txt")
     parser.add_argument("--file-ucod-1999-2017-ungrouped", help="Path to file for UCOD_1999_2017_UNGROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_UNGROUPED.txt")
