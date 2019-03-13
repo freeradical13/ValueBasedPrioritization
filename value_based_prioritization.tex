@@ -27,6 +27,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{bm}
+\raggedbottom
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -607,7 +608,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson regression\cite{mathers2006projections}, etc.):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -644,7 +645,7 @@ First, outline the parameters:
         \phi=0.98
       \end{gathered}
     \end{equation*}
-    Commonly used alternative models include poisson log-bilinear regressions:
+    Commonly used alternative models in all-cause mortality forecasting include poisson log-bilinear regressions:
     
     \enquote{There is a substantial literature on the projection or forecasting of all-cause mortality rates and mortality rates for specific diseases. The methods used fall into two broad groups. First are those methods based on time-series analysis of historical trends in mortality rates. These \enquote{aggregate models,} whether for all-cause mortality or for specific causes, use the previous trend of the variable of interest as the basis for predicting its future value. By their data requirements, such methods are generally limited to high-income countries with good death registration data [...]. Second are the \enquote{structural models,} which are based on relationships between mortality and a set of independent variables, and are necessarily projections of those independent variables. To the extent that the structural model identifies the important components — and the relationships among them — of the \enquote{system} that determines the variable of interest, they offer the potential for more robust predictions. When the underlying system is complex and sensitive to one or more of its components, a shift in some of the system variables can introduce large changes in the outcome that may be missed by extrapolation (such as the discovery of antibiotics and infectious disease trends or the change in tuberculosis mortality after the HIV epidemic). Aggregate models, in contrast, require considerably less knowledge of the system components and the relationships among them. These models can therefore provide more reliable estimates when such information is not available, especially when the system is not very sensitive to its inputs in time intervals that are in the order of the prediction time.}\cite{mathers2006projections}
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
@@ -798,7 +799,7 @@ Combine the table above with the manually calculated scale functions table \ref{
   \label{table:btablewithall}
 \end{table}
 
-Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 2 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
+Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
 
 \begin{table}[H]
   \centering
@@ -919,6 +920,24 @@ The same analysis is run on other groupings of causes of death:
       \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{RawName4774}}\label{fig:k6}
     \end{figure}
   \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action                  & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: RawName07928 & 0.19     \\
+          2   & Eliminate: RawName02631 & 0.14     \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
+      \label{table:ztable7}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/World/RawName07928_ets.png}
+      \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{RawName07928}}\label{fig:k7}
+    \end{figure}
 \end{enumerate}
 
 \section{Discussion}
