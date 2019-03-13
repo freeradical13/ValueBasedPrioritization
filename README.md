@@ -15,17 +15,58 @@ Prerequisites:
 
     python3 -m vbp.run -h
 
-### Underlying causes of death in the United States
-
-Example:
-
-    python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates "Malignant neoplasms"
-
 ## Running
+
+The model type is specified with `--ets`, `--ols`, and/or `--prophet`.
+These are not mutually exclusive; if combined, an average is taken of
+the results. The default is `--ets`.
+
+By default, action names are obfuscated to reduce bias during model
+building and testing. Specify `--do-not-obfuscate` to show actual names.
+
+Some data sources have different data types (e.g. mutually exclusive
+groupings of data). Add the `-a` argument before the data source
+name to run for all data types. Add the `--data-type X` argument after
+the data source name to specify a specific data type.
+
+In general, a list of actions may be specified to run for just that
+list; otherwise, without such a list, all actions are processed.
+
+Examples:
+
+    python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates
+
+    python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate "Ischemic heart diseases" Malaria
+
+### Exponential Smoothing
+
+Using [exponential smoothing](https://otexts.com/fpp2/expsmooth.html):
+
+    python3 -m vbp.run modeled_value_based_prioritization ${DATA_SOURCE} --ets
+
+Specify `--ets-no-multiplicative-models` to only use additive models.
+
+Specify `--ets-no-additive-models` to only use multiplicative models.
+
+### Linear Regression
+
+Using [linear regression](https://otexts.com/fpp2/regression.html).
+
+    python3 -m vbp.run modeled_value_based_prioritization ${DATA_SOURCE} --ols
+
+Specify `--ols-max-degrees X` to model higher degrees.
+
+### Prophet
+
+Using [Facebook Prophet](https://facebook.github.io/prophet/).
+
+    python3 -m vbp.run modeled_value_based_prioritization ${DATA_SOURCE} --prophet
 
 ### United States
 
-As of 2019-03-03, the unzipped mortality data consumes ~36GB of disk.
+As of 2019-03-01, the unzipped U.S. mortality data consumes ~36GB of
+disk. It will be downloaded and unzipped automatically when a function
+is used that needs it.
 
 #### Long-term, comparable, leading causes of death
 
@@ -49,3 +90,7 @@ Process `comparable_ucod_estimates.xlsx` with its
 `comparable_ucod_estimates_ratios_applied.xlsx`:
 
     python3 -m vbp.run prepare_data UnderlyingCausesOfDeathUnitedStates --comparable-ratios
+
+Final output:
+
+    python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates --data-type UCOD_LONGTERM_COMPARABLE_LEADING

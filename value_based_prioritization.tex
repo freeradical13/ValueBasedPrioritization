@@ -472,6 +472,14 @@
   note         = {\url{http://www.est.uc3m.es/esp/nueva_docencia/comp_col_get/lade/tecnicas_prediccion/Practicas0708/Practica1/25\%20years\%20of\%20time\%20series\%20forecasting\%20(Gooijer\%20and\%20Hyndman).pdf}},
 }
 
+@misc{tashman1991automatic,
+  title        = {Automatic forecasting software: A survey and evaluation},
+  author       = {Tashman, Leonard J and Leach, Michael L},
+  year         = {1991},
+  publisher    = {Elsevier},
+  note         = {\url{https://www.researchgate.net/profile/Len_Tashman/publication/223444048_Automatic_forecasting_software_A_survey_and_evaluation/links/5ad7af42aca272fdaf8029b3/Automatic-forecasting-software-A-survey-and-evaluation.pdf}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -599,7 +607,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson regression, etc.):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson regression\cite{mathers2006projections}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -608,7 +616,7 @@ Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to eac
   \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection} (or forecasting)\cite{de200625,hyndman2018forecasting,taylor2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
+The models are compared using \textbf{model selection} (or forecasting)\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
 For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
@@ -629,11 +637,10 @@ First, outline the parameters:
   \item \eqref{how-many-actions} $k = $ 1 for a single person (use 2 to hedge the failure of the first action or as a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
   \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\scriptsize{\url{https://www.who.int/topics/mortality/en/}}}.
-  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}}:
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}}\footnote{$ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.}:
     \begin{equation*}
       \begin{gathered}
-        \{ETS(A,A,N),ETS(A,A_d,N),\\
-        ETS(A,M,N),ETS(A,M_d,N)\},\\
+        \{ETS(A,A,N),ETS(A,A_d,N)\},\\
         \phi=0.98
       \end{gathered}
     \end{equation*}
@@ -731,12 +738,12 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
   \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate -p 10 "Ischemic heart diseases"}}:
+Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 "Ischemic heart diseases"}}:
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{Ischemic_heart_diseases_ets.png}
-  \caption{Exponential smoothing functions $ETS(A,*,N),\phi=0.98$ using Holt's linear trend method for \textit{Ischemic heart diseases}}\label{fig:neoplasmregs}
+  \caption{Exponential smoothing functions $ETS(A,A*,N),\phi=0.98$ using Holt's linear trend method for \textit{Ischemic heart diseases}}\label{fig:neoplasmregs}
 \end{figure}
 
 Scedasticity, forecast uncertainty, and cross-validation are not considered because it's not clear how to automate processing of such data to tune or choose models.
@@ -749,10 +756,8 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
     \toprule
       $R_i(D(A))$       & AICc           & Predicted       \\
     \midrule
-      $ETS(A,A,N)$      & 56.78          & 105.01          \\
+      $\bm{ETS(A,A,N)}$ & \textbf{56.78} & \textbf{105.01} \\
       $ETS(A,A_d,N)$    & 63.14          & 105.33          \\
-      $\bm{ETS(A,M,N)}$ & \textbf{51.99} & \textbf{104.74} \\
-      $ETS(A,M_d,N)$    & 57.32          & 105.57          \\
     \bottomrule
   \end{tabular}
   \caption{Example AICc values of $R_i(D(A))$ for \textit{Ischemic heart diseases}}
@@ -793,7 +798,7 @@ Combine the table above with the manually calculated scale functions table \ref{
   \label{table:btablewithall}
 \end{table}
 
-Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates -k 2 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
+Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 2 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}}:
 
 \begin{table}[H]
   \centering
@@ -819,24 +824,101 @@ The same analysis is run on other groupings of causes of death:
 
 \begin{enumerate}
   \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}:
-  \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
-  \item Minimally grouped (5,264) causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.}:
-  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
           $k$ & Action                  & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: TODO         & TODO     \\
-          2   & Eliminate: TODO         & TODO     \\
+          1   & Eliminate: RawName010   & 0.05     \\
+          2   & Eliminate: RawName011   & 0.05     \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the minimally grouped causes of death for the World}
+      \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States, including subtotals}
       \label{table:ztable2}
     \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_ALL/RawName010_ets.png}
+      \caption{Highest priority action from the ICD-10 113 Cause List for the United States, including subtotals: \textit{RawName010}}\label{fig:k2}
+    \end{figure}
+  \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action                  & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: RawName10    & 0.08     \\
+          2   & Eliminate: RawName21    & 0.08     \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the Longterm comparable leading causes of death for the United States}
+      \label{table:ztable3}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/UCOD_LONGTERM_COMPARABLE_LEADING/RawName10_ets.png}
+      \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{RawName10}}\label{fig:k3}
+    \end{figure}
+  \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action                  & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: RawName14    & 0.10     \\
+          2   & Eliminate: RawName19    & 0.06     \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the ICD-10 20 Chapters for the United States}
+      \label{table:ztable4}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_CHAPTERS/RawName14_ets.png}
+      \caption{Highest priority action from the ICD-10 20 Chapters for the United States: \textit{RawName14}}\label{fig:k4}
+    \end{figure}
+  \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action                  & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: RawName047   & 0.06     \\
+          2   & Eliminate: RawName157   & 0.04     \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the ICD-10 179 Sub-Chapters for the United States}
+      \label{table:ztable5}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_SUB_CHAPTERS/RawName047_ets.png}
+      \caption{Highest priority action from the ICD-10 179 Sub-Chapters for the United States: \textit{RawName047}}\label{fig:k5}
+    \end{figure}
+  \item Minimally grouped (5,264) causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action                  & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: RawName4774  & 0.01     \\
+          2   & Eliminate: RawName4428  & 0.01     \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the Minimally grouped (5,264) causes of death for the United States}
+      \label{table:ztable6}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_UNGROUPED/RawName4774_ets.png}
+      \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{RawName4774}}\label{fig:k6}
+    \end{figure}
+  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.}:
 \end{enumerate}
 
 \section{Discussion}
