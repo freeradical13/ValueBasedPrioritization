@@ -7,12 +7,17 @@ import pandas
 import zipfile
 import datetime
 import matplotlib
+import vbp.ucod.icd
 import urllib.request
+
+from vbp.ucod.icd import ICD
 
 class DataType(vbp.DataSourceDataType):
   ICD10_MINIMALLY_GROUPED = enum.auto()
+  ICD10_CHAPTERS = enum.auto()
+  ICD10_SUB_CHAPTERS = enum.auto()
 
-class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
+class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
   def initialize_parser(self, parser):
     super().initialize_parser(parser)
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
@@ -115,16 +120,10 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     
     deaths["Population"] = deaths.apply(lambda row: self.find_population(row["Country"], row["Year"], populations, unpopdata, country_codes), axis="columns")
     
-    deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
-    
-    deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * 100000.0
-    
-    deaths.reset_index(level=deaths.index.names, inplace=True)
-    
-    deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
-    
-    deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
-    
+    deaths["icdint"] = deaths[self.get_action_column_name()].apply(ICD.toint)
+    deaths["icdfloat"] = deaths[self.get_action_column_name()].apply(ICD.tofloat)
+    deaths.dropna(inplace=True)
+
     return deaths
 
   def run_load(self):
@@ -140,8 +139,35 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
     country_codes = self.load_with_cache("who_country_codes", self.load_country_codes)
     
     deaths = self.load_with_cache("who_deaths", self.load_deaths, populations, unpopdata, country_codes)
+    
+    if self.options.data_type == DataType.ICD10_MINIMALLY_GROUPED:
+      deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
+      deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * 100000.0
+      deaths.reset_index(level=deaths.index.names, inplace=True)
+      deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
+      deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
+    elif self.options.data_type == DataType.ICD10_CHAPTERS:
+      deaths = self.process_grouping(deaths, False)
+    elif self.options.data_type == DataType.ICD10_SUB_CHAPTERS:
+      deaths = self.process_grouping(deaths, True)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
+    
+    return deaths
+
+  def process_grouping(self, deaths, leaves_only):
+    # The Population column is deaths per country per year, and we
+    # want total population per year (for countries that reported
+    # mortality data):
+    deaths_per_year = deaths.groupby("Year").aggregate({"Population": numpy.sum})
+    
+    df = pandas.DataFrame(index=pandas.MultiIndex.from_product([ICD.icd10_chapters_and_subchapters.recursive_list(leaves_only), deaths["Year"].unique()], names = [self.get_action_column_name(), "Year"])).reset_index().sort_values("Year")
+    df["Query"] = df.apply(lambda row: "(Year == {}) & ({})".format(row["Year"], self.icd_query(self.extract_codes(row[self.get_action_column_name()]))), axis="columns")
+    df["Deaths"] = df["Query"].apply(lambda x: deaths.query(x)["Deaths"].sum())
+    df["Population"] = df["Year"].apply(lambda y: deaths_per_year.loc[y])
+    df["Crude Rate"] = (df["Deaths"] / df["Population"]) * 100000.0
+    df["Date"] = df["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
+    deaths = df[["Date"] + [col for col in df if col != "Date" and col != "Query"]]
     
     return deaths
 
@@ -221,5 +247,4 @@ class UnderlyingCausesOfDeathWorld(vbp.TimeSeriesDataSource):
   
   def run_test(self):
     self.ensure_loaded()
-    #print(len(list(map(self.icd_query, map(self.extract_codes, ICD.icd10_chapters_and_subchapters.recursive_list(True))))))
     return None

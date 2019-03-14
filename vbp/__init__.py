@@ -191,6 +191,7 @@ class DataSource(abc.ABC):
       parser.add_argument("--do-not-clean", action="store_true", help="Do not clean output data", default=False)
       parser.add_argument("--do-not-exit-on-warning", dest="exit_on_warning", action="store_false", help="Do not exit on a warning")
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
+      parser.add_argument("--do-not-write-spreadsheets", dest="write_spreadsheets", action="store_false", help="do not write spreadsheets")
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=5)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.add_argument("--no-data-type-subdir", help="Do not create an output subdirectory based on the data type", dest="data_type_subdir", action="store_false")
@@ -202,6 +203,7 @@ class DataSource(abc.ABC):
         show_graphs=False,
         data_type_subdir=True,
         exit_on_warning=True,
+        write_spreadsheets=True,
       )
       self.options = parser.parse_args(args)
       
@@ -340,32 +342,33 @@ class DataSource(abc.ABC):
     return os.path.join(outputdir, name)
   
   def write_spreadsheet(self, df, name, use_digits_grouping_number_format=False):
-    df.to_csv(self.create_output_name(name + ".csv"))
+    if self.options.write_spreadsheets:
+      df.to_csv(self.create_output_name(name + ".csv"))
 
-    df.to_pickle(self.create_output_name(name + ".pkl"))
-    
-    writer = pandas.ExcelWriter(self.create_output_name(name + ".xlsx"), engine="xlsxwriter")
-    
-    sheet_name = "Sheet1"
-    df.to_excel(writer, sheet_name=sheet_name)
-    
-    digits_grouping_format = None
-    if use_digits_grouping_number_format:
-      digits_grouping_format = writer.book.add_format({"num_format": "#,##0.00"})
+      df.to_pickle(self.create_output_name(name + ".pkl"))
+      
+      writer = pandas.ExcelWriter(self.create_output_name(name + ".xlsx"), engine="xlsxwriter")
+      
+      sheet_name = "Sheet1"
+      df.to_excel(writer, sheet_name=sheet_name)
+      
+      digits_grouping_format = None
+      if use_digits_grouping_number_format:
+        digits_grouping_format = writer.book.add_format({"num_format": "#,##0.00"})
 
-    # Set column widths based on longest values
-    # https://stackoverflow.com/a/40535454/11030758
-    worksheet = writer.sheets[sheet_name]
-    df2 = df.reset_index(level=df.index.names)
-    for idx, col in enumerate(df2):  # loop through all columns
+      # Set column widths based on longest values
+      # https://stackoverflow.com/a/40535454/11030758
+      worksheet = writer.sheets[sheet_name]
+      df2 = df.reset_index(level=df.index.names)
+      for idx, col in enumerate(df2):  # loop through all columns
         series = df2[col]
         max_len = max((
                     series.astype(str).map(len).max(),  # len of largest item
                     len(str(series.name))  # len of column name/header
                   )) + 1  # adding a little extra space
         worksheet.set_column(idx, idx, max_len, digits_grouping_format)  # set column width
-    
-    writer.save()
+      
+      writer.save()
   
   def write_verbose(self, file, obj):
     s = str(obj)

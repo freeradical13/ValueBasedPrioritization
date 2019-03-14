@@ -1,3 +1,4 @@
+import vbp
 import numpy
 
 from vbp import DictTree
@@ -270,8 +271,13 @@ class ICD:
     x = x.replace("-", "")
     if len(x) == 4:
       x = x[0:3]
-    x = ICD.normalize(x)
-    result = int(x)
+    normalized_x = ICD.normalize(x)
+    try:
+      result = int(normalized_x)
+    except ValueError:
+      #print("WARNING: Invalid ICD code {}. Interpreting first letter only.".format(x))
+      #return ICD.blockint(x[0])
+      return numpy.NaN
     if addone:
       result += 1
     return result
@@ -283,8 +289,13 @@ class ICD:
     if len(x) == 4:
       f = float(x[3]) / 10.0
       x = x[0:3]
-    x = ICD.normalize(x)
-    return float(x) + f
+    normalized_x = ICD.normalize(x)
+    try:
+      return float(normalized_x) + f
+    except ValueError:
+      #print("WARNING: Invalid ICD code {}. Interpreting first letter only.".format(x))
+      #return float(ICD.blockint(x[0])) + f
+      return numpy.NaN
 
   @staticmethod
   def blockint(c):
@@ -321,3 +332,47 @@ class ICD:
         return numpy.NaN
       else:
         raise ValueError("Unexpected age {}".format(x))
+
+class ICDDataSource(vbp.TimeSeriesDataSource):
+  def extract_codes(self, x):
+    return x.strip()[x.strip().rfind("(")+1:][:-1]
+  
+  def extract_name(self, x):
+    return x[:x.rfind("(")-1].replace("#", "").strip()
+
+  def icd_query(self, codes):
+    result = ""
+    
+    if codes != "Residual":
+      atol = 1e-08
+      codes = codes.replace("*", "")
+      codes_pieces = codes.split(",")
+      for codes_piece in codes_pieces:
+        if len(result) > 0:
+          result += " | "
+        result += "("
+        codes_piece = codes_piece.strip()
+        if "-" in codes_piece:
+          range_pieces = codes_piece.split("-")
+          x = range_pieces[0].strip()
+          y = range_pieces[1].strip()
+          if "." in x:
+            floatval = ICD.tofloat(x)
+            result += "(icdfloat >= {})".format(floatval - atol)
+          else:
+            result += "(icdint >= {})".format(ICD.toint(x))
+          result += " & "
+          if "." in y:
+            floatval = ICD.tofloat(y)
+            result += "(icdfloat <= {})".format(floatval + atol)
+          else:
+            result += "(icdint <= {})".format(ICD.toint(y))
+        else:
+          if "." in codes_piece:
+            floatval = ICD.tofloat(codes_piece)
+            result += "(icdfloat >= {}) & (icdfloat <= {})".format(floatval - atol, floatval + atol)
+          else:
+            result += "icdint == {}".format(ICD.toint(codes_piece))
+        result += ")"
+
+    return result

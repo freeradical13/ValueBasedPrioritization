@@ -13,6 +13,7 @@ import argparse
 import datetime
 import traceback
 import matplotlib
+import vbp.ucod.icd
 import urllib.request
 import matplotlib.pyplot
 import statsmodels.tools
@@ -51,7 +52,7 @@ class DataType(vbp.DataSourceDataType):
   # from https://www.cdc.gov/nchs/data/dvs/comp2.pdf
   UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
 
-class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
+class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
 
   # Population estimates (some mid-year) used to calculate death rates shown in Vital Statistics of the United States
   # https://www.cdc.gov/nchs/nvss/mortality/historical_population.htm
@@ -276,12 +277,6 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
   def get_data_types_enum_default():
     return DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES
 
-  def extract_codes(self, x):
-    return x.strip()[x.strip().rfind("(")+1:][:-1]
-  
-  def extract_name(self, x):
-    return x[:x.rfind("(")-1].replace("#", "").strip()
-
   def run_load(self):
     if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
        self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
@@ -467,8 +462,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
       raise ValueError("Unexpected year value {} in data for {}".format(df[yearcol].min(), csv))
     
     df["AgeMinutes"] = df["age"].apply(ICD.convert_age_minutes)
-    df["ucodint"] = df["ucod"].apply(ICD.toint)
-    df["ucodfloat"] = df["ucod"].apply(ICD.tofloat)
+    df["icdint"] = df["ucod"].apply(ICD.toint)
+    df["icdfloat"] = df["ucod"].apply(ICD.tofloat)
     
     scale = 1
     if file_year == 1972:
@@ -675,43 +670,6 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.TimeSeriesDataSource):
   def print_processing_csv(self, i, csv, csvs):
     print("Processing {} ({} of {})".format(csv, i+1, len(csvs)))
     
-  def icd_query(self, codes):
-    result = ""
-    
-    if codes != "Residual":
-      atol = 1e-08
-      codes = codes.replace("*", "")
-      codes_pieces = codes.split(",")
-      for codes_piece in codes_pieces:
-        if len(result) > 0:
-          result += " | "
-        result += "("
-        codes_piece = codes_piece.strip()
-        if "-" in codes_piece:
-          range_pieces = codes_piece.split("-")
-          x = range_pieces[0].strip()
-          y = range_pieces[1].strip()
-          if "." in x:
-            floatval = vbp.ucod.icd.ICD.tofloat(x)
-            result += "(ucodfloat >= {})".format(floatval - atol)
-          else:
-            result += "(ucodint >= {})".format(vbp.ucod.icd.ICD.toint(x))
-          result += " & "
-          if "." in y:
-            floatval = vbp.ucod.icd.ICD.tofloat(y)
-            result += "(ucodfloat <= {})".format(floatval + atol)
-          else:
-            result += "(ucodint <= {})".format(vbp.ucod.icd.ICD.toint(y))
-        else:
-          if "." in codes_piece:
-            floatval = vbp.ucod.icd.ICD.tofloat(codes_piece)
-            result += "(ucodfloat >= {}) & (ucodfloat <= {})".format(floatval - atol, floatval + atol)
-          else:
-            result += "ucodint == {}".format(vbp.ucod.icd.ICD.toint(codes_piece))
-        result += ")"
-
-    return result
-
   def get_calculated_scale_function_values(self):
     self.check_raw_files_directory()
     average_range = self.options.average_age_range

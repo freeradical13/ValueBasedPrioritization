@@ -100,3 +100,6 @@ Final output:
 As of 2019-03-01, the unzipped World mortality data consumes ~320MB of
 disk. It will be downloaded and unzipped automatically when a function
 is used that needs it.
+
+When testing, writing data spreadsheets takes a lot of time and may
+be avoided with --do-not-write-spreadsheets.
