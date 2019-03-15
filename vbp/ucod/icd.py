@@ -376,3 +376,6 @@ class ICDDataSource(vbp.TimeSeriesDataSource):
         result += ")"
 
     return result
+
+  def crude_rate_amount(self):
+    return 100000.0

@@ -333,7 +333,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     df.rename(columns = {"Year": "Date"}, inplace=True)
     df["Year"] = df["Date"].dt.year
     # https://wonder.cdc.gov/wonder/help/cmf.html#Frequently%20Asked%20Questions%20about%20Death%20Rates
-    df["Crude Rate"] = (df.Deaths / df.Population) * 100000.0
+    df["Crude Rate"] = (df.Deaths / df.Population) * self.crude_rate_amount()
     self.write_spreadsheet(df, self.prefix_all("data"))
     return df
 

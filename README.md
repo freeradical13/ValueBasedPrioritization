@@ -15,11 +15,14 @@ Prerequisites:
 
     python3 -m vbp.run -h
 
+Any non-screen output goes to the `output` folder.
+
 ## Running
 
 The model type is specified with `--ets`, `--ols`, and/or `--prophet`.
-These are not mutually exclusive; if combined, an average is taken of
-the results. The default is `--ets`.
+These are not mutually exclusive; if combined during
+`modeled_value_based_prioritization`, an average is taken of the
+results. The default is `--ets`.
 
 By default, action names are obfuscated to reduce bias during model
 building and testing. Specify `--do-not-obfuscate` to show actual names.

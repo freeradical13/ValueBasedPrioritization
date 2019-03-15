@@ -21,6 +21,8 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
   def initialize_parser(self, parser):
     super().initialize_parser(parser)
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
+    # The data before 1999 is spotty and throws off crude rates significantly
+    parser.add_argument("--min-year", help="The minimum year to use data from", type=int, default=1999)
     parser.add_argument("--max-year", help="The maximum year to use data from because not all data is reported", type=int, default=2015)
     parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/world/")
 
@@ -96,7 +98,10 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     # Drop any with non-vanilla ICD-10 codes
     # https://www.who.int/healthinfo/statistics/documentation.zip
     deaths.drop(deaths[~deaths["List"].isin(["101", "103", "104"])].index, inplace=True)
-    
+
+    if self.options.min_year > 0:
+      deaths.drop(deaths[deaths["Year"] < self.options.min_year].index, inplace=True)
+
     # Drop everything after the last year of full data
     deaths.drop(deaths[deaths["Year"] > self.options.max_year].index, inplace=True)
     
@@ -142,7 +147,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     
     if self.options.data_type == DataType.ICD10_MINIMALLY_GROUPED:
       deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
-      deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * 100000.0
+      deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * self.crude_rate_amount()
       deaths.reset_index(level=deaths.index.names, inplace=True)
       deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
       deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
@@ -165,7 +170,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     df["Query"] = df.apply(lambda row: "(Year == {}) & ({})".format(row["Year"], self.icd_query(self.extract_codes(row[self.get_action_column_name()]))), axis="columns")
     df["Deaths"] = df["Query"].apply(lambda x: deaths.query(x)["Deaths"].sum())
     df["Population"] = df["Year"].apply(lambda y: deaths_per_year.loc[y])
-    df["Crude Rate"] = (df["Deaths"] / df["Population"]) * 100000.0
+    df["Crude Rate"] = (df["Deaths"] / df["Population"]) * self.crude_rate_amount()
     df["Date"] = df["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
     deaths = df[["Date"] + [col for col in df if col != "Date" and col != "Query"]]
     
@@ -177,6 +182,9 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
   def get_value_column_name(self):
     return "Crude Rate"
   
+  def crude_rate_amount(self):
+    return 10000000.0
+
   def read_unpopdata(self, sheet_name):
     # https://population.un.org/wpp/Download/Standard/Population/
     # https://population.un.org/wpp/Publications/Files/WPP2017_Methodology.pdf (Pages 30-31)
