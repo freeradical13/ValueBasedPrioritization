@@ -36,6 +36,9 @@ class DataType(vbp.DataSourceDataType):
   # Same as above but only the leaves of the tree. For some reason, this is not exactly 113, but 117.
   UCOD_1999_2017_ICD10_113_CAUSES_LEAVES = enum.auto()
 
+  # Same as above but only the roots of the tree.
+  UCOD_1999_2017_ICD10_113_CAUSES_ROOTS = enum.auto()
+
   # Group Results By "Year" And By "ICD Chapter"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
   UCOD_1999_2017_CHAPTERS = enum.auto()
@@ -282,6 +285,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
        self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
 
       df = pandas.read_csv(
@@ -294,16 +298,23 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
            ).dropna(how="all")
 
       if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
         # Drop any causes that do not have a # prefix (i.e. not designated rankable)
         #df.drop(df[~df[self.get_action_column_name()].str.contains("#")].index, inplace=True)
         
         df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(self.extract_codes)
         df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(self.extract_name)
         
-        if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+        if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+           self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
           
-          keep_queries = list(map(self.icd_query, map(self.extract_codes, self.icd10_ucod113.recursive_list(True))))
+          if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+            target = self.icd10_ucod113.recursive_list(True)
+          else:
+            target = self.icd10_ucod113.roots_list()
+            
+          keep_queries = list(map(self.icd_query, map(self.extract_codes, target)))
           df["CodesQuery"] = df[self.get_code_column_name()].apply(self.icd_query)
           
           # Drop any non-leaves
@@ -347,7 +358,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death"
     elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
       return "ICD-10 113 Cause List"
     else:
       raise NotImplementedError()
@@ -365,7 +377,8 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death Code"
     elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
       return "Cause of death Codes"
     else:
       raise NotImplementedError()
@@ -380,14 +393,16 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
       return self.options.file_ucod_longterm_comparable_leading
     elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
       return self.options.file_ucod_1999_2017_icd10_113_causes
     else:
       raise NotImplementedError()
   
   def get_read_columns(self):
     if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
       return [self.get_action_column_name()]
     else:
       return [self.get_action_column_name(), self.get_code_column_name()]
@@ -679,6 +694,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
        self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       icd_codes = self.data[self.get_code_column_name()].unique()
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
@@ -730,6 +746,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
        self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
        self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
+       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS or \
        self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[self.get_code_column_name()] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
     elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
