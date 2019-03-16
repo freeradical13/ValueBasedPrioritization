@@ -14,7 +14,8 @@ from vbp.ucod.icd import ICD
 
 class DataType(vbp.DataSourceDataType):
   ICD10_MINIMALLY_GROUPED = enum.auto()
-  ICD10_CHAPTERS = enum.auto()
+  ICD10_CHAPTERS_ALL = enum.auto()
+  ICD10_CHAPTER_ROOTS = enum.auto()
   ICD10_SUB_CHAPTERS = enum.auto()
 
 class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
@@ -151,22 +152,28 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
       deaths.reset_index(level=deaths.index.names, inplace=True)
       deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
       deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
-    elif self.options.data_type == DataType.ICD10_CHAPTERS:
-      deaths = self.process_grouping(deaths, False)
+    elif self.options.data_type == DataType.ICD10_CHAPTERS_ALL:
+      deaths = self.process_grouping(deaths, False, False)
     elif self.options.data_type == DataType.ICD10_SUB_CHAPTERS:
-      deaths = self.process_grouping(deaths, True)
+      deaths = self.process_grouping(deaths, False, True)
+    elif self.options.data_type == DataType.ICD10_CHAPTER_ROOTS:
+      deaths = self.process_grouping(deaths, True, False)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
     
     return deaths
 
-  def process_grouping(self, deaths, leaves_only):
+  def process_grouping(self, deaths, roots_only, leaves_only):
     # The Population column is deaths per country per year, and we
     # want total population per year (for countries that reported
     # mortality data):
     deaths_per_year = deaths.groupby("Year").aggregate({"Population": numpy.sum})
     
-    df = pandas.DataFrame(index=pandas.MultiIndex.from_product([ICD.icd10_chapters_and_subchapters.recursive_list(leaves_only), deaths["Year"].unique()], names = [self.get_action_column_name(), "Year"])).reset_index().sort_values("Year")
+    if roots_only:
+      target = ICD.icd10_chapters_and_subchapters.roots_list()
+    else:
+      target = ICD.icd10_chapters_and_subchapters.recursive_list(leaves_only)
+    df = pandas.DataFrame(index=pandas.MultiIndex.from_product([target, deaths["Year"].unique()], names = [self.get_action_column_name(), "Year"])).reset_index().sort_values("Year")
     df["Query"] = df.apply(lambda row: "(Year == {}) & ({})".format(row["Year"], self.icd_query(self.extract_codes(row[self.get_action_column_name()]))), axis="columns")
     df["Deaths"] = df["Query"].apply(lambda x: deaths.query(x)["Deaths"].sum())
     df["Population"] = df["Year"].apply(lambda y: deaths_per_year.loc[y])

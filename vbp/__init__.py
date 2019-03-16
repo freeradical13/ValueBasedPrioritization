@@ -927,3 +927,12 @@ class DictTree(collections.defaultdict):
     if self == node and self.value is not None:
       if not leaves_only or (leaves_only and len(node) == 0):
         accumulator.append(self.value)
+
+  def roots_list(self):
+    accumulator = []
+    for v in self.values():
+      if isinstance(v, DictTree):
+        accumulator.append(v.value)
+      else:
+        accumulator.append(v)
+    return accumulator
