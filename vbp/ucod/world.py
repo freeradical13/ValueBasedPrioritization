@@ -183,7 +183,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     return "Crude Rate"
   
   def crude_rate_amount(self):
-    return 10000000.0
+    return 100000000.0
 
   def read_unpopdata(self, sheet_name):
     # https://population.un.org/wpp/Download/Standard/Population/

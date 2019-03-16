@@ -697,8 +697,10 @@ class TimeSeriesDataSource(DataSource):
   def create_model_ets(self, action, predict, i, count):
     print("Creating ETS model {} of {} for: {}".format(i, count, self.get_obfuscated_name(action)))
     df = self.get_action_data(action)
+    
+    df_nozeros = df[df[self.get_value_column_name()] != 0]
 
-    if len(df) <= 1:
+    if len(df) <= 1 or len(df_nozeros) == 0:
       return None
 
     # First create an image with raw data and no predictions because
@@ -707,6 +709,8 @@ class TimeSeriesDataSource(DataSource):
     
     action_title = "{}{}".format(self.get_action_title_prefix(), self.get_obfuscated_name(action))
     
+    self.write_spreadsheet(df, "{}_etsdata".format(self.get_obfuscated_name(action)))
+
     df = df[[self.get_value_column_name()]]
     ax = df.plot(color="black", marker="o", legend=True, title=action_title, grid=True, kind="line")
     ax.set_ylabel(self.get_value_column_name())
@@ -751,7 +755,6 @@ class TimeSeriesDataSource(DataSource):
       ax.set_title("Residuals of {} (${}$)".format(self.get_obfuscated_name(action), title))
       self.save_plot_image(action, "{}_ets_residuals".format(title), fig)
       
-    self.write_spreadsheet(df, "{}_etsdata".format(self.get_obfuscated_name(action)))
     self.write_spreadsheet(resultdf, "{}_etsresults".format(self.get_obfuscated_name(action)))
     
     return resultdf
