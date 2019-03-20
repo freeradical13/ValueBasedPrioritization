@@ -28,6 +28,8 @@
 \usepackage{subcaption}
 \usepackage{bm}
 \raggedbottom
+\usepackage[bottom]{footmisc}
+\interfootnotelinepenalty=100 % Default 100, increase to reduce footnote splitting.
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -799,7 +801,9 @@ Combine the table above with the manually calculated scale functions table \ref{
   \label{table:btablewithall}
 \end{table}
 
-Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}} in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
+Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions.
+
+For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}} in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
 
 % US_ICD10_113_SELECTED_CAUSES_LEAVES
 \begin{table}[H]
@@ -972,26 +976,101 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Name0856}}\label{fig:k7}
     \end{figure}
   
-  % 
-  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
+  % WORLD_ICD10_MINIMALLY_GROUPED
+  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action               & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName07928 & 0.19     \\
-          2   & Eliminate: RawName02631 & 0.14     \\
+          1   & Eliminate: Name01277 & 0.184546 \\
+          2   & Eliminate: Name08372 & 0.163315 \\
+          3   & Eliminate: Name06345 & 0.120113 \\
+          4   & Eliminate: Name07421 & 0.025902 \\
+          5   & Eliminate: Name10978 & 0.007329 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
       \label{table:ztable8}
     \end{table}
-%     \begin{figure}[H]
-%       \centering
-%       \includegraphics[width=0.5\textwidth]{results/World/RawName07928_ets.png}
-%       \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{RawName07928}}\label{fig:k8}
-%     \end{figure}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/Name01277_ets.png}
+      \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Name01277}}\label{fig:k8}
+    \end{figure}
+  
+  % WORLD_ICD10_CHAPTERS_ALL
+  \item ICD-10 22 Chapters for the World, including subtotals\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figure \ref{fig:k9}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action             & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: Name139 & 0.093680 \\
+          2   & Eliminate: Name059 & 0.088751 \\
+          3   & Eliminate: Name084 & 0.088618 \\
+          4   & Eliminate: Name173 & 0.043221 \\
+          5   & Eliminate: Name125 & 0.042347 \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the ICD-10 22 Chapters for the World, including subtotals}
+      \label{table:ztable9}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Name139_ets.png}
+      \caption{Highest priority action from the ICD-10 22 Chapters for the World, including subtotals: \textit{Name139}}\label{fig:k9}
+    \end{figure}
+  
+  % WORLD_ICD10_CHAPTER_ROOTS
+  \item ICD-10 22 Chapters for the World with only top-level groupings\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figure \ref{fig:k10}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action             & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: Name139 & 0.189185 \\
+          2   & Eliminate: Name059 & 0.175389 \\
+          3   & Eliminate: Name173 & 0.087086 \\
+          4   & Eliminate: Name183 & 0.061499 \\
+          5   & Eliminate: Name200 & 0.036612 \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the ICD-10 22 Chapters for the World with only top-level groupings}
+      \label{table:ztable10}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Name139_ets.png}
+      \caption{Highest priority action from the ICD-10 22 Chapters for the World with only top-level groupings: \textit{Name139}}\label{fig:k10}
+    \end{figure}
+  
+  % WORLD_ICD10_SUB_CHAPTERS
+  \item ICD-10 211 Sub-Chapters for the World\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figure \ref{fig:k11}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action             & $Z(t_F)$ \\
+        \midrule
+          1   & Eliminate: Name084 & 0.186351 \\
+          2   & Eliminate: Name125 & 0.089824 \\
+          3   & Eliminate: Name031 & 0.058376 \\
+          4   & Eliminate: Name214 & 0.036073 \\
+          5   & Eliminate: Name219 & 0.033883 \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the ICD-10 211 Sub-Chapters for the World}
+      \label{table:ztable11}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Name084_ets.png}
+      \caption{Highest priority action from the ICD-10 211 Sub-Chapters for the World: \textit{Name084}}\label{fig:k11}
+    \end{figure}
 \end{enumerate}
 
 \section{Discussion}
