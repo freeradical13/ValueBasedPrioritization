@@ -31,29 +31,29 @@ class DataType(vbp.DataSourceDataType):
   
   # Group Results By "Year" And By "ICD-10 113 Cause List"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_ICD10_113_CAUSES_ALL = enum.auto()
+  US_ICD10_113_SELECTED_CAUSES_ALL = enum.auto()
 
   # Same as above but only the leaves of the tree. For some reason, this is not exactly 113, but 117.
-  UCOD_1999_2017_ICD10_113_CAUSES_LEAVES = enum.auto()
+  US_ICD10_113_SELECTED_CAUSES_LEAVES = enum.auto()
 
   # Same as above but only the roots of the tree.
-  UCOD_1999_2017_ICD10_113_CAUSES_ROOTS = enum.auto()
+  US_ICD10_113_SELECTED_CAUSES_ROOTS = enum.auto()
 
   # Group Results By "Year" And By "ICD Chapter"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_CHAPTERS = enum.auto()
+  US_ICD10_CHAPTERS = enum.auto()
   
   # Group Results By "Year" And By "ICD Sub-Chapter"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_SUB_CHAPTERS = enum.auto()
+  US_ICD10_SUB_CHAPTERS = enum.auto()
 
   # Group Results By "Year" And By "Cause of death"; Check "Export Results"; Uncheck "Show Totals"
   # https://wonder.cdc.gov/ucd-icd10.html
-  UCOD_1999_2017_MINIMALLY_GROUPED = enum.auto()
+  US_ICD10_MINIMALLY_GROUPED = enum.auto()
   
   # Built from https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf and Mortality data >= 1959 and comparability ratios
   # from https://www.cdc.gov/nchs/data/dvs/comp2.pdf
-  UCOD_LONGTERM_COMPARABLE_LEADING = enum.auto()
+  US_ICD_LONGTERM_COMPARABLE_LEADING = enum.auto()
 
 class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
 
@@ -264,11 +264,11 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
     parser.add_argument("--comparable-ratios-input-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
-    parser.add_argument("--file-ucod-1999-2017-sub-chapters", help="Path to file for UCOD_1999_2017_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_SUB_CHAPTERS.txt")
-    parser.add_argument("--file-ucod-1999-2017-chapters", help="Path to file for UCOD_1999_2017_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_CHAPTERS.txt")
-    parser.add_argument("--file-ucod-1999-2017-minimally-grouped", help="Path to file for UCOD_1999_2017_MINIMALLY_GROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_MINIMALLY_GROUPED.txt")
-    parser.add_argument("--file-ucod-1999-2017-icd10-113-causes", help="Path to file for UCOD_1999_2017_ICD10_113_CAUSES", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_UCOD_1999_2017_ICD10_113_CAUSES.txt")
-    parser.add_argument("--file-ucod-longterm-comparable-leading", help="Path to file for UCOD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
+    parser.add_argument("--file-us-icd10-sub-chapters", help="Path to file for US_ICD10_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_SUB_CHAPTERS.txt")
+    parser.add_argument("--file-us-icd10-chapters", help="Path to file for US_ICD10_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_CHAPTERS.txt")
+    parser.add_argument("--file-us-icd10-minimally-grouped", help="Path to file for US_ICD10_MINIMALLY_GROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_MINIMALLY_GROUPED.txt")
+    parser.add_argument("--file-us-icd10-113-selected-causes", help="Path to file for US_ICD10_113_SELECTED_CAUSES", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_113_SELECTED_CAUSES.txt")
+    parser.add_argument("--file-us-icd-longterm-comparable-leading", help="Path to file for US_ICD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
     parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/united_states/mort/")
     parser.add_argument("--test", help="Test")
 
@@ -278,15 +278,15 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
 
   @staticmethod
   def get_data_types_enum_default():
-    return DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES
+    return DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES
 
   def run_load(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
-       self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS or \
-       self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+    if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS or \
+       self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS or \
+       self.options.data_type == DataType.US_ICD10_CHAPTERS:
 
       df = pandas.read_csv(
              self.get_data_file(),
@@ -297,19 +297,19 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
              encoding="ISO-8859-1",
            ).dropna(how="all")
 
-      if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
+      if self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS:
         # Drop any causes that do not have a # prefix (i.e. not designated rankable)
         #df.drop(df[~df[self.get_action_column_name()].str.contains("#")].index, inplace=True)
         
         df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(self.extract_codes)
         df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(self.extract_name)
         
-        if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-           self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
+        if self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+           self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS:
           
-          if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES:
+          if self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES:
             target = self.icd10_ucod113.recursive_list(True)
           else:
             target = self.icd10_ucod113.roots_list()
@@ -320,12 +320,12 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
           # Drop any non-leaves
           df.drop(df[~df["CodesQuery"].isin(keep_queries)].index, inplace=True)
           
-      elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
+      elif self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
         # Lookup by action_column_name but these aren't unique in this data set,
         # so append the codes.
         df[self.get_action_column_name()] = df.apply(lambda row: "{} ({})".format(row[self.get_action_column_name()], row[self.get_code_column_name()]), axis="columns")
 
-    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+    elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
 
       df = pandas.read_excel(
         self.get_data_file(),
@@ -349,17 +349,17 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     return df
 
   def get_action_column_name(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+    if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS:
       return "ICD Sub-Chapter"
-    elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+    elif self.options.data_type == DataType.US_ICD10_CHAPTERS:
       return "ICD Chapter"
-    elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
+    elif self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
       return "Cause of death"
-    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+    elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death"
-    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
+    elif self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS:
       return "ICD-10 113 Cause List"
     else:
       raise NotImplementedError()
@@ -368,41 +368,41 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     return "Crude Rate"
   
   def get_code_column_name(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
+    if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS:
       return "ICD Sub-Chapter Code"
-    elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+    elif self.options.data_type == DataType.US_ICD10_CHAPTERS:
       return "ICD Chapter Code"
-    elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
+    elif self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
       return "Cause of death Code"
-    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+    elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
       return "Cause of death Code"
-    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
+    elif self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS:
       return "Cause of death Codes"
     else:
       raise NotImplementedError()
   
   def get_data_file(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS:
-      return self.options.file_ucod_1999_2017_sub_chapters
-    elif self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
-      return self.options.file_ucod_1999_2017_chapters
-    elif self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED:
-      return self.options.file_ucod_1999_2017_minimally_grouped
-    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
-      return self.options.file_ucod_longterm_comparable_leading
-    elif self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-         self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
-      return self.options.file_ucod_1999_2017_icd10_113_causes
+    if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS:
+      return self.options.file_us_icd10_sub_chapters
+    elif self.options.data_type == DataType.US_ICD10_CHAPTERS:
+      return self.options.file_us_icd10_chapters
+    elif self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
+      return self.options.file_us_icd10_minimally_grouped
+    elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
+      return self.options.file_us_icd_longterm_comparable_leading
+    elif self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+         self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS:
+      return self.options.file_us_icd10_113_selected_causes
     else:
       raise NotImplementedError()
   
   def get_read_columns(self):
-    if self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS:
+    if self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS:
       return [self.get_action_column_name()]
     else:
       return [self.get_action_column_name(), self.get_code_column_name()]
@@ -436,7 +436,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
       raise ValueError("--raw-files-directory is not a directory")
 
   def run_prepare_data(self):
-    self.options.data_type = DataType.UCOD_LONGTERM_COMPARABLE_LEADING
+    self.options.data_type = DataType.US_ICD_LONGTERM_COMPARABLE_LEADING
     self.check_raw_files_directory()
     if self.options.comparable_ratios:
       self.create_comparable()
@@ -690,15 +690,15 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     average_range = self.options.average_age_range
     min_year = self.data["Year"].max() - self.options.average_age_range + 1
     
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
-       self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS or \
-       self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+    if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS or \
+       self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS or \
+       self.options.data_type == DataType.US_ICD10_CHAPTERS:
       icd_codes = self.data[self.get_code_column_name()].unique()
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
-    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+    elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
       ulcl_codes = pandas.read_excel(
         self.options.comparable_ratios_input_file,
         index_col=0,
@@ -742,14 +742,14 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     agesbygroup["SumAgeYears"] = agesbygroup["SumAgeMinutes"] / 525960
     agesbygroup["Count"] = subset.groupby(codescol).apply(lambda row: row["Count"].sum())
 
-    if self.options.data_type == DataType.UCOD_1999_2017_SUB_CHAPTERS or \
-       self.options.data_type == DataType.UCOD_1999_2017_MINIMALLY_GROUPED or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ALL or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_LEAVES or \
-       self.options.data_type == DataType.UCOD_1999_2017_ICD10_113_CAUSES_ROOTS or \
-       self.options.data_type == DataType.UCOD_1999_2017_CHAPTERS:
+    if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS or \
+       self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ALL or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES or \
+       self.options.data_type == DataType.US_ICD10_113_SELECTED_CAUSES_ROOTS or \
+       self.options.data_type == DataType.US_ICD10_CHAPTERS:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(self.data[self.data[self.get_code_column_name()] == row.name][self.get_action_column_name()].iloc[0]), raw=True, axis="columns")
-    elif self.options.data_type == DataType.UCOD_LONGTERM_COMPARABLE_LEADING:
+    elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
       agesbygroup[self.obfuscated_column_name] = agesbygroup.apply(lambda row: self.get_obfuscated_name(ulcl_codes[ulcl_codes == row.name].index.values[0]), raw=True, axis="columns")
     else:
       raise NotImplementedError()

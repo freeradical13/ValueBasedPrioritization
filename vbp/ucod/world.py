@@ -13,10 +13,10 @@ import urllib.request
 from vbp.ucod.icd import ICD
 
 class DataType(vbp.DataSourceDataType):
-  ICD10_MINIMALLY_GROUPED = enum.auto()
-  ICD10_CHAPTERS_ALL = enum.auto()
-  ICD10_CHAPTER_ROOTS = enum.auto()
-  ICD10_SUB_CHAPTERS = enum.auto()
+  WORLD_ICD10_MINIMALLY_GROUPED = enum.auto()
+  WORLD_ICD10_CHAPTERS_ALL = enum.auto()
+  WORLD_ICD10_CHAPTER_ROOTS = enum.auto()
+  WORLD_ICD10_SUB_CHAPTERS = enum.auto()
 
 class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
   def initialize_parser(self, parser):
@@ -33,7 +33,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
 
   @staticmethod
   def get_data_types_enum_default():
-    return DataType.ICD10_MINIMALLY_GROUPED
+    return DataType.WORLD_ICD10_MINIMALLY_GROUPED
 
   def load_who_populations(self):
     populations = pandas.read_csv(
@@ -146,17 +146,17 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     
     deaths = self.load_with_cache("who_deaths", self.load_deaths, populations, unpopdata, country_codes)
     
-    if self.options.data_type == DataType.ICD10_MINIMALLY_GROUPED:
+    if self.options.data_type == DataType.WORLD_ICD10_MINIMALLY_GROUPED:
       deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
       deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * self.crude_rate_amount()
       deaths.reset_index(level=deaths.index.names, inplace=True)
       deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
       deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
-    elif self.options.data_type == DataType.ICD10_CHAPTERS_ALL:
+    elif self.options.data_type == DataType.WORLD_ICD10_CHAPTERS_ALL:
       deaths = self.process_grouping(deaths, False, False)
-    elif self.options.data_type == DataType.ICD10_SUB_CHAPTERS:
+    elif self.options.data_type == DataType.WORLD_ICD10_SUB_CHAPTERS:
       deaths = self.process_grouping(deaths, False, True)
-    elif self.options.data_type == DataType.ICD10_CHAPTER_ROOTS:
+    elif self.options.data_type == DataType.WORLD_ICD10_CHAPTER_ROOTS:
       deaths = self.process_grouping(deaths, True, False)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
