@@ -801,14 +801,18 @@ Combine the table above with the manually calculated scale functions table \ref{
 
 Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions. For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}} in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
 
+% US_ICD10_113_SELECTED_CAUSES_LEAVES
 \begin{table}[H]
   \centering
   \begin{tabular}{clc}
     \toprule
-      $k$ & Action                & $Z(t_F)$ \\
+      $k$ & Action             & $Z(t_F)$ \\
     \midrule
-      1   & Eliminate: RawName127 & 0.03     \\
-      2   & Eliminate: RawName001 & 0.02     \\
+      1   & Eliminate: Name129 & 0.034025 \\
+      2   & Eliminate: Name074 & 0.024781 \\
+      3   & Eliminate: Name007 & 0.023725 \\
+      4   & Eliminate: Name060 & 0.015351 \\
+      5   & Eliminate: Name080 & 0.015007 \\
     \bottomrule
   \end{tabular}
   \caption{$Z(t_F)$ table for the highest priority actions from the 113 Selected Causes of Death list for the United States}
@@ -817,22 +821,26 @@ Calculate the product of each action's $B(t_F)$ and its scale function values to
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_LEAVES/RawName127_ets.png}
-  \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{RawName127}}\label{fig:k1}
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_LEAVES/Name129_ets.png}
+  \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{Name129}}\label{fig:k1}
 \end{figure}
 
 The same analysis is run on other mutually exclusive groupings of causes of death:
 
 \begin{enumerate}
+  % US_ICD10_113_SELECTED_CAUSES_ALL
   \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action             & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName010   & 0.05     \\
-          2   & Eliminate: RawName011   & 0.05     \\
+          1   & Eliminate: Name018 & 0.052470 \\
+          2   & Eliminate: Name056 & 0.050141 \\
+          3   & Eliminate: Name108 & 0.031641 \\
+          4   & Eliminate: Name006 & 0.020573 \\
+          5   & Eliminate: Name017 & 0.017620 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States, including subtotals}
@@ -840,18 +848,23 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_ALL/RawName010_ets.png}
-      \caption{Highest priority action from the ICD-10 113 Cause List for the United States, including subtotals: \textit{RawName010}}\label{fig:k2}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_ALL/Name018_ets.png}
+      \caption{Highest priority action from the ICD-10 113 Cause List for the United States, including subtotals: \textit{Name018}}\label{fig:k2}
     \end{figure}
+
+  % US_ICD10_113_SELECTED_CAUSES_ROOTS
   \item ICD-10 113 Cause List for the United States with only top-level groupings\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action             & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName010   & 0.05     \\
-          2   & Eliminate: RawName011   & 0.05     \\
+          1   & Eliminate: Name056 & 0.131958 \\
+          2   & Eliminate: Name006 & 0.045660 \\
+          3   & Eliminate: Name017 & 0.045493 \\
+          4   & Eliminate: Name110 & 0.017201 \\
+          5   & Eliminate: Name073 & 0.013716 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States with only top-level groupings}
@@ -859,18 +872,23 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_ALL/RawName010_ets.png}
-      \caption{Highest priority action from the ICD-10 113 Cause List for the United States, including subtotals: \textit{RawName010}}\label{fig:k3}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_ROOTS/Name056_ets.png}
+      \caption{Highest priority action from the ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Name056}}\label{fig:k3}
     \end{figure}
+
+  % US_ICD_LONGTERM_COMPARABLE_LEADING
   \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999} in Table \ref{table:ztable4} and Figure \ref{fig:k4}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action            & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName10    & 0.08     \\
-          2   & Eliminate: RawName21    & 0.08     \\
+          1   & Eliminate: Name02 & 0.080375 \\
+          2   & Eliminate: Name18 & 0.077476 \\
+          3   & Eliminate: Name25 & 0.034373 \\
+          4   & Eliminate: Name21 & 0.025423 \\
+          5   & Eliminate: Name26 & 0.014776 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the Longterm comparable leading causes of death for the United States}
@@ -878,18 +896,23 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/UCOD_LONGTERM_COMPARABLE_LEADING/RawName10_ets.png}
-      \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{RawName10}}\label{fig:k4}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD_LONGTERM_COMPARABLE_LEADING/Name02_ets.png}
+      \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{Name02}}\label{fig:k4}
     \end{figure}
+  
+  % US_ICD10_CHAPTERS
   \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action            & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName14    & 0.10     \\
-          2   & Eliminate: RawName19    & 0.06     \\
+          1   & Eliminate: Name16 & 0.101677 \\
+          2   & Eliminate: Name17 & 0.060121 \\
+          3   & Eliminate: Name14 & 0.039507 \\
+          4   & Eliminate: Name01 & 0.037175 \\
+          5   & Eliminate: Name18 & 0.026494 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 20 Chapters for the United States}
@@ -897,18 +920,23 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_CHAPTERS/RawName14_ets.png}
-      \caption{Highest priority action from the ICD-10 20 Chapters for the United States: \textit{RawName14}}\label{fig:k5}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Name16_ets.png}
+      \caption{Highest priority action from the ICD-10 20 Chapters for the United States: \textit{Name16}}\label{fig:k5}
     \end{figure}
+  
+  % US_ICD10_SUB_CHAPTERS
   \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figure \ref{fig:k6}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action             & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName047   & 0.06     \\
-          2   & Eliminate: RawName157   & 0.04     \\
+          1   & Eliminate: Name093 & 0.060440 \\
+          2   & Eliminate: Name026 & 0.038374 \\
+          3   & Eliminate: Name101 & 0.037231 \\
+          4   & Eliminate: Name037 & 0.027645 \\
+          5   & Eliminate: Name075 & 0.025999 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 179 Sub-Chapters for the United States}
@@ -916,18 +944,23 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_SUB_CHAPTERS/RawName047_ets.png}
-      \caption{Highest priority action from the ICD-10 179 Sub-Chapters for the United States: \textit{RawName047}}\label{fig:k6}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Name093_ets.png}
+      \caption{Highest priority action from the ICD-10 179 Sub-Chapters for the United States: \textit{Name093}}\label{fig:k6}
     \end{figure}
+    
+  % US_ICD10_MINIMALLY_GROUPED
   \item Minimally grouped (5,264) causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figure \ref{fig:k7}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
-          $k$ & Action                  & $Z(t_F)$ \\
+          $k$ & Action              & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: RawName4774  & 0.01     \\
-          2   & Eliminate: RawName4428  & 0.01     \\
+          1   & Eliminate: Name0856 & 0.013730 \\
+          2   & Eliminate: Name4563 & 0.012711 \\
+          3   & Eliminate: Name2111 & 0.012563 \\
+          4   & Eliminate: Name0653 & 0.011704 \\
+          5   & Eliminate: Name3874 & 0.007563 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the Minimally grouped (5,264) causes of death for the United States}
@@ -935,9 +968,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_UNGROUPED/RawName4774_ets.png}
-      \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{RawName4774}}\label{fig:k7}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Name0856_ets.png}
+      \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Name0856}}\label{fig:k7}
     \end{figure}
+  
+  % 
   \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
     \begin{table}[H]
       \centering
@@ -952,11 +987,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
       \label{table:ztable8}
     \end{table}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.5\textwidth]{results/World/RawName07928_ets.png}
-      \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{RawName07928}}\label{fig:k8}
-    \end{figure}
+%     \begin{figure}[H]
+%       \centering
+%       \includegraphics[width=0.5\textwidth]{results/World/RawName07928_ets.png}
+%       \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{RawName07928}}\label{fig:k8}
+%     \end{figure}
 \end{enumerate}
 
 \section{Discussion}
