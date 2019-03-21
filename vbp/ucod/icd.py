@@ -381,4 +381,4 @@ class ICDDataSource(vbp.TimeSeriesDataSource):
     return 100000.0
 
   def get_value_column_name(self):
-    return " (per {:,g})".format(self.crude_rate_amount())
+    return " (per {:,d})".format(int(self.crude_rate_amount()))
