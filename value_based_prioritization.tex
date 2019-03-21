@@ -483,6 +483,14 @@
   note         = {\url{https://www.researchgate.net/profile/Len_Tashman/publication/223444048_Automatic_forecasting_software_A_survey_and_evaluation/links/5ad7af42aca272fdaf8029b3/Automatic-forecasting-software-A-survey-and-evaluation.pdf}},
 }
 
+@book{hyndman2008forecasting,
+  title        = {Forecasting with exponential smoothing: the state space approach},
+  author       = {Hyndman, Rob and Koehler, Anne B and Ord, J Keith and Snyder, Ralph D},
+  year         = {2008},
+  publisher    = {Springer Science \& Business Media},
+  note         = {\url{http://www.exponentialsmoothing.net/}},
+}
+
 \end{filecontents}
 
 \begin{document}
@@ -610,7 +618,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
+Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting,hyndman2008forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
