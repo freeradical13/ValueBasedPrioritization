@@ -344,7 +344,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
     df.rename(columns = {"Year": "Date"}, inplace=True)
     df["Year"] = df["Date"].dt.year
     # https://wonder.cdc.gov/wonder/help/cmf.html#Frequently%20Asked%20Questions%20about%20Death%20Rates
-    df["Crude Rate"] = (df.Deaths / df.Population) * self.crude_rate_amount()
+    df[self.get_value_column_name()] = (df.Deaths / df.Population) * self.crude_rate_amount()
     self.write_spreadsheet(df, self.prefix_all("data"))
     return df
 
@@ -365,7 +365,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
       raise NotImplementedError()
   
   def get_value_column_name(self):
-    return "Crude Rate"
+    return "Crude Rate" + super().get_value_column_name()
   
   def get_code_column_name(self):
     if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS:

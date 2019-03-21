@@ -148,7 +148,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     
     if self.options.data_type == DataType.WORLD_ICD10_MINIMALLY_GROUPED:
       deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
-      deaths["Crude Rate"] = (deaths["Deaths"] / deaths["Population"]) * self.crude_rate_amount()
+      deaths[self.get_value_column_name()] = (deaths["Deaths"] / deaths["Population"]) * self.crude_rate_amount()
       deaths.reset_index(level=deaths.index.names, inplace=True)
       deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
       deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
@@ -177,7 +177,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     df["Query"] = df.apply(lambda row: "(Year == {}) & ({})".format(row["Year"], self.icd_query(self.extract_codes(row[self.get_action_column_name()]))), axis="columns")
     df["Deaths"] = df["Query"].apply(lambda x: deaths.query(x)["Deaths"].sum())
     df["Population"] = df["Year"].apply(lambda y: deaths_per_year.loc[y])
-    df["Crude Rate"] = (df["Deaths"] / df["Population"]) * self.crude_rate_amount()
+    df[self.get_value_column_name()] = (df["Deaths"] / df["Population"]) * self.crude_rate_amount()
     df["Date"] = df["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
     deaths = df[["Date"] + [col for col in df if col != "Date" and col != "Query"]]
     
@@ -187,7 +187,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     return "Cause"
   
   def get_value_column_name(self):
-    return "Crude Rate"
+    return "Crude Rate" + super().get_value_column_name()
   
   def crude_rate_amount(self):
     return 100000000.0
