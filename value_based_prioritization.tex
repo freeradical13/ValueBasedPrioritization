@@ -11,7 +11,7 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
 \urlstyle{rm}
-\usepackage[super,comma,sort&compress]{natbib}
+\usepackage[super,comma,sort]{natbib}
 \bibliographystyle{plainnat}
 \usepackage{abstract}
 \renewcommand{\abstractnamefont}{\normalfont\bfseries}
@@ -209,18 +209,6 @@
   note         = {\url{https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1524-4733.2009.00515.x}},
 }
 
-@article{zucchini2000introduction,
-  title        = {An introduction to model selection},
-  author       = {Zucchini, Walter},
-  journal      = {Journal of mathematical psychology},
-  volume       = {44},
-  number       = {1},
-  pages        = {41--61},
-  year         = {2000},
-  publisher    = {Academic Press},
-  note         = {\url{http://www.indiana.edu/~clcl/Q550/Papers/Zucchini_JMP_2000.pdf}},
-}
-
 @article{wit2012all,
   title        = {‘All models are wrong...’: an introduction to model uncertainty},
   author       = {Wit, Ernst and Heuvel, Edwin van den and Romeijn, Jan-Willem},
@@ -364,8 +352,8 @@
 }
 
 @misc{icdcomparabilityratios,
-  title        = {{A Guide to State Implementation of ICD-10 for Mortality; Part II: Applying Comparability Ratios}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
+  title        = {\textit{A Guide to State Implementation of ICD-10 for Mortality; Part II: Applying Comparability Ratios}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\@gobble{}}},
   howpublished = {\url{https://www.cdc.gov/nchs/data/statab/document-for-the-states.pdf}},
   note         = {Accessed: 2019-03-01},
 }
@@ -384,14 +372,14 @@
 
 @misc{uspopulation19002001,
   title        = {\textit{United States Population by Age, Race, and Sex, 1900-90, and 1991-2001}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\@gobble{}\@gobble{}}},
   howpublished = {\url{https://www.cdc.gov/nchs/nvss/mortality/historical_population.htm}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{uslcod19001998,
   title        = {\textit{Leading Causes of Death, 1900-1998}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\@gobble{}\@gobble{}\@gobble{}}},
   howpublished = {\url{https://www.cdc.gov/nchs/nvss/mortality_historical_data.htm}},
   note         = {Accessed: 2019-03-01},
 }
@@ -476,7 +464,7 @@
 }
 
 @misc{tashman1991automatic,
-  title        = {Automatic forecasting software: A survey and evaluation},
+  title        = {\textit{Automatic forecasting software: A survey and evaluation}},
   author       = {Tashman, Leonard J and Leach, Michael L},
   year         = {1991},
   publisher    = {Elsevier},
@@ -627,7 +615,7 @@ Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to eac
   \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection} (or forecasting)\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all,zucchini2000introduction}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
+The models are compared using \textbf{model selection} (or forecasting)\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
 For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
@@ -840,6 +828,7 @@ For the parameters and data in this example, the results are\footnote{\texttt{py
 The same analysis is run on other mutually exclusive groupings of causes of death:
 
 \begin{enumerate}
+  \vfill\eject
   % US_ICD10_113_SELECTED_CAUSES_ALL
   \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
@@ -864,6 +853,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 113 Cause List for the United States, including subtotals: \textit{Name018}}\label{fig:k2}
     \end{figure}
 
+  \vfill\eject
   % US_ICD10_113_SELECTED_CAUSES_ROOTS
   \item ICD-10 113 Cause List for the United States with only top-level groupings\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
     \begin{table}[H]
@@ -888,6 +878,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Name056}}\label{fig:k3}
     \end{figure}
 
+  \vfill\eject
   % US_ICD_LONGTERM_COMPARABLE_LEADING
   \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999} in Table \ref{table:ztable4} and Figure \ref{fig:k4}:
     \begin{table}[H]
@@ -912,6 +903,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{Name02}}\label{fig:k4}
     \end{figure}
   
+  \vfill\eject
   % US_ICD10_CHAPTERS
   \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
     \begin{table}[H]
@@ -936,6 +928,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 20 Chapters for the United States: \textit{Name16}}\label{fig:k5}
     \end{figure}
   
+  \vfill\eject
   % US_ICD10_SUB_CHAPTERS
   \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figure \ref{fig:k6}:
     \begin{table}[H]
@@ -960,6 +953,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 179 Sub-Chapters for the United States: \textit{Name093}}\label{fig:k6}
     \end{figure}
     
+  \vfill\eject
   % US_ICD10_MINIMALLY_GROUPED
   \item Minimally grouped (5,264) causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figure \ref{fig:k7}:
     \begin{table}[H]
@@ -983,7 +977,8 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Name0856_ets.png}
       \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Name0856}}\label{fig:k7}
     \end{figure}
-  
+
+  \vfill\eject
   % WORLD_ICD10_MINIMALLY_GROUPED
   \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist, and without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
     \begin{table}[H]
@@ -992,11 +987,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
         \toprule
           $k$ & Action               & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: Name01277 & 0.184546 \\
-          2   & Eliminate: Name08372 & 0.163315 \\
-          3   & Eliminate: Name06345 & 0.120113 \\
-          4   & Eliminate: Name07421 & 0.025902 \\
-          5   & Eliminate: Name10978 & 0.007329 \\
+          1   & Eliminate: Name01002 & 0.026866 \\
+          2   & Eliminate: Name04954 & 0.024561 \\
+          3   & Eliminate: Name05025 & 0.022585 \\
+          4   & Eliminate: Name06345 & 0.019871 \\
+          5   & Eliminate: Name01748 & 0.018749 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
@@ -1004,10 +999,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/Name01277_ets.png}
-      \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Name01277}}\label{fig:k8}
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/Name01002_ets.png}
+      \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Name01002}}\label{fig:k8}
     \end{figure}
   
+  \vfill\eject
   % WORLD_ICD10_CHAPTERS_ALL
   \item ICD-10 22 Chapters for the World, including subtotals\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figure \ref{fig:k9}:
     \begin{table}[H]
@@ -1016,11 +1012,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
         \toprule
           $k$ & Action             & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: Name139 & 0.093680 \\
-          2   & Eliminate: Name059 & 0.088751 \\
-          3   & Eliminate: Name084 & 0.088618 \\
-          4   & Eliminate: Name173 & 0.043221 \\
-          5   & Eliminate: Name125 & 0.042347 \\
+          1   & Eliminate: Name038 & 0.160800 \\
+          2   & Eliminate: Name216 & 0.097424 \\
+          3   & Eliminate: Name059 & 0.092250 \\
+          4   & Eliminate: Name151 & 0.046399 \\
+          5   & Eliminate: Name148 & 0.034819 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 22 Chapters for the World, including subtotals}
@@ -1028,10 +1024,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Name139_ets.png}
-      \caption{Highest priority action from the ICD-10 22 Chapters for the World, including subtotals: \textit{Name139}}\label{fig:k9}
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Name038_ets.png}
+      \caption{Highest priority action from the ICD-10 22 Chapters for the World, including subtotals: \textit{Name038}}\label{fig:k9}
     \end{figure}
   
+  \vfill\eject
   % WORLD_ICD10_CHAPTER_ROOTS
   \item ICD-10 22 Chapters for the World with only top-level groupings\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figure \ref{fig:k10}:
     \begin{table}[H]
@@ -1040,11 +1037,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
         \toprule
           $k$ & Action             & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: Name139 & 0.189185 \\
-          2   & Eliminate: Name059 & 0.175389 \\
-          3   & Eliminate: Name173 & 0.087086 \\
-          4   & Eliminate: Name183 & 0.061499 \\
-          5   & Eliminate: Name200 & 0.036612 \\
+          1   & Eliminate: Name038 & 0.321104 \\
+          2   & Eliminate: Name216 & 0.194456 \\
+          3   & Eliminate: Name151 & 0.092581 \\
+          4   & Eliminate: Name129 & 0.043816 \\
+          5   & Eliminate: Name055 & 0.032951 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 22 Chapters for the World with only top-level groupings}
@@ -1052,10 +1049,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Name139_ets.png}
-      \caption{Highest priority action from the ICD-10 22 Chapters for the World with only top-level groupings: \textit{Name139}}\label{fig:k10}
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Name038_ets.png}
+      \caption{Highest priority action from the ICD-10 22 Chapters for the World with only top-level groupings: \textit{Name038}}\label{fig:k10}
     \end{figure}
   
+  \vfill\eject
   % WORLD_ICD10_SUB_CHAPTERS
   \item ICD-10 211 Sub-Chapters for the World\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figure \ref{fig:k11}:
     \begin{table}[H]
@@ -1064,11 +1062,11 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
         \toprule
           $k$ & Action             & $Z(t_F)$ \\
         \midrule
-          1   & Eliminate: Name084 & 0.186351 \\
-          2   & Eliminate: Name125 & 0.089824 \\
-          3   & Eliminate: Name031 & 0.058376 \\
-          4   & Eliminate: Name214 & 0.036073 \\
-          5   & Eliminate: Name219 & 0.033883 \\
+          1   & Eliminate: Name059 & 0.216971 \\
+          2   & Eliminate: Name148 & 0.076670 \\
+          3   & Eliminate: Name197 & 0.038095 \\
+          4   & Eliminate: Name189 & 0.032015 \\
+          5   & Eliminate: Name092 & 0.031105 \\
         \bottomrule
       \end{tabular}
       \caption{$Z(t_F)$ table for the ICD-10 211 Sub-Chapters for the World}
@@ -1076,8 +1074,8 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Name084_ets.png}
-      \caption{Highest priority action from the ICD-10 211 Sub-Chapters for the World: \textit{Name084}}\label{fig:k11}
+      \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Name059_ets.png}
+      \caption{Highest priority action from the ICD-10 211 Sub-Chapters for the World: \textit{Name059}}\label{fig:k11}
     \end{figure}
 \end{enumerate}
 

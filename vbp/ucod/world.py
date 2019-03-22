@@ -106,6 +106,9 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     # Drop everything after the last year of full data
     deaths.drop(deaths[deaths["Year"] > self.options.max_year].index, inplace=True)
     
+    # Drop anything with an invalid ICD10 code
+    deaths.drop(deaths[deaths["Cause"].str.startswith("1")].index, inplace=True)
+    
     # "Except United Kingdom which include data for England and Wales, 
     #  Northern Ireland and Scotland which are also presented separately, 
     #  all the other data are mutually exclusive, for e.g. Martinique,
@@ -146,29 +149,30 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     
     deaths = self.load_with_cache("who_deaths", self.load_deaths, populations, unpopdata, country_codes)
     
+    # The Population column is deaths per country per year, and we
+    # want total population per year (for countries that reported
+    # mortality data):
+    deaths_per_year = deaths.groupby(["Year", "Country"]).aggregate({"Population": numpy.max}).groupby("Year").sum()
+
     if self.options.data_type == DataType.WORLD_ICD10_MINIMALLY_GROUPED:
-      deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum, "Population": numpy.sum})
-      deaths[self.get_value_column_name()] = (deaths["Deaths"] / deaths["Population"]) * self.crude_rate_amount()
+      deaths = deaths.groupby(["Year", "Cause"]).agg({"Deaths": numpy.sum})
       deaths.reset_index(level=deaths.index.names, inplace=True)
+      deaths["Population"] = deaths["Year"].apply(lambda y: deaths_per_year.loc[y])
+      deaths[self.get_value_column_name()] = (deaths["Deaths"] / deaths["Population"]) * self.crude_rate_amount()
       deaths["Date"] = deaths["Year"].apply(lambda year: pandas.datetime.strptime(str(year), "%Y"))
       deaths = deaths[["Date"] + [col for col in deaths if col != "Date"]]
     elif self.options.data_type == DataType.WORLD_ICD10_CHAPTERS_ALL:
-      deaths = self.process_grouping(deaths, False, False)
+      deaths = self.process_grouping(deaths, deaths_per_year, False, False)
     elif self.options.data_type == DataType.WORLD_ICD10_SUB_CHAPTERS:
-      deaths = self.process_grouping(deaths, False, True)
+      deaths = self.process_grouping(deaths, deaths_per_year, False, True)
     elif self.options.data_type == DataType.WORLD_ICD10_CHAPTER_ROOTS:
-      deaths = self.process_grouping(deaths, True, False)
+      deaths = self.process_grouping(deaths, deaths_per_year, True, False)
 
     self.write_spreadsheet(deaths, self.prefix_all("deaths"))
     
     return deaths
 
-  def process_grouping(self, deaths, roots_only, leaves_only):
-    # The Population column is deaths per country per year, and we
-    # want total population per year (for countries that reported
-    # mortality data):
-    deaths_per_year = deaths.groupby("Year").aggregate({"Population": numpy.sum})
-    
+  def process_grouping(self, deaths, deaths_per_year, roots_only, leaves_only):
     if roots_only:
       target = ICD.icd10_chapters_and_subchapters.roots_list()
     else:
@@ -190,7 +194,7 @@ class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
     return "Crude Rate" + super().get_value_column_name()
   
   def crude_rate_amount(self):
-    return 100000000.0
+    return 1000000.0
 
   def read_unpopdata(self, sheet_name):
     # https://population.un.org/wpp/Download/Standard/Population/
