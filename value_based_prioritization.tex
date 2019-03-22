@@ -8,8 +8,6 @@
 \usepackage{mathtools}
 \usepackage{csquotes}
 \usepackage{xurl}
-\usepackage{hyperref}
-\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
 \urlstyle{rm}
 \usepackage[super,comma,sort]{natbib}
 \bibliographystyle{plainnat}
@@ -30,6 +28,7 @@
 \raggedbottom
 \usepackage[bottom]{footmisc}
 \interfootnotelinepenalty=100 % Default 100, increase to reduce footnote splitting.
+\newcommand\nothing{}
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -222,7 +221,7 @@
 }
 
 @misc{centers2017underlying,
-  title        = {\textit{Underlying Cause of Death 1999-2017 on CDC WONDER Online Database, released December, 2018. Data are from the Multiple Cause of Death Files, 1999-2017, as compiled from data provided by the 57 vital statistics jurisdictions through the Vital Statistics Cooperative Program}},
+  title        = {{Underlying Cause of Death 1999-2017 on CDC WONDER Online Database, released December, 2018. Data are from the Multiple Cause of Death Files, 1999-2017, as compiled from data provided by the 57 vital statistics jurisdictions through the Vital Statistics Cooperative Program}},
   author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
   howpublished = {\url{https://wonder.cdc.gov/ucd-icd10.html}},
   note         = {Accessed: 2019-03-01},
@@ -331,29 +330,29 @@
 }
 
 @misc{censusestimates19001999,
-  title        = {\textit{Historical National Population Estimates}},
+  title        = {{Historical National Population Estimates}},
   author       = {{U.S. Census Bureau}},
   howpublished = {\url{https://www2.census.gov/programs-surveys/popest/tables/1900-1980/national/totals/popclockest.txt}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{worldbankopendata,
-  title        = {\textit{World Bank Open Data: United States SP.POP.TOTL}},
+  title        = {{World Bank Open Data: United States SP.POP.TOTL}},
   author       = {{World Bank}},
   howpublished = {\url{http://api.worldbank.org/v2/en/country/USA?downloadformat=csv}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{nbermortality,
-  title        = {\textit{Mortality Data: Vital Statistics NCHS' Multiple Cause of Death Data, 1959-2017}},
+  title        = {{Mortality Data: Vital Statistics NCHS' Multiple Cause of Death Data, 1959-2017}},
   author       = {{The National Bureau of Economic Research}},
   howpublished = {\url{https://www.nber.org/data/vital-statistics-mortality-data-multiple-cause-of-death.html}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{icdcomparabilityratios,
-  title        = {\textit{A Guide to State Implementation of ICD-10 for Mortality; Part II: Applying Comparability Ratios}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\@gobble{}}},
+  title        = {{A Guide to State Implementation of ICD-10 for Mortality; Part II: Applying Comparability Ratios}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\nothing}},
   howpublished = {\url{https://www.cdc.gov/nchs/data/statab/document-for-the-states.pdf}},
   note         = {Accessed: 2019-03-01},
 }
@@ -371,15 +370,15 @@
 }
 
 @misc{uspopulation19002001,
-  title        = {\textit{United States Population by Age, Race, and Sex, 1900-90, and 1991-2001}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\@gobble{}\@gobble{}}},
+  title        = {{United States Population by Age, Race, and Sex, 1900-90, and 1991-2001}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\nothing\nothing}},
   howpublished = {\url{https://www.cdc.gov/nchs/nvss/mortality/historical_population.htm}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{uslcod19001998,
-  title        = {\textit{Leading Causes of Death, 1900-1998}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\@gobble{}\@gobble{}\@gobble{}}},
+  title        = {{Leading Causes of Death, 1900-1998}},
+  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\nothing\nothing\nothing}},
   howpublished = {\url{https://www.cdc.gov/nchs/nvss/mortality_historical_data.htm}},
   note         = {Accessed: 2019-03-01},
 }
@@ -401,7 +400,7 @@
 }
 
 @misc{givewellcosteffectiveness,
-  title        = {\textit{Some considerations against more investment in cost-effectiveness estimates}},
+  title        = {{Some considerations against more investment in cost-effectiveness estimates}},
   author       = {{GiveWell.org}},
   howpublished = {\url{https://blog.givewell.org/2011/11/04/some-considerations-against-more-investment-in-cost-effectiveness-estimates/}},
   note         = {Accessed: 2019-03-01},
@@ -445,7 +444,7 @@
 }
 
 @misc{whomortality,
-  title        = {\textit{WHO Mortality Database}},
+  title        = {{WHO Mortality Database}},
   author       = {{World Health Organization}},
   howpublished = {\url{https://www.who.int/healthinfo/statistics/mortality_rawdata/en/}},
   note         = {Accessed: 2019-03-01},
@@ -464,7 +463,7 @@
 }
 
 @misc{tashman1991automatic,
-  title        = {\textit{Automatic forecasting software: A survey and evaluation}},
+  title        = {{Automatic forecasting software: A survey and evaluation}},
   author       = {Tashman, Leonard J and Leach, Michael L},
   year         = {1991},
   publisher    = {Elsevier},
@@ -480,6 +479,9 @@
 }
 
 \end{filecontents}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
 
 \begin{document}
 
