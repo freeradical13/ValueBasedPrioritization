@@ -55,7 +55,7 @@ class DataType(vbp.DataSourceDataType):
   # from https://www.cdc.gov/nchs/data/dvs/comp2.pdf
   US_ICD_LONGTERM_COMPARABLE_LEADING = enum.auto()
 
-class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
+class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
 
   # Population estimates (some mid-year) used to calculate death rates shown in Vital Statistics of the United States
   # https://www.cdc.gov/nchs/nvss/mortality/historical_population.htm
@@ -528,7 +528,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
         }
         counts[file_year] = count_years
 
-        count_years["ICD Revision"] = UnderlyingCausesOfDeathUnitedStates.mortality_uspopulation.loc[file_year]["ICDRevision"]
+        count_years["ICD Revision"] = UCODUnitedStates.mortality_uspopulation.loc[file_year]["ICDRevision"]
         self.print_processing_csv(i, csv, csvs)
         
         df, scale = self.get_mortality_data(csv, file_year)

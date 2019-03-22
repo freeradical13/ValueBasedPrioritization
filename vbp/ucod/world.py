@@ -18,7 +18,7 @@ class DataType(vbp.DataSourceDataType):
   WORLD_ICD10_CHAPTER_ROOTS = enum.auto()
   WORLD_ICD10_SUB_CHAPTERS = enum.auto()
 
-class UnderlyingCausesOfDeathWorld(vbp.ucod.icd.ICDDataSource):
+class UCODWorld(vbp.ucod.icd.ICDDataSource):
   def initialize_parser(self, parser):
     super().initialize_parser(parser)
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)

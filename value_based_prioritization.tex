@@ -662,19 +662,21 @@ First, outline the parameters:
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
-$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death. This example starts by looking at the ICD-10\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.} 113 Selected Causes of Death list for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run count UnderlyingCausesOfDeathUnitedStates}}:
+$A(t)$ is a set of actions which would eliminate the groups of underlying causes of death as classified by the International Classification of Diseases (ICD)\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.}.
+
+This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run list UCODUnitedStates}}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
 
 \begin{equation*}
   \begin{gathered}
     A(t) = \{\\
-    A_1(t) = \textrm{Eliminate: Ischemic heart diseases},\\
-    A_2(t) = \textrm{Eliminate: Malignant neoplasms\ldots},\\
+    A_1(t) = \textrm{Eliminate: Heart disease},\\
+    A_2(t) = \textrm{Eliminate: Cancer},\\
     \textrm{\ldots}\\
     \}
   \end{gathered}
 \end{equation*}
 
-Review the list of actions\footnote{\texttt{python3 -m vbp.run list UnderlyingCausesOfDeathUnitedStates}} and hypothesize scale functions. Examples:
+Review the list of actions and hypothesize scale functions. Examples:
 
 \begin{itemize}
   \item $S_1(A_i) = 1$
@@ -695,7 +697,7 @@ Review the list of actions\footnote{\texttt{python3 -m vbp.run list UnderlyingCa
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the example scale functions, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run manual\char`_scale\char`_functions -a -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UnderlyingCausesOfDeathUnitedStates S4}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run manual\char`_scale\char`_functions -a -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UCODUnitedStates S4}}:
 
 \begin{table}[H]
   \centering
@@ -719,20 +721,18 @@ For example, see Table \ref{table:exscaletable}:
   \centering
   \begin{tabular}{lc}
     \toprule
-      Action                                 & $S_4$ \\
+      Action (Eliminate: \ldots) & $S_4$ \\
     \midrule
-      Eliminate: Assault (homicide)\ldots    & 0.1   \\
-      Eliminate: Legal intervention          & 0.1   \\
-      Eliminate: Operations of war\ldots     & 0.1   \\
+      Homicide                   & 0.1   \\
     \bottomrule
   \end{tabular}
-  \caption{Example scale function table}
+  \caption{Example scale function table for the longterm comparable leading causes of death for the United States}
   \label{table:exscaletable}
 \end{table}
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}). For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Ischemic heart diseases"}}, see Table \ref{table:daa1}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}). For example, for \textit{Cancer}\footnote{\texttt{python3 -m vbp.run action\char`_data UCODUnitedStates Cancer}}, see Table \ref{table:daa1}:
 
 \begin{table}[H]
   \centering
@@ -740,22 +740,23 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
     \toprule
       Year   & Crude Rate \\
     \midrule
-      1999   &      189.8 \\
-      2000   &      183.1 \\
+      1900   &  61.612658 \\
+      1901   &  63.969191 \\
       \ldots &     \ldots \\
-      2017   &      112.3 \\
+      2016   & 185.319100 \\
+      2017   & 184.217584 \\
     \bottomrule
   \end{tabular}
-  \caption{Crude rate of deaths per year for \textit{Ischemic heart diseases}}
+  \caption{Crude rate of deaths per year for \textit{Cancer} for the Longterm comparable leading causes of death for the United States}
   \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 "Ischemic heart diseases"}}, see Figure \ref{fig:neoplasmregs}:
+Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Cancer}\footnote{\texttt{python3 -m vbp.run predict UCODUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 Cancer}}, see Figure \ref{fig:fig1}:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{results/UCOD_1999_2017_ICD10_113_CAUSES_LEAVES_Ischemic_heart_diseases_ets.png}
-  \caption{Exponential smoothing functions $ETS(A,A*,N),\phi=0.98$ using Holt's linear trend method for \textit{Ischemic heart diseases} for the ICD-10 113 Selected Causes of Death list for the United States}\label{fig:neoplasmregs}
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_LONGTERM_COMPARABLE_LEADING_Cancer_ets.png}
+  \caption{Exponential smoothing functions $ETS(A,A*,N),\phi=0.98$ using Holt's linear trend method for \textit{Cancer} for the Longterm comparable leading causes of death for the United States}\label{fig:fig1}
 \end{figure}
 
 Scedasticity, forecast uncertainty, and cross-validation are not considered because it's not clear how to automate processing of such data to tune or choose models.
@@ -766,13 +767,13 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
   \centering
   \begin{tabular}{lcc}
     \toprule
-      $R_i(D(A))$       & AICc           & Predicted       \\
+      $R_i(D(A))$       & AICc            & Predicted       \\
     \midrule
-      $\bm{ETS(A,A,N)}$ & \textbf{56.78} & \textbf{105.01} \\
-      $ETS(A,A_d,N)$    & 63.14          & 105.33          \\
+      $\bm{ETS(A,A,N)}$ & \textbf{128.37} & \textbf{180.73} \\
+      $ETS(A,A_d,N)$    & 128.83          & 181.29          \\
     \bottomrule
   \end{tabular}
-  \caption{Example AICc values of $R_i(D(A))$ for \textit{Ischemic heart diseases}}
+  \caption{Example AICc values of $R_i(D(A))$ for \textit{Cancer} for the Longterm comparable leading causes of death for the United States}
   \label{table:choosem}
 \end{table}
 
@@ -784,12 +785,12 @@ Use each $M(A(t_F))$'s predicted value and generate all of the relative $B(t_F)$
     \toprule
       Action  & $B(t_F)$ & $S_1$  & $S_3$  \\
     \midrule
-      Action1 & 0.09     & 1.0    & 0.54   \\
-      Action2 & 0.07     & 1.0    & 0.80   \\
+      Name02  & 0.305    & 1      & 0.682  \\
+      Name18  & 0.281    & 1      & 0.634  \\
       \ldots  & \ldots   & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
-  \caption{Example $B(t_F)$ values and model-based scale function values}
+  \caption{Example $B(t_F)$ values and model-based scale function values for the Longterm comparable leading causes of death for the United States}
   \label{table:btable}
 \end{table}
 
@@ -801,46 +802,71 @@ Combine the table above with the manually calculated scale functions table \ref{
     \toprule
       Action  & $B(t_F)$ & $S_1$  & $S_2$  & $S_3$  & $S_4$  \\
     \midrule
-      Action1 & 0.09     & 1.0    & 0.39   & 0.54   & 1      \\
-      Action2 & 0.07     & 1.0    & 0.54   & 0.80   & 1      \\
-      \ldots  & \ldots   & \ldots & \ldots & \ldots \\
+      Name02  & 0.305    & 1      & 0.386  & 0.682  & 1      \\
+      Name18  & 0.281    & 1      & 0.435  & 0.634  & 1      \\
+      \ldots  & \ldots   & \ldots & \ldots & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
-  \caption{Example $B(t_F)$ values with all scale function values}
+  \caption{Example $B(t_F)$ values with all scale function values for the Longterm comparable leading causes of death for the United States}
   \label{table:btablewithall}
 \end{table}
 
 Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions.
 
-For the parameters and data in this example, the results are\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}} in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
+For the longterm comparable leading causes of death for the United States, the results\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}} are in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
 
-% US_ICD10_113_SELECTED_CAUSES_LEAVES
+% US_ICD_LONGTERM_COMPARABLE_LEADING
 \begin{table}[H]
   \centering
   \begin{tabular}{clc}
     \toprule
       $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
     \midrule
-      1   & Name129 & 0.034025 \\
-      2   & Name074 & 0.024781 \\
-      3   & Name007 & 0.023725 \\
-      4   & Name060 & 0.015351 \\
-      5   & Name080 & 0.015007 \\
+      1   & Name02 & 0.080375 \\
+      2   & Name18 & 0.077476 \\
+      3   & Name25 & 0.034373 \\
+      4   & Name21 & 0.025423 \\
+      5   & Name26 & 0.014776 \\
     \bottomrule
   \end{tabular}
-  \caption{$Z(t_F)$ table for the highest priority actions from the 113 Selected Causes of Death list for the United States}
+  \caption{$Z(t_F)$ table for the Longterm comparable leading causes of death for the United States}
   \label{table:ztable1}
 \end{table}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_LEAVES/Name129_ets.png}
-  \caption{Highest priority action from the 113 Selected Causes of Death list for the United States: \textit{Name129}}\label{fig:k1}
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_LONGTERM_COMPARABLE_LEADING/Name02_ets.png}
+  \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{Name02}}\label{fig:k1}
 \end{figure}
 
 The same analysis is run on other mutually exclusive groupings of causes of death:
 
 \begin{enumerate}
+  \vfill\eject
+  % US_ICD10_113_SELECTED_CAUSES_LEAVES
+  \item ICD-10 113 Cause List for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
+    \begin{table}[H]
+      \centering
+      \begin{tabular}{clc}
+        \toprule
+          $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+        \midrule
+          1   & Name129 & 0.034025 \\
+          2   & Name074 & 0.024781 \\
+          3   & Name007 & 0.023725 \\
+          4   & Name060 & 0.015351 \\
+          5   & Name080 & 0.015007 \\
+        \bottomrule
+      \end{tabular}
+      \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States}
+      \label{table:ztable2}
+    \end{table}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_LEAVES/Name129_ets.png}
+      \caption{Highest priority action from the ICD-10 113 Cause List for the United States: \textit{Name129}}\label{fig:k2}
+    \end{figure}
+
   \vfill\eject
   % US_ICD10_113_SELECTED_CAUSES_ALL
   \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
@@ -891,31 +917,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Name056}}\label{fig:k3}
     \end{figure}
 
-  \vfill\eject
-  % US_ICD_LONGTERM_COMPARABLE_LEADING
-  \item Longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999} in Table \ref{table:ztable4} and Figure \ref{fig:k4}:
-    \begin{table}[H]
-      \centering
-      \begin{tabular}{clc}
-        \toprule
-          $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-        \midrule
-          1   & Name02 & 0.080375 \\
-          2   & Name18 & 0.077476 \\
-          3   & Name25 & 0.034373 \\
-          4   & Name21 & 0.025423 \\
-          5   & Name26 & 0.014776 \\
-        \bottomrule
-      \end{tabular}
-      \caption{$Z(t_F)$ table for the Longterm comparable leading causes of death for the United States}
-      \label{table:ztable4}
-    \end{table}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.5\textwidth]{results/US_ICD_LONGTERM_COMPARABLE_LEADING/Name02_ets.png}
-      \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{Name02}}\label{fig:k4}
-    \end{figure}
-  
   \vfill\eject
   % US_ICD10_CHAPTERS
   \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
@@ -1110,6 +1111,20 @@ TODO
 Notes on Section \ref{section-example}:
 
 \begin{enumerate}
+  \item \label{generateuslongterm} To generate the longterm comparable leading causes of death for the United States:
+    \begin{enumerate}
+      \item Generate data from 1959 for all long-term, comparable, leading causes of death\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf}}}:
+      
+            \texttt{python3 -m vbp.run prepare\char`_data UCODUnitedStates}
+
+      \item Rows 1900:1957 and the sheet \enquote{Comparability Ratios} in comparable\_ucod\_estimates.xlsx were manually input from \url{https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf}.
+      \item Open comparable\_data\_since\_1959.xlsx and copy rows 1959:Present.
+      \item Open comparable\_ucod\_estimates.xlsx and paste on top starting at 1959.
+      \item Process comparable\_ucod\_estimates.xlsx with its \enquote{Comparability Ratios} sheet to generate comparable\_ucod\_estimates\_ratios\_applied.xlsx:
+      
+            \texttt{python3 -m vbp.run prepare\char`_data UCODUnitedStates --comparable-ratios}
+
+    \end{enumerate}
   \item Age adjustment\footnote{\scriptsize{\url{https://seer.cancer.gov/seerstat/tutorials/aarates/definition.html}}} is not performed on crude rates because the goal of the example is to predict future \textit{relative} death rates which already implicitly takes into account population age changes over time.
   \item The WHO Mortality Database population and death statistics are quite incomplete, reporting only about $\frac{1}{3}$ of the world population and about $\frac{1}{3}$ of world deaths:
     \begin{figure}[H]
