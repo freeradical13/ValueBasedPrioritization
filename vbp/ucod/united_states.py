@@ -278,7 +278,7 @@ class UnderlyingCausesOfDeathUnitedStates(vbp.ucod.icd.ICDDataSource):
 
   @staticmethod
   def get_data_types_enum_default():
-    return DataType.US_ICD10_113_SELECTED_CAUSES_LEAVES
+    return DataType.US_ICD_LONGTERM_COMPARABLE_LEADING
 
   def run_load(self):
     if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS or \
