@@ -19,7 +19,7 @@
 \usepackage{geometry}
 \geometry{top=1cm,bottom=1.5cm,left=2cm,right=2cm,includehead,includefoot}
 \setlength{\columnsep}{7mm} % Column separation width
-\renewcommand*{\thefootnote}{\roman{footnote}} % Use symbols for footnotes
+\renewcommand*{\thefootnote}{\roman{footnote}}
 \renewcommand*{\bibfont}{\raggedright}
 \usepackage{float}
 \usepackage{graphicx}
@@ -1083,7 +1083,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 
 \section{Discussion}
 
-\enquote{Substantial research remains to develop robust and unbiased methods for measuring trends in case fatality rates, survival times, and disability due to specific causes, let alone collecting such data across all regions of the world. Despite these uncertainties, projections provide a useful perspective on population health trends and health policies, provided that they are interpreted with a degree of caution. Projections enable us to appreciate better the implications for health and health policy of currently observed trends, and the likely impact of fairly certain future trends, such as the ageing of the population, and the continuation of the epidemiological transition in developing countries.}\cite{mathers2006projections}
+TODO
 
 % Column break before the Bibliography.
 \vfill\eject
@@ -1100,12 +1100,14 @@ Notes on Section \ref{section-example}:
 
 \begin{enumerate}
   \item Age adjustment\footnote{\scriptsize{\url{https://seer.cancer.gov/seerstat/tutorials/aarates/definition.html}}} is not performed on crude rates because the goal of the example is to predict future \textit{relative} death rates which already implicitly takes into account population age changes over time.
-  \item The WHO Mortality Database population and death statistics are poorly reported before 1999 (and slightly after 2010), and for the world generally with only about $\frac{1}{3}$ of the world reported:
+  \item The WHO Mortality Database population and death statistics are quite incomplete, reporting only about $\frac{1}{3}$ of the world population and about $\frac{1}{3}$ of world deaths:
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\textwidth]{results/who_mortality_db_population_deaths.png}
       \caption{WHO Mortality Database: Reported Population and Deaths}
     \end{figure}
+  \item \enquote{Substantial research remains to develop robust and unbiased methods for measuring trends in case fatality rates, survival times, and disability due to specific causes, let alone collecting such data across all regions of the world. Despite these uncertainties, projections provide a useful perspective on population health trends and health policies, provided that they are interpreted with a degree of caution. Projections enable us to appreciate better the implications for health and health policy of currently observed trends, and the likely impact of fairly certain future trends, such as the ageing of the population, and the continuation of the epidemiological transition in developing countries.}\cite{mathers2006projections}
+  \item \enquote{Accuracy in diagnosing causes of death still varies from one country to another. In addition the process of coding underlying causes of death involves some extent of misattribution or miscoding even in countries where causes are assigned by medically qualified staff. Main reasons are incorrect or systematic biases in diagnosis, incorrect or incomplete death certificates, misinterpretation of ICD rules for selection of the underlying cause, and variations in the use of coding categories for unknown and ill-defined causes.}\footnote{\scriptsize{\url{https://apps.who.int/healthinfo/statistics/mortality/whodpms/help/desc.htm}}}
 \end{enumerate}
 
 \end{document}
