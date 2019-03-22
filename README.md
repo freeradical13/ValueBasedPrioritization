@@ -106,3 +106,12 @@ is used that needs it.
 
 When testing, writing data spreadsheets takes a lot of time and may
 be avoided with --do-not-write-spreadsheets.
+
+### Creating a new Data Source
+
+Review vbp/example.py for a simple example. The basic process is:
+
+1. Create a sub-class of vbp.DataSource in somename.py
+1. Implement all `@abc.abstractmethod` methods and override any
+   other superclass methods as needed.
+1. Import somename.py at the top of vbp/run.py
