@@ -478,6 +478,17 @@
   note         = {\url{http://www.exponentialsmoothing.net/}},
 }
 
+@InCollection{sep-rationalism-empiricism,
+  author       = {Markie, Peter},
+  title        = {Rationalism vs. Empiricism},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  note         = {\url{https://plato.stanford.edu/archives/fall2017/entries/rationalism-empiricism/}},
+  year         = {2017},
+  edition      = {Fall 2017},
+  publisher    = {Metaphysics Research Lab, Stanford University},
+}
+
 \end{filecontents}
 
 \usepackage{hyperref}
@@ -545,7 +556,7 @@ This article proposes a method called Value-Based Prioritization which builds a 
 
 \section{How to do an Action?}
 
-Given answers to \enquote{Why?} and \enquote{What?}, how to implement actions is usually best answered with the scientific method\cite{scientific-method}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
+Given answers to \enquote{Why?} and \enquote{What?}, how to implement actions is usually best answered with the scientific method\cite{scientific-method,sep-rationalism-empiricism}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
 
 \section{Value-Based Prioritization}
 
@@ -702,7 +713,7 @@ Create a table listing all actions as rows and all \textit{manually calculated} 
   \label{table:scaletable}
 \end{table}
 
-For example:
+For example, see Table \ref{table:exscaletable}:
 
 \begin{table}[H]
   \centering
@@ -721,7 +732,7 @@ For example:
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}). For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Ischemic heart diseases"}}:
+$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}). For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run action\char`_data UnderlyingCausesOfDeathUnitedStates "Ischemic heart diseases"}}, see Table \ref{table:daa1}:
 
 \begin{table}[H]
   \centering
@@ -739,7 +750,7 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
   \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 "Ischemic heart diseases"}}:
+Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ischemic heart diseases}\footnote{\texttt{python3 -m vbp.run predict UnderlyingCausesOfDeathUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 "Ischemic heart diseases"}}, see Figure \ref{fig:neoplasmregs}:
 
 \begin{figure}[H]
   \centering
@@ -749,7 +760,7 @@ Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Ische
 
 Scedasticity, forecast uncertainty, and cross-validation are not considered because it's not clear how to automate processing of such data to tune or choose models.
 
-For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc. For example:
+For each model, calculate AICc and choose the model $M(A(t_F))$ that has the lowest AICc. For example, see Table \ref{table:choosem}:
 
 \begin{table}[H]
   \centering
@@ -765,7 +776,7 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
   \label{table:choosem}
 \end{table}
 
-Use each $M(A(t_F))$'s predicted value and generate all of the relative $B(t_F)$ values (setting negative values to 0) along with any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example:
+Use each $M(A(t_F))$'s predicted value and generate all of the relative $B(t_F)$ values (setting negative values to 0) along with any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example, see Table \ref{table:btable}:
 
 \begin{table}[H]
   \centering
@@ -782,7 +793,7 @@ Use each $M(A(t_F))$'s predicted value and generate all of the relative $B(t_F)$
   \label{table:btable}
 \end{table}
 
-Combine the table above with the manually calculated scale functions table \ref{table:scaletable} and any other calculated scale functions (e.g. $S_2(A_i)$) to create the final table with all scale function values. For example:
+Combine the table above with the manually calculated scale functions table \ref{table:scaletable} and any other calculated scale functions (e.g. $S_2(A_i)$) to create the final table with all scale function values. For example, see Table \ref{table:btablewithall}:
 
 \begin{table}[H]
   \centering
