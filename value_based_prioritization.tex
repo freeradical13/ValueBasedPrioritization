@@ -664,7 +664,7 @@ First, outline the parameters:
 
 $A(t)$ is a set of actions which would eliminate the groups of Underlying Causes of Death (UCOD) as classified by the International Classification of Diseases (ICD)\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.}.
 
-This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run list UCODUnitedStates}}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
+This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run list UCODUnitedStates}}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.} (this example will be followed by various other groupings of UCOD for the U.S., as well as groupings for the world):
 
 \begin{equation*}
   \begin{gathered}
@@ -689,7 +689,7 @@ Review the list of actions and hypothesize scale functions. Examples:
                   \newline\newline
                   $f(A_i) = M'(A_i(t_F)), a=0.5, b=1$
                   \newline\newline
-                  Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize\footnote{\scriptsize{\url{https://en.wikipedia.org/wiki/Normalization_(statistics)}}} into $[0.5,1]$ relative to other actions.
+                  Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize into $[0.5,1]$ relative to other actions.
   \item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if political/cultural} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                   \newline\newline
                   Essentially remove actions that are primarily political and/or cultural.
@@ -843,78 +843,78 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 
 \begin{enumerate}
   \vfill\eject
-  % US_ICD10_113_SELECTED_CAUSES_LEAVES
-  \item ICD-10 113 Cause List for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
+  % US_ICD_113_SELECTED_CAUSES_LEAVES
+  \item ICD-9 and ICD-10 113 Cause List for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
           $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
         \midrule
-          1   & Name129 & 0.034025 \\
-          2   & Name074 & 0.024781 \\
-          3   & Name007 & 0.023725 \\
-          4   & Name060 & 0.015351 \\
-          5   & Name080 & 0.015007 \\
+          1   & Name029 & 0.042592 \\
+          2   & Name029 & 0.038454 \\
+          3   & Name056 & 0.028337 \\
+          4   & Name072 & 0.021745 \\
+          5   & Name025 & 0.019720 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States}
+      \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States}
       \label{table:ztable2}
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_LEAVES/Name129_ets.png}
-      \caption{Highest priority action from the ICD-10 113 Cause List for the United States: \textit{Name129}}\label{fig:k2}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Name029_ets.png}
+      \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Name029}}\label{fig:k2}
     \end{figure}
 
   \vfill\eject
-  % US_ICD10_113_SELECTED_CAUSES_ALL
-  \item ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
+  % US_ICD_113_SELECTED_CAUSES_ALL
+  \item ICD-9 and ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
           $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
         \midrule
-          1   & Name018 & 0.052470 \\
-          2   & Name056 & 0.050141 \\
-          3   & Name108 & 0.031641 \\
-          4   & Name006 & 0.020573 \\
-          5   & Name017 & 0.017620 \\
+          1   & Name048 & 0.049639 \\
+          2   & Name009 & 0.031924 \\
+          3   & Name082 & 0.021617 \\
+          4   & Name082 & 0.019517 \\
+          5   & Name111 & 0.019465 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States, including subtotals}
+      \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
       \label{table:ztable2}
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_ALL/Name018_ets.png}
-      \caption{Highest priority action from the ICD-10 113 Cause List for the United States, including subtotals: \textit{Name018}}\label{fig:k2}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Name048_ets.png}
+      \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Name048}}\label{fig:k2}
     \end{figure}
 
   \vfill\eject
-  % US_ICD10_113_SELECTED_CAUSES_ROOTS
-  \item ICD-10 113 Cause List for the United States with only top-level groupings\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
+  % US_ICD_113_SELECTED_CAUSES_ROOTS
+  \item ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
         \toprule
           $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
         \midrule
-          1   & Name056 & 0.131958 \\
-          2   & Name006 & 0.045660 \\
-          3   & Name017 & 0.045493 \\
-          4   & Name110 & 0.017201 \\
-          5   & Name073 & 0.013716 \\
+          1   & Name01 & 0.113827 \\
+          2   & Name27 & 0.049390 \\
+          3   & Name27 & 0.044591 \\
+          4   & Name51 & 0.044143 \\
+          5   & Name05 & 0.039510 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 113 Cause List for the United States with only top-level groupings}
+      \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings}
       \label{table:ztable3}
     \end{table}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.5\textwidth]{results/US_ICD10_113_SELECTED_CAUSES_ROOTS/Name056_ets.png}
-      \caption{Highest priority action from the ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Name056}}\label{fig:k3}
+      \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Name01_ets.png}
+      \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Name01}}\label{fig:k3}
     \end{figure}
 
   \vfill\eject

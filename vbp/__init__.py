@@ -575,6 +575,7 @@ class DataSource(abc.ABC):
       os.makedirs(self.options.cachedir)
     path = os.path.join(self.options.cachedir, name + ".pkl")
     df.to_pickle(path)
+    print("Cached {} to {}".format(name, path))
     
   def load_with_cache(self, name, loadfunc, *args):
     result = self.check_cache(name)
@@ -928,6 +929,22 @@ class DictTree(collections.defaultdict):
       if not leaves_only or (leaves_only and len(node) == 0):
         accumulator.append(self.value)
 
+  def recursive_dict(self, leaves_only):
+    accumulator = {}
+    self.recursive_dict_process(self, leaves_only, accumulator)
+    return accumulator
+  
+  def recursive_dict_process(self, node, leaves_only, accumulator):
+    for k, v in node.items():
+      if isinstance(v, DictTree):
+        v.recursive_dict_process(v, leaves_only, accumulator)
+        if not leaves_only and v.value is not None:
+          accumulator[k] = v.value
+      elif isinstance(v, dict):
+        self.recursive_dict_process(v, leaves_only, accumulator)
+      else:
+        accumulator[k] = v
+
   def roots_list(self):
     accumulator = []
     for v in self.values():
@@ -936,3 +953,23 @@ class DictTree(collections.defaultdict):
       else:
         accumulator.append(v)
     return accumulator
+
+  def find_value(self, func):
+    return self.find_value_recursive(self, func)
+
+  def find_value_recursive(self, node, func):
+    for k, v in node.items():
+      if self.value is not None and func(self.value):
+        return self.value
+      if isinstance(v, DictTree):
+        result = v.find_value_recursive(v, func)
+        if result is not None:
+          return result
+      elif isinstance(v, dict):
+        result = self.find_value_recursive(v, func)
+        if result is not None:
+          return result
+      else:
+        if v is not None and func(v):
+          return v
+    return None

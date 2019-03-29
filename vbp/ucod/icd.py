@@ -343,7 +343,7 @@ class ICDDataSource(vbp.TimeSeriesDataSource):
   def icd_query(self, codes):
     result = ""
     
-    if codes != "Residual":
+    if codes != "Residual" and codes != "NaN":
       atol = 1e-08
       codes = codes.replace("*", "")
       codes_pieces = codes.split(",")
@@ -374,6 +374,8 @@ class ICDDataSource(vbp.TimeSeriesDataSource):
           else:
             result += "icdint == {}".format(ICD.toint(codes_piece))
         result += ")"
+    else:
+      result = "False"
 
     return result
 

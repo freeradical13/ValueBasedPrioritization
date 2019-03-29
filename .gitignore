@@ -5,6 +5,7 @@ value_based_prioritization.bib
 /output
 /cache
 /data/ucod/united_states/mort/
+/data/ucod/world/Morticd*
 
 *.pyc
 __pycache__
