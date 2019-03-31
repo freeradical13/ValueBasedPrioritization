@@ -4,6 +4,12 @@
 
 Academic article: https://github.com/freeradical13/ValueBasedPrioritization/raw/master/value_based_prioritization.pdf
 
+## Installation
+
+https://pypi.org/project/vbp/
+
+    pip3 install vbp
+
 ## vbp
 
 Value Based Prioritization (`vbp`) uses value theory to quantitatively
