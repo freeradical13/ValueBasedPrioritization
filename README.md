@@ -76,9 +76,9 @@ list; otherwise, without such a list, all actions are processed.
 
 Examples:
 
-    python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates
+    python3 -m vbp.run modeled_value_based_prioritization UCODUnitedStates
 
-    python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates --do-not-obfuscate "Ischemic heart diseases" Malaria
+    python3 -m vbp.run modeled_value_based_prioritization UCODUnitedStates --do-not-obfuscate "Ischemic heart diseases" Malaria
 
 ### Exponential Smoothing
 
@@ -116,7 +116,7 @@ Generate `data/ucod/united_states/comparable_data_since_1959.xlsx` for
 all long-term, comparable, leading causes of death in
 https://www.cdc.gov/nchs/data/dvs/lead1900_98.pdf:
 
-    python3 -m vbp.run prepare_data UnderlyingCausesOfDeathUnitedStates
+    python3 -m vbp.run prepare_data UCODUnitedStates
 
 Rows 1900:1957 and the sheet `Comparability Ratios` in
 `data/ucod/united_states/comparable_ucod_estimates.xlsx` were manually
@@ -131,11 +131,11 @@ Process `comparable_ucod_estimates.xlsx` with its
 `Comparability Ratios` sheet to generate
 `comparable_ucod_estimates_ratios_applied.xlsx`:
 
-    python3 -m vbp.run prepare_data UnderlyingCausesOfDeathUnitedStates --comparable-ratios
+    python3 -m vbp.run prepare_data UCODUnitedStates --comparable-ratios
 
 Final output:
 
-    python3 -m vbp.run modeled_value_based_prioritization UnderlyingCausesOfDeathUnitedStates --data-type UCOD_LONGTERM_COMPARABLE_LEADING
+    python3 -m vbp.run modeled_value_based_prioritization UCODUnitedStates --data-type UCOD_LONGTERM_COMPARABLE_LEADING
 
 ### World
 

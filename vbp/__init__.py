@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.2.8"
+VERSION = "0.2.9"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
