@@ -46,7 +46,7 @@ on `vbp.TimeSeriesDataSource`.
 
 Built-in Modeled VBPs include Underlying Cause of Death models for
 the United States (`vbp.ucod.united_states.UCODUnitedStates`) and the
-World (`vbp.ucod.united_states.world.UCODWorld`). These
+World (`vbp.ucod.world.UCODWorld`). These
 data sources both inherit from `vbp.ucod.icd.ICDDataSource` which
 inherits from `vbp.TimeSeriesDataSource`.
 
