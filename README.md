@@ -78,7 +78,7 @@ Examples:
 
     python3 -m vbp.run modeled_value_based_prioritization UCODUnitedStates
 
-    python3 -m vbp.run modeled_value_based_prioritization UCODUnitedStates --do-not-obfuscate "Ischemic heart diseases" Malaria
+    python3 -m vbp.run modeled_value_based_prioritization UCODUnitedStates --do-not-obfuscate "Heart disease" Cancer
 
 ### Exponential Smoothing
 
