@@ -93,6 +93,9 @@ class UCODWorld(vbp.ucod.icd.ICDDataSource):
       raise ValueError("--raw-files-directory is not a directory")
 
   def load_deaths(self, populations, unpopdata, country_codes):
+    
+    print("Loading death data. This will take a while but it will be cached for the future...")
+    
     deaths = pandas.concat([
       self.read_icd10(os.path.join(self.options.raw_files_directory, "Morticd10_part1")),
       self.read_icd10(os.path.join(self.options.raw_files_directory, "Morticd10_part2")),
