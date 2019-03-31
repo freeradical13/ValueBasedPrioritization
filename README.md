@@ -6,8 +6,31 @@ Academic article: https://github.com/freeradical13/ValueBasedPrioritization/raw/
 
 ## vbp
 
-Value Based Prioritization (vbp) uses value theory to quantitatively
+Value Based Prioritization (`vbp`) uses value theory to quantitatively
 prioritize potential actions to accomplish a goal.
+
+The `vbp.run` module may be used from the command line to perform
+different VBP actions such as listing actions (`list`), counting
+actions (`count`), predicting values (`predict`), running Modeled VBP
+(`modeled_value_based_prioritization`), and more. For usage, run:
+
+    python3 -m vbp.run
+
+Any non-terminal output goes to the `vbpoutput` sub-folder.
+
+Here is a simple example counting the number of groupings of
+underlying causes of death for the United States for the default data
+type:
+
+    python3 -m vbp.run count UCODUnitedStates
+
+Alternatively, if installed through `pip`, a `vbp` script wrapper may
+be used:
+
+    vbp count UCODUnitedStates
+
+The academic article above includes footnotes with details on how to
+run `vbp` to produce the output of each step.
 
 This package provides abstract classes and utility methods to run
 VBP, mostly focused on Modeled VBP which uses time series data to
@@ -26,29 +49,6 @@ the United States (`vbp.ucod.united_states.UCODUnitedStates`) and the
 World (`vbp.ucod.united_states.world.UCODWorld`). These
 data sources both inherit from `vbp.ucod.icd.ICDDataSource` which
 inherits from `vbp.TimeSeriesDataSource`.
-
-The `vbp.run` module may be used from the command line to perform
-different VBP actions such as listing actions (`list`), counting
-actions (`count`), predicting values (`predict`), running Modeled VBP
-(`modeled_value_based_prioritization`), and more. For usage, run:
-
-    python3 -m vbp.run
-
-Any non-screen output goes to the `vbpoutput` folder.
-
-Here is a simple example counting the number of groupings of
-underlying causes of death for the United States for the default data
-type:
-
-    python3 -m vbp.run count UCODUnitedStates
-
-Alternatively, if installed through pip, a vbp script wrapper may be
-used:
-
-    vbp count UCODUnitedStates
-
-The academic article above includes footnotes for each step with
-details on how to run `vbp`.
 
 ## Running
 
