@@ -21,11 +21,13 @@ class DataType(vbp.DataSourceDataType):
 class UCODWorld(vbp.ucod.icd.ICDDataSource):
   def initialize_parser(self, parser):
     super().initialize_parser(parser)
+    parser.add_argument("--data-world-who-country-codes", help="WHO World country codes file", default=os.path.join(self.get_data_dir(), "data/ucod/world/country_codes"))
+    parser.add_argument("--data-world-un-population", help="U.N. World population data file", default=os.path.join(self.get_data_dir(), "data/population/WPP2017_POP_F01_1_TOTAL_POPULATION_BOTH_SEXES.xlsx"))
+    parser.add_argument("--data-world-who-population", help="WHO World population data file", default=os.path.join(self.get_data_dir(), "data/ucod/world/pop"))
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
-    # The data before 1999 is spotty and throws off crude rates significantly
-    parser.add_argument("--min-year", help="The minimum year to use data from", type=int, default=1999)
+    parser.add_argument("--min-year", help="The minimum year to use data from", type=int, default=1999) # The data before 1999 is spotty and throws off crude rates significantly
     parser.add_argument("--max-year", help="The maximum year to use data from because not all data is reported", type=int, default=2015)
-    parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/world/")
+    parser.add_argument("--raw-files-directory", help="directory with raw files", default=os.path.join(self.default_cache_dir, "world"))
 
   @staticmethod
   def get_data_types_enum():
@@ -37,7 +39,7 @@ class UCODWorld(vbp.ucod.icd.ICDDataSource):
 
   def load_who_populations(self):
     populations = pandas.read_csv(
-      "data/ucod/world/pop",
+      self.options.data_world_who_population,
       usecols=["Country", "Year", "Pop1"],
     )
     populations.set_index(["Country", "Year"], inplace=True)
@@ -57,7 +59,7 @@ class UCODWorld(vbp.ucod.icd.ICDDataSource):
 
   def load_country_codes(self):
     country_codes = pandas.read_csv(
-      "data/ucod/world/country_codes",
+      self.options.data_world_who_country_codes,
       index_col=0,
       squeeze=True,
     )
@@ -149,6 +151,8 @@ class UCODWorld(vbp.ucod.icd.ICDDataSource):
     
     deaths = self.load_with_cache("who_deaths", self.load_deaths, populations, unpopdata, country_codes)
     
+    print("Processing input data...")
+    
     # The Population column is deaths per country per year, and we
     # want total population per year (for countries that reported
     # mortality data):
@@ -200,7 +204,7 @@ class UCODWorld(vbp.ucod.icd.ICDDataSource):
     # https://population.un.org/wpp/Download/Standard/Population/
     # https://population.un.org/wpp/Publications/Files/WPP2017_Methodology.pdf (Pages 30-31)
     unpopdata = pandas.read_excel(
-      "data/population/WPP2017_POP_F01_1_TOTAL_POPULATION_BOTH_SEXES.xlsx",
+      self.options.data_world_un_population,
       skiprows=range(0, 16),
       index_col=2,
       sheet_name=sheet_name,

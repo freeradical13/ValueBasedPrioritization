@@ -2,10 +2,10 @@ value_based_prioritization.bib
 /*xlsx*
 /*csv*
 /work
-/output
-/cache
-/data/ucod/united_states/mort/
-/data/ucod/world/Morticd*
+/vbpoutput
+/vbpcache
+/vbp/data/ucod/united_states/mort/
+/vbp/data/ucod/world/Morticd*
 
 *.pyc
 __pycache__

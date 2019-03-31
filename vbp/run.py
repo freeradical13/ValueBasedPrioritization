@@ -73,7 +73,12 @@ def add_data_source_subclasses(array, cl):
         array.append(subclass)
       add_data_source_subclasses(array, subclass)
 
-if __name__ == "__main__":
+def print_finished_ds(options):
+  if options is not None:
+    print("")
+    print("Any output files such as images and spreadsheets have been written to {}".format(os.path.abspath(options.output_dir)))
+
+def run_vbp():
   try:
     args = sys.argv[1:]
     
@@ -137,6 +142,7 @@ if __name__ == "__main__":
     options = parser.parse_args(args)
     if options.command_name == "modeled_value_based_prioritization":
       
+      first_ds = None
       data_types = get_data_types(data_source_classes, options)
       first = True
       for i, data_type in enumerate(data_types):
@@ -154,10 +160,14 @@ if __name__ == "__main__":
         print("")
         vbp.print_full_columns(b)
         first = False
+        first_ds = ds.options
+
+      print_finished_ds(first_ds)
         
     elif options.command_name == "predict":
       
       data_types = get_data_types(data_source_classes, options)
+      first_ds = None
       first = True
       for i, data_type in enumerate(data_types):
         if len(data_types) > 1:
@@ -173,12 +183,16 @@ if __name__ == "__main__":
         b = ds.predict()
         vbp.print_full_columns(b)
         first = False
+        first_ds = ds.options
+
+      print_finished_ds(first_ds)
       
     elif options.command_name == "list":
       
       data_types = get_data_types(data_source_classes, options)
 
       first = True
+      first_ds = None
       for i, data_type in enumerate(data_types):
         if len(data_types) > 1:
           if data_type is not None:
@@ -196,13 +210,17 @@ if __name__ == "__main__":
           options.output.write(os.linesep.join(numpy.sort(ds.get_possible_actions()).tolist()))
         options.output.write(os.linesep)
         first = False
+        first_ds = ds.options
 
       options.output.close()
+
+      print_finished_ds(first_ds)
       
     elif options.command_name == "count":
       
       data_types = get_data_types(data_source_classes, options)
       first = True
+      first_ds = None
       for i, data_type in enumerate(data_types):
         if len(data_types) > 1:
           if data_type is not None:
@@ -216,6 +234,9 @@ if __name__ == "__main__":
         ds.load(options.args)
         print(len(ds.get_possible_actions()))
         first = False
+        first_ds = ds.options
+
+      print_finished_ds(first_ds)
       
     elif options.command_name == "manual_scale_functions":
       
@@ -224,6 +245,7 @@ if __name__ == "__main__":
       
       data_types = get_data_types(data_source_classes, options)
       first = True
+      first_ds = None
       for i, data_type in enumerate(data_types):
         if len(data_types) > 1:
           if data_type is not None:
@@ -275,28 +297,38 @@ if __name__ == "__main__":
           raise NotImplementedError()
 
         first = False
+        first_ds = ds.options
+
+      print_finished_ds(first_ds)
       
     elif options.command_name == "action_data":
       
       ds = create_data_source(data_source_classes, options)
       ds.load(options.args)
       print(ds.get_action_data(options.action))
+      print_finished_ds(ds.options)
       
     elif options.command_name == "prepare_data":
       
       ds = create_data_source(data_source_classes, options)
       ds.ensure_options(options.args)
       ds.prepare_data()
+      print_finished_ds(ds.options)
       
     elif options.command_name == "test":
       
       ds = create_data_source(data_source_classes, options)
       ds.ensure_options(options.args)
       ds.test()
+      print_finished_ds(ds.options)
       
     else:
       raise NotImplementedError()
+    
   except:
     e = sys.exc_info()[0]
     if e != SystemExit:
       traceback.print_exc()
+
+if __name__ == "__main__":
+  run_vbp()

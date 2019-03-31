@@ -420,14 +420,15 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
     parser.add_argument("--average-ages", help="Compute average ages column with the specified column name", default="AverageAge")
     parser.add_argument("--average-age-range", help="Range over which to calculate the average age", type=int, default=5)
     parser.add_argument("--comparable-ratios", help="Process comparable ratios for raw mortality matrix for prepare_data", action="store_true", default=False)
-    parser.add_argument("--comparable-ratios-input-file", help="Comparable ratios file", default="data/ucod/united_states/comparable_ucod_estimates.xlsx")
+    parser.add_argument("--data-comparable-ratios-input-file", help="Comparable ratios file", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/comparable_ucod_estimates.xlsx"))
+    parser.add_argument("--data-comparability-ratio-tables", help="Comparable ratios file", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/Comparability_Ratio_tables.xls"))
+    parser.add_argument("--data-us-icd10-sub-chapters", help="Path to file for US_ICD10_SUB_CHAPTERS", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_SUB_CHAPTERS.txt"))
+    parser.add_argument("--data-us-icd10-chapters", help="Path to file for US_ICD10_CHAPTERS", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_CHAPTERS.txt"))
+    parser.add_argument("--data-us-icd10-minimally-grouped", help="Path to file for US_ICD10_MINIMALLY_GROUPED", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_MINIMALLY_GROUPED.txt"))
+    parser.add_argument("--data-us-icd10-113-selected-causes", help="Path to file for US_ICD10_113_SELECTED_CAUSES", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_113_SELECTED_CAUSES.txt"))
+    parser.add_argument("--data-us-icd-longterm-comparable-leading", help="Path to file for US_ICD_LONGTERM_COMPARABLE_LEADING", default=os.path.join(self.get_data_dir(), "data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx"))
     parser.add_argument("--download", help="If no files in --raw-files-directory, download and extract", action="store_true", default=True)
-    parser.add_argument("--file-us-icd10-sub-chapters", help="Path to file for US_ICD10_SUB_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_SUB_CHAPTERS.txt")
-    parser.add_argument("--file-us-icd10-chapters", help="Path to file for US_ICD10_CHAPTERS", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_CHAPTERS.txt")
-    parser.add_argument("--file-us-icd10-minimally-grouped", help="Path to file for US_ICD10_MINIMALLY_GROUPED", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_MINIMALLY_GROUPED.txt")
-    parser.add_argument("--file-us-icd10-113-selected-causes", help="Path to file for US_ICD10_113_SELECTED_CAUSES", default="data/ucod/united_states/Underlying Cause of Death, 1999-2017_US_ICD10_113_SELECTED_CAUSES.txt")
-    parser.add_argument("--file-us-icd-longterm-comparable-leading", help="Path to file for US_ICD_LONGTERM_COMPARABLE_LEADING", default="data/ucod/united_states/comparable_ucod_estimates_ratios_applied.xlsx")
-    parser.add_argument("--raw-files-directory", help="directory with raw files", default="data/ucod/united_states/mort/")
+    parser.add_argument("--raw-files-directory", help="directory with raw files", default=os.path.join(self.default_cache_dir, "united_states"))
     parser.add_argument("--test", help="Test")
 
   @staticmethod
@@ -581,17 +582,17 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
   
   def get_data_file(self):
     if self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS:
-      return self.options.file_us_icd10_sub_chapters
+      return self.options.data_us_icd10_sub_chapters
     elif self.options.data_type == DataType.US_ICD10_CHAPTERS:
-      return self.options.file_us_icd10_chapters
+      return self.options.data_us_icd10_chapters
     elif self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
-      return self.options.file_us_icd10_minimally_grouped
+      return self.options.data_us_icd10_minimally_grouped
     elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
-      return self.options.file_us_icd_longterm_comparable_leading
+      return self.options.data_us_icd_longterm_comparable_leading
     elif self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_ALL or \
          self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_LEAVES or \
          self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_ROOTS:
-      return self.options.file_us_icd10_113_selected_causes
+      return self.options.data_us_icd10_113_selected_causes
     else:
       raise NotImplementedError()
   
@@ -880,13 +881,13 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
       self.longterm_comparable_icd10(),
     )
 
-    output_file = os.path.abspath("data/ucod/united_states/comparable_data_since_1959.xlsx")
+    output_file = os.path.abspath(os.path.join(self.options.cachedir, "comparable_data_since_1959.xlsx"))
     df.to_excel(output_file)
     print("Created {}".format(output_file))
 
   def create_comparable(self):
-    comparability_ratios = pandas.read_excel(self.options.comparable_ratios_input_file, sheet_name="Comparability Ratios", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
-    comparable_ucods = pandas.read_excel(self.options.comparable_ratios_input_file, index_col="Year")
+    comparability_ratios = pandas.read_excel(self.options.data_comparable_ratios_input_file, sheet_name="Comparability Ratios", index_col=0, usecols=[0, 2, 4, 6, 8, 10]).fillna(1)
+    comparable_ucods = pandas.read_excel(self.options.data_comparable_ratios_input_file, index_col="Year")
     comparable_ucods = comparable_ucods.transform(self.transform_row, axis="columns", comparability_ratios=comparability_ratios)
     comparable_ucods.to_excel(self.get_data_file())
     print("Created {}".format(self.get_data_file()))
@@ -928,7 +929,7 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
       icd_codes_map = dict(zip(icd_codes, [{} for i in range(0, len(icd_codes))]))
     elif self.options.data_type == DataType.US_ICD_LONGTERM_COMPARABLE_LEADING:
       ulcl_codes = pandas.read_excel(
-        self.options.comparable_ratios_input_file,
+        self.options.data_comparable_ratios_input_file,
         index_col=0,
         sheet_name="Comparability Ratios",
         usecols=[0, 11],
@@ -993,7 +994,7 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
   
   def get_icd9_10_comparability_ratios(self):
     df = pandas.read_excel(
-      "data/ucod/united_states/Comparability_Ratio_tables.xls",
+      self.options.data_comparability_ratio_tables,
       header=None,
       skiprows=5,
       usecols="A:J",

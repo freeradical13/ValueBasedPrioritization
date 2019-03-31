@@ -16,7 +16,7 @@ may be used for Modeled VBP. The ExampleDataSource class demonstrates
 a simple data source based on TimeSeriesDataSource.
 
 Built-in Modeled VBPs include Underlying Cause of Death models for
-the United States (UCODUnitedStates) and the world (UCODWorld). These
+the United States (UCODUnitedStates) and the World (UCODWorld). These
 data sources both inherit from ICDDataSource which inherits from
 TimeSeriesDataSource.
 
@@ -133,6 +133,8 @@ class DataSource(abc.ABC):
   available_obfuscated_names = None
   model_fit_algorithms = {"lowest_aic": "AIC", "lowest_aicc": "AICc", "lowest_bic": "BIC"}
   default_model_fit_algorithm = "lowest_aicc"
+  default_cache_dir = "vbpcache"
+  default_output_dir = "vbpoutput"
 
   #######################
   # Main Public Methods #
@@ -196,12 +198,18 @@ class DataSource(abc.ABC):
     self.ensure_options(args)
     self.ensure_loaded()
 
+  def get_data_dir(self):
+    if os.path.isdir("vbp"):
+      return "vbp"
+    else:
+      return os.path.join(sys.prefix, "vbp")
+
   def ensure_options(self, args):
     if not hasattr(self, "options"):
       parser = create_parser()
       self.initialize_parser(parser)
       parser.add_argument("-b", "--best-fit", choices=list(self.model_fit_algorithms.keys()), default=self.default_model_fit_algorithm, help="Best fitting model algorithm")
-      parser.add_argument("--cachedir", help="cache directory", default="cache")
+      parser.add_argument("--cachedir", help="cache directory", default=self.default_cache_dir)
       parser.add_argument("--clean", action="store_true", help="first clean any existing generated data such as images", default=False)
       parser.add_argument("-d", "--hide-graphs", dest="show_graphs", action="store_false", help="hide graphs")
       data_type_choices = self.get_data_types_enum()
@@ -224,7 +232,7 @@ class DataSource(abc.ABC):
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=5)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.add_argument("--no-data-type-subdir", help="Do not create an output subdirectory based on the data type", dest="data_type_subdir", action="store_false")
-      parser.add_argument("-o", "--output-dir", help="output directory", default="output")
+      parser.add_argument("-o", "--output-dir", help="output directory", default=self.default_output_dir)
       parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
       parser.add_argument("-s", "--show-graphs", dest="show_graphs", action="store_true", help="verbose")
       parser.add_argument("-v", "--verbose", action="store_true", help="verbose", default=False)
@@ -595,6 +603,7 @@ class DataSource(abc.ABC):
       os.makedirs(self.options.cachedir)
     path = os.path.join(self.options.cachedir, name + ".pkl")
     if os.path.exists(path):
+      print("Reading cached data for {} from {}".format(name, path))
       return pandas.read_pickle(path)
     else:
       return None

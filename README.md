@@ -15,7 +15,7 @@ Prerequisites:
 
     python3 -m vbp.run -h
 
-Any non-screen output goes to the `output` folder.
+Any non-screen output goes to the `vbpoutput` folder.
 
 ## Running
 
