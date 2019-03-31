@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.1.6"
+VERSION = "0.2.3"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
@@ -202,7 +202,7 @@ class DataSource(abc.ABC):
     if os.path.isdir("vbp"):
       return "vbp"
     else:
-      return os.path.join(sys.prefix, "vbp")
+      return os.path.dirname(__file__)
 
   def ensure_options(self, args):
     if not hasattr(self, "options"):

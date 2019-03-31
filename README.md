@@ -2,18 +2,35 @@
 
 ## Article
 
-* PDF: [value_based_prioritization.pdf](value_based_prioritization.pdf)
-* TeX Source: [value_based_prioritization.tex](value_based_prioritization.tex)
+Academic article: https://github.com/freeradical13/ValueBasedPrioritization/raw/master/value_based_prioritization.pdf
 
-## Source Code
+## vbp
 
-Prerequisites:
+Value Based Prioritization (vbp) uses value theory to quantitatively
+prioritize potential actions to accomplish a goal.
 
-    pip3 install numpy pandas matplotlib statsmodels scipy fbprophet
+This package provides abstract classes and utility methods to run
+VBP, mostly focused on Modeled VBP which uses time series data to
+predict future values and prioritize actions based on the relative
+predicted values.
 
-### Usage
+The DataSource class is the base abstract class for VBP.
 
-    python3 -m vbp.run -h
+The TimeSeriesDataSource abstract class inherits from DataSource and
+may be used for Modeled VBP. The ExampleDataSource class demonstrates
+a simple data source based on TimeSeriesDataSource.
+
+Built-in Modeled VBPs include Underlying Cause of Death models for
+the United States (UCODUnitedStates) and the World (UCODWorld). These
+data sources both inherit from ICDDataSource which inherits from
+TimeSeriesDataSource.
+
+The run module may be used from the command line to perform different
+VBP actions such as listing actions (list), counting actions (count),
+predicting values (predict), running Modeled VBP
+(modeled_value_based_prioritization), and more. For usage, run:
+
+    python3 -m vbp.run
 
 Any non-screen output goes to the `vbpoutput` folder.
 
@@ -118,6 +135,13 @@ Review vbp/example.py for a simple example. The basic process is:
 
 ## Development
 
+Prerequisites:
+
+    pip3 install numpy pandas matplotlib statsmodels scipy fbprophet
+
+Updating PyPI package:
+
     # Edit version in setup.py and __init__.py
-    python3 setup.py sdist bdist_wheel upload
+    python3 setup.py bdist bdist_wheel
+    python3 -m twine upload --skip-existing dist/*
     # https://pypi.org/project/vbp/
