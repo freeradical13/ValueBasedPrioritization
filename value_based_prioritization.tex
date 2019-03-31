@@ -489,6 +489,24 @@
   publisher    = {Metaphysics Research Lab, Stanford University},
 }
 
+@article{huemer2012praise,
+  title        = {In praise of passivity},
+  author       = {Huemer, Michael},
+  journal      = {Studia Humana},
+  volume       = {1},
+  number       = {2},
+  pages        = {12--28},
+  year         = {2012},
+  note         = {\url{http://atavisionary.com/wp-content/uploads/2017/08/In-Praise-of-Passivity.pdf}},
+}
+
+@article{anderson2001comparability,
+  title        = {Comparability of Cause of Death between ICD-9 and ICD-10: Preliminary Estimates},
+  author       = {Anderson, Robert N and Mini{\~n}o, Arialdi M and Hoyert, Donna L and Rosenberg, Harry M},
+  year         = {2001},
+  note         = {\url{https://www.cdc.gov/nchs/data/nvsr/nvsr49/nvsr49_02.pdf}},
+}
+
 \end{filecontents}
 
 \usepackage{hyperref}
@@ -530,7 +548,7 @@ on the desire to reduce suffering.
 
 \section{Introduction}
 
-Why should a particular goal be pursued (\enquote{Why})? Given a goal, what actions should be pursued to best accomplish said goal (\enquote{What})? Given an action, how should said action be pursued (\enquote{How})?
+Why should a particular goal be pursued (\enquote{Why})? Given a goal, what actions should be pursued to best accomplish that goal (\enquote{What})? Given an action, how should that action be pursued (\enquote{How})?
 
 This article proposes that value theory usually best scopes \enquote{Why} and \enquote{What} and the scientific method usually best answers \enquote{How}. A method called Value-Based Prioritization is developed to answer the \enquote{What} question:
 
@@ -546,7 +564,7 @@ This article proposes that value theory usually best scopes \enquote{Why} and \e
 
 \section{Why a Goal?}
 
-\enquote{Why a Goal?} is usually best scoped using value systems because they are evaluative by nature\cite{value-theory}. Evaluating different value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
+\enquote{Why a Goal?} is usually best scoped using value systems because they are evaluative by nature\cite{value-theory}. Comparing value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
 
 \section{What Actions?}
 
@@ -589,7 +607,7 @@ A \textbf{value-based prioritization score} $C(A(t))$ is the result of the produ
 \begin{equation}\label{prioritization-score}
   \begin{gathered}
     C(A(t)) = B(A(t)) \cdot \prod_{j=1}^{N} S_j(A(t)), \\
-    0 \leq S_j(B(A(t))) \leq 1
+    0 \leq S_j(A(t)) \leq 1
   \end{gathered}
 \end{equation}
 
@@ -619,7 +637,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting,hyndman2008forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
+Then, a set of \textbf{comparable prediction models} (or forecasting models) $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting,hyndman2008forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -628,7 +646,7 @@ Then, a set of \textbf{comparable prediction models} $R(D(A))$ is applied to eac
   \end{multlined}
 \end{equation}
 
-The models are compared using \textbf{model selection} (or forecasting)\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} using a model selection algorithm \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
+The models are compared using a \textbf{model selection} algorithm\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
 For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
@@ -664,7 +682,7 @@ First, outline the parameters:
 
 $A(t)$ is a set of actions which would eliminate the groups of Underlying Causes of Death (UCOD) as classified by the International Classification of Diseases (ICD)\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.}.
 
-This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run list UCODUnitedStates}}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.} (this example will be followed by various other groupings of UCOD for the U.S., as well as groupings for the world):
+This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run list UCODUnitedStates}}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
 
 \begin{equation*}
   \begin{gathered}
@@ -692,7 +710,7 @@ Review the list of actions and hypothesize scale functions. Examples:
                   Scale down by up to half by the relative rate of change of an action's predicted rate of death: Take the derivative of $M(A_i(t))$ and evaluate it with the predicted value and min-max normalize into $[0.5,1]$ relative to other actions.
   \item $S_4(A_i) = \begin{cases}\text{0.1} & \mbox{if political/cultural} \\ \text{1} & \mbox{otherwise} \\ \end{cases}$
                   \newline\newline
-                  Essentially remove actions that are primarily political and/or cultural.
+                  Essentially remove actions that are primarily political and/or cultural\cite{huemer2012praise}.
 \end{itemize}
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
@@ -726,13 +744,13 @@ For example, see Table \ref{table:exscaletable}:
       Homicide                   & 0.1   \\
     \bottomrule
   \end{tabular}
-  \caption{Example scale function table for the longterm comparable leading causes of death for the United States}
+  \caption{Example manually calculated scale function table for the longterm comparable leading causes of death for the United States}
   \label{table:exscaletable}
 \end{table}
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per 100,000 of population (\enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}). For example, for \textit{Cancer}\footnote{\texttt{python3 -m vbp.run action\char`_data UCODUnitedStates Cancer}}, see Table \ref{table:daa1}:
+$D(A)$ for each action is the time-series data of number of deaths per year per some number of population (the \enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}; 100,000 for the U.S. and 1,000,000 for the world). For example, for \textit{Cancer}\footnote{\texttt{python3 -m vbp.run action\char`_data UCODUnitedStates Cancer}}, see Table \ref{table:daa1}:
 
 \begin{table}[H]
   \centering
@@ -777,7 +795,7 @@ For each model, calculate AICc and choose the model $M(A(t_F))$ that has the low
   \label{table:choosem}
 \end{table}
 
-Use each $M(A(t_F))$'s predicted value and generate all of the relative $B(t_F)$ values (setting negative values to 0) along with any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example, see Table \ref{table:btable}:
+Use each $M(A(t_F))$'s predicted value (setting negative values to 0) and generate all of the relative $B(t_F)$ values along with any scale functions based on the models (e.g. scaling by the relative prediction derivatives using $S_3$). For example, see Table \ref{table:btable}:
 
 \begin{table}[H]
   \centering
@@ -844,7 +862,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 \begin{enumerate}
   \vfill\eject
   % US_ICD_113_SELECTED_CAUSES_LEAVES
-  \item ICD-9 and ICD-10 113 Cause List for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 115 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
+  \item ICD-9 and ICD-10 113 Cause List for the United States\cite{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -869,7 +887,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 
   \vfill\eject
   % US_ICD_113_SELECTED_CAUSES_ALL
-  \item ICD-9 and ICD-10 113 Cause List for the United States, including subtotals\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
+  \item ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -894,7 +912,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 
   \vfill\eject
   % US_ICD_113_SELECTED_CAUSES_ROOTS
-  \item ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD-10 113 Cause List}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
+  \item ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -919,7 +937,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 
   \vfill\eject
   % US_ICD10_CHAPTERS
-  \item ICD-10 20 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
+  \item ICD-10 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -933,18 +951,18 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
           5   & Name18 & 0.026494 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 20 Chapters for the United States}
+      \caption{$Z(t_F)$ table for the ICD-10 Chapters for the United States}
       \label{table:ztable5}
     \end{table}
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Name16_ets.png}
-      \caption{Highest priority action from the ICD-10 20 Chapters for the United States: \textit{Name16}}\label{fig:k5}
+      \caption{Highest priority action from the ICD-10 Chapters for the United States: \textit{Name16}}\label{fig:k5}
     \end{figure}
   
   \vfill\eject
   % US_ICD10_SUB_CHAPTERS
-  \item ICD-10 179 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figure \ref{fig:k6}:
+  \item ICD-10 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figure \ref{fig:k6}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -958,13 +976,13 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
           5   & Name075 & 0.025999 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 179 Sub-Chapters for the United States}
+      \caption{$Z(t_F)$ table for the ICD-10 Sub-Chapters for the United States}
       \label{table:ztable6}
     \end{table}
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Name093_ets.png}
-      \caption{Highest priority action from the ICD-10 179 Sub-Chapters for the United States: \textit{Name093}}\label{fig:k6}
+      \caption{Highest priority action from the ICD-10 Sub-Chapters for the United States: \textit{Name093}}\label{fig:k6}
     \end{figure}
     
   \vfill\eject
@@ -1019,7 +1037,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
   
   \vfill\eject
   % WORLD_ICD10_CHAPTERS_ALL
-  \item ICD-10 22 Chapters for the World, including subtotals\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figure \ref{fig:k9}:
+  \item ICD-10 Chapters for the World, including subtotals\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figure \ref{fig:k9}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -1033,18 +1051,18 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
           5   & Name148 & 0.034819 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 22 Chapters for the World, including subtotals}
+      \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World, including subtotals}
       \label{table:ztable9}
     \end{table}
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Name038_ets.png}
-      \caption{Highest priority action from the ICD-10 22 Chapters for the World, including subtotals: \textit{Name038}}\label{fig:k9}
+      \caption{Highest priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Name038}}\label{fig:k9}
     \end{figure}
   
   \vfill\eject
   % WORLD_ICD10_CHAPTER_ROOTS
-  \item ICD-10 22 Chapters for the World with only top-level groupings\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figure \ref{fig:k10}:
+  \item ICD-10 Chapters for the World with only top-level groupings\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figure \ref{fig:k10}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -1058,18 +1076,18 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
           5   & Name055 & 0.032951 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 22 Chapters for the World with only top-level groupings}
+      \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World with only top-level groupings}
       \label{table:ztable10}
     \end{table}
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Name038_ets.png}
-      \caption{Highest priority action from the ICD-10 22 Chapters for the World with only top-level groupings: \textit{Name038}}\label{fig:k10}
+      \caption{Highest priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Name038}}\label{fig:k10}
     \end{figure}
   
   \vfill\eject
   % WORLD_ICD10_SUB_CHAPTERS
-  \item ICD-10 211 Sub-Chapters for the World\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figure \ref{fig:k11}:
+  \item ICD-10 Sub-Chapters for the World\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figure \ref{fig:k11}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -1083,13 +1101,13 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
           5   & Name092 & 0.031105 \\
         \bottomrule
       \end{tabular}
-      \caption{$Z(t_F)$ table for the ICD-10 211 Sub-Chapters for the World}
+      \caption{$Z(t_F)$ table for the ICD-10 Sub-Chapters for the World}
       \label{table:ztable11}
     \end{table}
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Name059_ets.png}
-      \caption{Highest priority action from the ICD-10 211 Sub-Chapters for the World: \textit{Name059}}\label{fig:k11}
+      \caption{Highest priority action from the ICD-10 Sub-Chapters for the World: \textit{Name059}}\label{fig:k11}
     \end{figure}
 \end{enumerate}
 
@@ -1125,7 +1143,7 @@ Notes on Section \ref{section-example}:
             \texttt{python3 -m vbp.run prepare\char`_data UCODUnitedStates --comparable-ratios}
 
     \end{enumerate}
-  \item Age adjustment\footnote{\scriptsize{\url{https://seer.cancer.gov/seerstat/tutorials/aarates/definition.html}}} is not performed on crude rates because the goal of the example is to predict future \textit{relative} death rates which already implicitly takes into account population age changes over time.
+  \item Age adjustment\footnote{\scriptsize{\url{https://seer.cancer.gov/seerstat/tutorials/aarates/definition.html}}} is not performed on crude rates because the goal of the example is to predict future \textit{relative} total death rates which already implicitly takes into account population age changes over time.
   \item The WHO Mortality Database population and death statistics are quite incomplete, reporting only about $\frac{1}{3}$ of the world population and about $\frac{1}{3}$ of world deaths:
     \begin{figure}[H]
       \centering
@@ -1133,7 +1151,7 @@ Notes on Section \ref{section-example}:
       \caption{WHO Mortality Database: Reported Population and Deaths}
     \end{figure}
   \item \enquote{Substantial research remains to develop robust and unbiased methods for measuring trends in case fatality rates, survival times, and disability due to specific causes, let alone collecting such data across all regions of the world. Despite these uncertainties, projections provide a useful perspective on population health trends and health policies, provided that they are interpreted with a degree of caution. Projections enable us to appreciate better the implications for health and health policy of currently observed trends, and the likely impact of fairly certain future trends, such as the ageing of the population, and the continuation of the epidemiological transition in developing countries.}\cite{mathers2006projections}
-  \item \enquote{Accuracy in diagnosing causes of death still varies from one country to another. In addition the process of coding underlying causes of death involves some extent of misattribution or miscoding even in countries where causes are assigned by medically qualified staff. Main reasons are incorrect or systematic biases in diagnosis, incorrect or incomplete death certificates, misinterpretation of ICD rules for selection of the underlying cause, and variations in the use of coding categories for unknown and ill-defined causes.}\footnote{\scriptsize{\url{https://apps.who.int/healthinfo/statistics/mortality/whodpms/help/desc.htm}}}
+  \item \enquote{The process of coding underlying causes of death involves some extent of misattribution or miscoding even in countries where causes are assigned by medically qualified staff [due to] incorrect or systematic biases in diagnosis, incorrect or incomplete death certificates, misinterpretation of ICD rules for selection of the underlying cause, and variations in the use of coding categories for unknown and ill-defined causes.}\footnote{\scriptsize{\url{https://apps.who.int/healthinfo/statistics/mortality/whodpms/help/desc.htm}}}
 \end{enumerate}
 
 \end{document}

@@ -33,7 +33,7 @@ class DataType(vbp.DataSourceDataType):
   # https://wonder.cdc.gov/ucd-icd10.html
   US_ICD_113_SELECTED_CAUSES_ALL = enum.auto()
 
-  # Same as above but only the leaves of the tree. For some reason, this is not exactly 113, but 117.
+  # Same as above but only the leaves of the tree. For some reason, this is not exactly 113, but 118.
   US_ICD_113_SELECTED_CAUSES_LEAVES = enum.auto()
 
   # Same as above but only the roots of the tree.
