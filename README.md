@@ -14,25 +14,41 @@ VBP, mostly focused on Modeled VBP which uses time series data to
 predict future values and prioritize actions based on the relative
 predicted values.
 
-The DataSource class is the base abstract class for VBP.
+The `vbp.DataSource` class is the base abstract class for VBP.
 
-The TimeSeriesDataSource abstract class inherits from DataSource and
-may be used for Modeled VBP. The ExampleDataSource class demonstrates
-a simple data source based on TimeSeriesDataSource.
+The `vbp.TimeSeriesDataSource` abstract class inherits from
+`vbp.DataSource` and may be used for Modeled VBP. The
+`vbp.ExampleDataSource` class demonstrates a simple data source based
+on `vbp.TimeSeriesDataSource`.
 
 Built-in Modeled VBPs include Underlying Cause of Death models for
-the United States (UCODUnitedStates) and the World (UCODWorld). These
-data sources both inherit from ICDDataSource which inherits from
-TimeSeriesDataSource.
+the United States (`vbp.ucod.united_states.UCODUnitedStates`) and the
+World (`vbp.ucod.united_states.world.UCODWorld`). These
+data sources both inherit from `vbp.ucod.icd.ICDDataSource` which
+inherits from `vbp.TimeSeriesDataSource`.
 
-The run module may be used from the command line to perform different
-VBP actions such as listing actions (list), counting actions (count),
-predicting values (predict), running Modeled VBP
-(modeled_value_based_prioritization), and more. For usage, run:
+The `vbp.run` module may be used from the command line to perform
+different VBP actions such as listing actions (`list`), counting
+actions (`count`), predicting values (`predict`), running Modeled VBP
+(`modeled_value_based_prioritization`), and more. For usage, run:
 
     python3 -m vbp.run
 
 Any non-screen output goes to the `vbpoutput` folder.
+
+Here is a simple example counting the number of groupings of
+underlying causes of death for the United States for the default data
+type:
+
+    python3 -m vbp.run count UCODUnitedStates
+
+Alternatively, if installed through pip, a vbp script wrapper may be
+used:
+
+    vbp count UCODUnitedStates
+
+The academic article above includes footnotes for each step with
+details on how to run `vbp`.
 
 ## Running
 
