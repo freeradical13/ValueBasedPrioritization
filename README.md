@@ -115,3 +115,9 @@ Review vbp/example.py for a simple example. The basic process is:
 1. Implement all `@abc.abstractmethod` methods and override any
    other superclass methods as needed.
 1. Import somename.py at the top of vbp/run.py
+
+## Development
+
+    # Edit version in setup.py and __init__.py
+    python3 setup.py sdist bdist_wheel upload
+    # https://pypi.org/project/vbp/

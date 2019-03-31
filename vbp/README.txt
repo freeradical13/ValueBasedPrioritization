@@ -1,9 +1,7 @@
-# Value Based Prioritization
-
 Value Based Prioritization (VBP) uses value theory to quantitatively
 prioritize potential actions to accomplish a goal.
 
-[The source for this project is available here][src].
+https://github.com/freeradical13/ValueBasedPrioritization
 
 This package provides abstract classes and utility methods to run
 VBP, mostly focused on Modeled VBP which uses time series data to
@@ -28,4 +26,3 @@ predicting values (predict), running Modeled VBP
 
 python -m vbp.run
 
-[src]: https://github.com/freeradical13/ValueBasedPrioritization
