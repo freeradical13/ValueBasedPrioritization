@@ -6,6 +6,9 @@ value_based_prioritization.bib
 /vbpcache
 /vbp/data/ucod/united_states/mort/
 /vbp/data/ucod/world/Morticd*
+/vbp/build/
+/vbp/dist/
+/vbp/vbp.egg-info/
 
 *.pyc
 __pycache__
