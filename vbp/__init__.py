@@ -249,7 +249,7 @@ class DataSource(abc.ABC):
       self.options = parser.parse_args(args)
       
       clean = self.options.clean
-      if self.options.output_dir == "output":
+      if self.options.output_dir == self.default_output_dir:
         # Always clean if it's the default output directory
         # Unless --do-not-clean is explicitly used
         clean = True
