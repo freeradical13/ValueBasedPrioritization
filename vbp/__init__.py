@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
@@ -107,6 +107,10 @@ def print_full_columns(df):
   with pandas.option_context("display.max_columns", None):
     with pandas.option_context("display.max_colwidth", sys.maxsize):
       print(df)
+
+def print_all_rows(df):
+  with pandas.option_context("display.max_rows", None, "display.max_columns", None):
+    print(df)
 
 class DataSourceDataType(enum.Enum):
   def __str__(self):
@@ -302,7 +306,7 @@ class DataSource(abc.ABC):
     
     b = b.reindex(columns=sorted(b.columns))
     
-    self.write_spreadsheet(b, self.prefix_all("b"))
+    self.write_spreadsheet(b, self.prefix_all("b2"))
     
     z = b.prod(axis="columns").sort_values(ascending=False)
     z.name = "Z({})".format(self.options.predict)
@@ -712,7 +716,7 @@ class TimeSeriesDataSource(DataSource):
       final_columns += extra_columns
       b = m[final_columns]
       
-      self.write_spreadsheet(b, self.prefix_all("b"))
+      self.write_spreadsheet(b, self.prefix_all("b1"))
       return b
 
     else:

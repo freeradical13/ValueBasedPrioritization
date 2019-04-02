@@ -139,6 +139,8 @@ def run_vbp():
     add_data_source_arg(subparser, data_source_names)
     add_remainder_arg(subparser)
     
+    print("vbp version {}".format(vbp.VERSION))
+
     options = parser.parse_args(args)
     if options.command_name == "modeled_value_based_prioritization":
       

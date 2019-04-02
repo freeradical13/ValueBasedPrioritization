@@ -227,7 +227,7 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
     108: "Certain conditions originating in the perinatal period (P00-P96)",
     109: "Congenital malformations, deformations and chromosomal abnormalities (Q00-Q99)",
     110: "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified (R00-R99)",
-    111: "All other diseases (Residual) (D65-E07,E15-E34,E65-F99,G04-G14,G23-G25,G31-H93,K00-K22,K29-K31,K50-K66,K71-K72,K75-K76,K83-M99,N13.0-N13.5,N13.7-N13.9,N14,N15.0,N15.8-N15.9,N20-N23,N28-N39,N41-N64,N80-N98)",
+    111: "All other diseases (Residual) (NaN)",
     112: DictTree(value="Accidents (unintentional injuries) (V01-X59,Y85-Y86)", d={
       113: "Transport accidents (V01-V99,Y85)",
       114: "Motor vehicle accidents (V02-V04,V09.0,V09.2,V12-V14,V19.0-V19.2,V19.4-V19.6,V20-V79,V80.3-V80.5,V81.0-V81.1,V82.0-V82.1,V83-V86, V87.0-V87.8,V88.0-V88.8,V89.0,V89.2)",
@@ -523,6 +523,7 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
     return df
 
   def load_us_raw_data_with_comparability_ratios(self):
+    self.check_raw_files_directory()
     df = self.get_raw_mortality_counts(
       self.raw_icd_basis,
       None,
@@ -1020,4 +1021,5 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
     return x
   
   def run_test(self):
+    #self.ensure_loaded()
     return None
