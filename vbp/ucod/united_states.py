@@ -29,8 +29,7 @@ from vbp.ucod.icd import ICD
 
 class DataType(vbp.DataSourceDataType):
   
-  # Group Results By "Year" And By "ICD-10 113 Cause List"; Check "Export Results"; Uncheck "Show Totals"
-  # https://wonder.cdc.gov/ucd-icd10.html
+  # https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf (Page 19)
   US_ICD_113_SELECTED_CAUSES_ALL = enum.auto()
 
   # Same as above but only the leaves of the tree. For some reason, this is not exactly 113, but 118.
@@ -476,28 +475,7 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
              encoding="ISO-8859-1",
            ).dropna(how="all")
 
-      # Old code no longer applicable because of previous if clause
-      if self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_ALL or \
-         self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_LEAVES or \
-         self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_ROOTS:
-        df[self.get_code_column_name()] = df[self.get_action_column_name()].apply(self.extract_codes)
-        df[self.get_action_column_name()] = df[self.get_action_column_name()].apply(self.extract_name)
-        
-        if self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_LEAVES or \
-           self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_ROOTS:
-          
-          if self.options.data_type == DataType.US_ICD_113_SELECTED_CAUSES_LEAVES:
-            target = self.icd10_ucod113.recursive_list(True)
-          else:
-            target = self.icd10_ucod113.roots_list()
-            
-          keep_queries = list(map(self.icd_query, map(self.extract_codes, target)))
-          df["CodesQuery"] = df[self.get_code_column_name()].apply(self.icd_query)
-          
-          # Drop any non-leaves
-          df.drop(df[~df["CodesQuery"].isin(keep_queries)].index, inplace=True)
-          
-      elif self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
+      if self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED:
         # Lookup by action_column_name but these aren't unique in this data set,
         # so append the codes.
         df[self.get_action_column_name()] = df.apply(lambda row: "{} ({})".format(row[self.get_action_column_name()], row[self.get_code_column_name()]), axis="columns")
