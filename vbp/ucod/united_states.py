@@ -460,6 +460,9 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
         # Drop any non-leaves
         df.drop(df[~df["CodesQuery"].isin(keep_queries)].index, inplace=True)
         
+        # The column ends up being a string column, so we can't just do dropna()
+        df.drop(df[df[self.get_code_column_name()] == "NaN"].index, inplace=True)
+        
     elif self.options.data_type == DataType.US_ICD10_SUB_CHAPTERS or \
          self.options.data_type == DataType.US_ICD10_MINIMALLY_GROUPED or \
          self.options.data_type == DataType.US_ICD10_CHAPTERS:
