@@ -652,7 +652,14 @@ For each action, $L(R(D(A)))$ produces the \textit{best fitting model} $M(A(t))$
 
 Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
-Finally, \textit{modeled value-based prioritization} \inlineequation[modeled-vbp]{Z(t_F)} is simply \eqref{vbp} with $t_F$.
+Finally, \textit{modeled value-based prioritization} $Z(t_F)$ is simply \eqref{vbp} with $t_F$:
+
+\begin{equation}\label{modeled-vbp}
+  \begin{gathered}
+    Z(t_F) = (A_1(t_F), \ldots, A_N(t_F)), \\
+    C(A_1(t_F)) \geq \ldots \geq C(A_N(t_F))
+  \end{gathered}
+\end{equation}
 
 \section{Choosing Meaningful Work}\label{section-example}
 
@@ -711,7 +718,7 @@ Review the list of actions and hypothesize scale functions. Examples:
                   Essentially remove actions that are primarily political and/or cultural\cite{huemer2012praise}.
 \end{itemize}
 
-The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
+The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$. The inverse of existing market investment might be interesting to consider.
 
 Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmanualscales}.}:
 
