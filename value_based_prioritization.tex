@@ -2,7 +2,7 @@
 % Configuration %
 %%%%%%%%%%%%%%%%%
 
-\documentclass[12pt, a4paper, twocolumn]{article}
+\documentclass[10pt, a4paper, twocolumn]{IEEEconf}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
@@ -546,7 +546,7 @@ on the desire to reduce suffering.
 % Article %
 %%%%%%%%%%%
 
-\section{Introduction}
+\section{Background}
 
 Why should a particular goal be pursued (\enquote{Why})? Given a goal, what actions should be pursued to best accomplish that goal (\enquote{What})? Given an action, how should that action be pursued (\enquote{How})?
 
@@ -556,29 +556,29 @@ This article proposes that value theory usually best scopes \enquote{Why} and \e
   \begin{gathered}
     \textrm{Why: } \textit{Value Theory} \\
     \downarrow \\
-    \textrm{What: } \textit{\textbf{Value-Based Prioritization}} \\
+    \textrm{What: } \textit{\textit{Value-Based Prioritization}} \\
     \downarrow \\
     \textrm{How: } \textit{Scientific Method}
   \end{gathered}
 \end{equation*}
 
-\section{Why a Goal?}
+\subsection{Why a Goal?}
 
 \enquote{Why a Goal?} is usually best scoped using value systems because they are evaluative by nature\cite{value-theory}. Comparing value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism\cite{huemer2007ethical}, consequentialism\cite{consequentialism}, evolutionary biology\cite{morality-biology}, religion\cite{religion-morality}, epicureanism\cite{epicurus}, stoicism\cite{stoicism}, political liberalism\cite{rawls}, anarcho-capitalism\cite{huemer2013problem}, communitarianism\cite{communitarianism}, objectivism\cite{ayn-rand}, etc.}.
 
-\section{What Actions?}
+\subsection{What Actions?}
 
 \enquote{What Actions?} is usually best scoped by prioritizing actions because actions usually have differing effect sizes and time is limited. It follows from the value system used to answer \enquote{Why} that the same value system is used primarily to evaluate the priority of each action.
 
 This article proposes a method called Value-Based Prioritization which builds a quantitative prioritization model based on predicted effect sizes. Raw prioritization scores are further scaled by contextual factors such as implementation time, cost, risk, and other judgments.
 
-\section{How to do an Action?}
+\subsection{How to do an Action?}
 
 Given answers to \enquote{Why?} and \enquote{What?}, how to implement actions is usually best answered with the scientific method\cite{scientific-method,sep-rationalism-empiricism}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
 
 \section{Value-Based Prioritization}
 
-A \textbf{value system} \inlineequation[value-system]{V} generates a \textbf{goal} \inlineequation[goal]{G(t)} (for some future time $t$) and a set of \textbf{mutually exclusive potential future actions} $A(t)$:
+A \textit{value system} \inlineequation[value-system]{V} generates a \textit{goal} \inlineequation[goal]{G(t)} (for some future time $t$) and a set of \textit{mutually exclusive potential future actions} $A(t)$:
 
 \begin{equation}\label{potential-actions}
   \begin{gathered}
@@ -587,7 +587,7 @@ A \textbf{value system} \inlineequation[value-system]{V} generates a \textbf{goa
   \end{gathered}
 \end{equation}
 
-An action's \textbf{estimated relative accomplishment amount} $B(A(t))$ is an action's expected \textit{relative} (i.e. with respect to other actions) contribution towards accomplishing $G$(t):
+An action's \textit{estimated relative accomplishment amount} $B(A(t))$ is an action's expected \textit{relative} (i.e. with respect to other actions) contribution towards accomplishing $G$(t):
 
 \begin{equation}\label{action-amount}
   \begin{gathered}
@@ -602,7 +602,7 @@ Thus, $G(t)$ is fully accomplished if all actions are accomplished:
   G(t) = \sum_{i=1}^{N} B(A_i(t)) = 1
 \end{equation}
 
-A \textbf{value-based prioritization score} $C(A(t))$ is the result of the product of a set of \textbf{value-based prioritization scale functions} \inlineequation[scale-functions]{S = \{S_1, \ldots, S_N\}} multiplied by \eqref{action-amount}:
+A \textit{value-based prioritization score} $C(A(t))$ is the result of the product of a set of \textit{value-based prioritization scale functions} \inlineequation[scale-functions]{S = \{S_1, \ldots, S_N\}} multiplied by \eqref{action-amount}:
 
 \begin{equation}\label{prioritization-score}
   \begin{gathered}
@@ -613,7 +613,7 @@ A \textbf{value-based prioritization score} $C(A(t))$ is the result of the produ
 
 Example scale functions include implementation time, cost, risk, and other judgments. Ideally, scale functions should be defined before running the model to reduce bias. The set $S$ always includes the element $S_1(A(t)) = 1$. Note that $\sum_{i=1}^{N} C(A_i(t)) \neq G$ if any $S_j(A_i(t)) < 1$.
 
-A \textbf{value-based prioritization} $Z(t)$ is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
+A \textit{value-based prioritization} $Z(t)$ is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
 
 \begin{equation}\label{vbp}
   \begin{gathered}
@@ -624,7 +624,7 @@ A \textbf{value-based prioritization} $Z(t)$ is a sequence of actions ordered by
 
 The first $k$ actions in $Z(t)$ should be executed in descending priority/proportion where \inlineequation[how-many-actions]{k} is chosen based on factors such as available concurrency, time, resources, etc.
 
-\section{Modeled Value-Based Prioritization}
+\subsection{Modeled Value-Based Prioritization}
 
 Historical data may be used to predict actions' estimated relative accomplishment amounts \eqref{action-amount} at a future time \inlineequation[modeled-future-time]{t_F}.
 
@@ -637,7 +637,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textbf{comparable prediction models} (or forecasting models)\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting,hyndman2008forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
+Then, a set of \textit{comparable prediction models} (or forecasting models)\cite{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing\cite{hyndman2018forecasting,hyndman2008forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM]\cite{taylor2018forecasting}, ARIMA\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning\cite{makridakis2018m4}, seasonal algorithms such as TBATS\cite{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression\cite{mathers2006projections}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -646,13 +646,13 @@ Then, a set of \textbf{comparable prediction models} (or forecasting models)\cit
   \end{multlined}
 \end{equation}
 
-The models are compared using a \textbf{model selection} algorithm\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
+The models are compared using a \textit{model selection} algorithm\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
-For each action, $L(R(D(A)))$ produces the \textbf{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
+For each action, $L(R(D(A)))$ produces the \textit{best fitting model} $M(A(t))$ (or a model that's an average of multiple models\cite{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
 Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
-Finally, \textbf{modeled value-based prioritization} \inlineequation[modeled-vbp]{Z(t_F)} is simply \eqref{vbp} with $t_F$.
+Finally, \textit{modeled value-based prioritization} \inlineequation[modeled-vbp]{Z(t_F)} is simply \eqref{vbp} with $t_F$.
 
 \section{Choosing Meaningful Work}\label{section-example}
 
@@ -661,28 +661,26 @@ The following example applies modeled value-based prioritization \eqref{modeled-
 First, outline the parameters:
 
 \begin{itemize}
-  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death\footnote{More accurately, something like the lack of a potential of life.}. Alternatives include morbidity and disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys,lopez2006global}), non-human suffering, cost effectiveness\cite{jamison2017disease,neumann2018comparing,givewellcosteffectiveness}, economic impact\cite{world2009guide}, existential risks\cite{bostrom2013existential}, pre-birth suffering, working to give\cite{macaskill2015doing}, etc.
+  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce suffering} which is defined as maximal human suffering: death (more precisely, something like the lack of a potential of life). Alternatives include morbidity and disease burden (e.g. Quality-Adjusted Life Years [QALYs]\cite{weinstein2009qalys,lopez2006global}), non-human suffering, cost effectiveness\cite{jamison2017disease,neumann2018comparing,givewellcosteffectiveness}, economic impact\cite{world2009guide}, existential risks\cite{bostrom2013existential}, pre-birth suffering, working to give\cite{macaskill2015doing}, etc.
   \item \eqref{goal} $G(t) = $ eliminate human death.
   \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
   \item \eqref{how-many-actions} $k = $ 1 for a single person (or 2 to hedge the failure of the first action or to add a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
   \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\scriptsize{\url{https://www.who.int/topics/mortality/en/}}}.
-  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}}\footnote{$ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.}:
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}} ($ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.):
     \begin{equation*}
       \begin{gathered}
         \{ETS(A,A,N),ETS(A,A_d,N)\},\\
         \phi=0.98
       \end{gathered}
     \end{equation*}
-    Commonly used alternative models in all-cause mortality forecasting include poisson log-bilinear regressions:
-    
-    \enquote{There is a substantial literature on the projection or forecasting of all-cause mortality rates and mortality rates for specific diseases. The methods used fall into two broad groups. First are those methods based on time-series analysis of historical trends in mortality rates. These \enquote{aggregate models,} whether for all-cause mortality or for specific causes, use the previous trend of the variable of interest as the basis for predicting its future value. By their data requirements, such methods are generally limited to high-income countries with good death registration data [...]. Second are the \enquote{structural models,} which are based on relationships between mortality and a set of independent variables, and are necessarily projections of those independent variables. To the extent that the structural model identifies the important components — and the relationships among them — of the \enquote{system} that determines the variable of interest, they offer the potential for more robust predictions. When the underlying system is complex and sensitive to one or more of its components, a shift in some of the system variables can introduce large changes in the outcome that may be missed by extrapolation (such as the discovery of antibiotics and infectious disease trends or the change in tuberculosis mortality after the HIV epidemic). Aggregate models, in contrast, require considerably less knowledge of the system components and the relationships among them. These models can therefore provide more reliable estimates when such information is not available, especially when the system is not very sensitive to its inputs in time intervals that are in the order of the prediction time.}\cite{mathers2006projections}
+    Commonly used alternative models in all-cause mortality forecasting include poisson log-bilinear regressions\footnote{See Appendix note \ref{mathersquote}.}.
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
 $A(t)$ is a set of actions which would eliminate the groups of Underlying Causes of Death (UCOD) as classified by the International Classification of Diseases (ICD)\cite{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2\cite{icd10vol2}. For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2\cite{icd10vol2}.}.
 
-This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run list UCODUnitedStates}}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
+This example starts by looking at the longterm comparable leading causes of death for the United States\cite{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{See Appendix command \ref{cmdlist}.}\textsuperscript{,}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
 
 \begin{equation*}
   \begin{gathered}
@@ -715,7 +713,7 @@ Review the list of actions and hypothesize scale functions. Examples:
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{\texttt{python3 -m vbp.run manual\char`_scale\char`_functions -a -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UCODUnitedStates S4}}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmanualscales}.}:
 
 \begin{table}[H]
   \centering
@@ -750,7 +748,7 @@ For example, see Table \ref{table:exscaletable}:
 
 Outside of the manually calculated scale function table, use obfuscated action names when developing the model to avoid introducing bias.
 
-$D(A)$ for each action is the time-series data of number of deaths per year per some number of population (the \enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}; 100,000 for the U.S. and 1,000,000 for the world). For example, for \textit{Cancer}\footnote{\texttt{python3 -m vbp.run action\char`_data UCODUnitedStates Cancer}}, see Table \ref{table:daa1}:
+$D(A)$ for each action is the time-series data of number of deaths per year per some number of population (the \enquote{Crude Rate}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/cmf.html\#Frequently\%20Asked\%20Questions\%20about\%20Death\%20Rates}}}; 100,000 for the U.S. and 1,000,000 for the world). For example, for \textit{Cancer}\footnote{See Appendix command \ref{cmdcancerdata}.}, see Table \ref{table:daa1}:
 
 \begin{table}[H]
   \centering
@@ -769,7 +767,7 @@ $D(A)$ for each action is the time-series data of number of deaths per year per 
   \label{table:daa1}
 \end{table}
 
-Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Cancer}\footnote{\texttt{python3 -m vbp.run predict UCODUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 Cancer}}, see Figure \ref{fig:fig1}:
+Run each comparable prediction model $R_i(D(A))$. For example, for \textit{Cancer}\footnote{See Appendix command \ref{cmdcancerpredict}.}, see Figure \ref{fig:fig1}:
 
 \begin{figure}[H]
   \centering
@@ -812,7 +810,7 @@ Use each $M(A(t_F))$'s predicted value (setting negative values to 0) and genera
   \label{table:btable}
 \end{table}
 
-Combine the table above with the manually calculated scale functions table \ref{table:scaletable} and any other calculated scale functions (e.g. $S_2(A_i)$) to create the final table with all scale function values. For example, see Table \ref{table:btablewithall}:
+Combine the table above with the manually calculated scale functions table (Table \ref{table:scaletable}) and any other calculated scale functions (e.g. $S_2(A_i)$) to create the final table with all scale function values. For example, see Table \ref{table:btablewithall}:
 
 \begin{table}[H]
   \centering
@@ -831,7 +829,9 @@ Combine the table above with the manually calculated scale functions table \ref{
 
 Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions.
 
-For the longterm comparable leading causes of death for the United States, the results\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}} are in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
+\subsection{Results}
+
+For the longterm comparable leading causes of death for the United States, the results\footnote{See Appendix command \ref{cmdlongtermcomparable}.} are in Table \ref{table:ztable1} and Figure \ref{fig:k1}:
 
 % US_ICD_LONGTERM_COMPARABLE_LEADING
 \begin{table}[H]
@@ -857,7 +857,7 @@ For the longterm comparable leading causes of death for the United States, the r
   \caption{Highest priority action from the Longterm comparable leading causes of death for the United States: \textit{Name02}}\label{fig:k1}
 \end{figure}
 
-The same analysis is run on other mutually exclusive groupings of causes of death\footnote{Prefix the data source with the \texttt{-a} flag to run for all data types; for example: \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization -a UCODUnitedStates \ldots}}:
+The same analysis is run on other mutually exclusive groupings of causes of death\footnote{Prefix the data source with the \texttt{-a} flag to run for all data types; for example, see Appendix command \ref{cmdmodeledvbpus}.}:
 
 \begin{enumerate}
   \vfill\eject
@@ -1011,7 +1011,7 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
 
   \vfill\eject
   % WORLD_ICD10_MINIMALLY_GROUPED
-  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\footnote{\texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODWorld --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx}}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
+  \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
     \begin{table}[H]
       \centering
       \begin{tabular}{clc}
@@ -1149,8 +1149,22 @@ Notes on Section \ref{section-example}:
       \includegraphics[width=0.5\textwidth]{results/who_mortality_db_population_deaths.png}
       \caption{WHO Mortality Database: Reported Population and Deaths}
     \end{figure}
+  \item \label{mathersquote} \enquote{There is a substantial literature on the projection or forecasting of all-cause mortality rates and mortality rates for specific diseases. The methods used fall into two broad groups. First are those methods based on time-series analysis of historical trends in mortality rates. These \enquote{aggregate models,} whether for all-cause mortality or for specific causes, use the previous trend of the variable of interest as the basis for predicting its future value. By their data requirements, such methods are generally limited to high-income countries with good death registration data [...]. Second are the \enquote{structural models,} which are based on relationships between mortality and a set of independent variables, and are necessarily projections of those independent variables. To the extent that the structural model identifies the important components — and the relationships among them — of the \enquote{system} that determines the variable of interest, they offer the potential for more robust predictions. When the underlying system is complex and sensitive to one or more of its components, a shift in some of the system variables can introduce large changes in the outcome that may be missed by extrapolation (such as the discovery of antibiotics and infectious disease trends or the change in tuberculosis mortality after the HIV epidemic). Aggregate models, in contrast, require considerably less knowledge of the system components and the relationships among them. These models can therefore provide more reliable estimates when such information is not available, especially when the system is not very sensitive to its inputs in time intervals that are in the order of the prediction time.}\cite{mathers2006projections}
   \item \enquote{Substantial research remains to develop robust and unbiased methods for measuring trends in case fatality rates, survival times, and disability due to specific causes, let alone collecting such data across all regions of the world. Despite these uncertainties, projections provide a useful perspective on population health trends and health policies, provided that they are interpreted with a degree of caution. Projections enable us to appreciate better the implications for health and health policy of currently observed trends, and the likely impact of fairly certain future trends, such as the ageing of the population, and the continuation of the epidemiological transition in developing countries.}\cite{mathers2006projections}
   \item \enquote{The process of coding underlying causes of death involves some extent of misattribution or miscoding even in countries where causes are assigned by medically qualified staff [due to] incorrect or systematic biases in diagnosis, incorrect or incomplete death certificates, misinterpretation of ICD rules for selection of the underlying cause, and variations in the use of coding categories for unknown and ill-defined causes.}\footnote{\scriptsize{\url{https://apps.who.int/healthinfo/statistics/mortality/whodpms/help/desc.htm}}}
+\end{enumerate}
+
+\onecolumn
+\subsection{Python Commands}
+
+\begin{enumerate}
+  \item \label{cmdlist} \texttt{python3 -m vbp.run list UCODUnitedStates}
+  \item \label{cmdmanualscales} \texttt{python3 -m vbp.run manual\char`_scale\char`_functions -a -t excel -o manual\char`_scale\char`_functions.xlsx -n "Scale Values" -p "Eliminate: " UCODUnitedStates S4}
+  \item \label{cmdcancerdata} \texttt{python3 -m vbp.run action\char`_data UCODUnitedStates Cancer}
+  \item \label{cmdcancerpredict} \texttt{python3 -m vbp.run predict UCODUnitedStates --ets-no-multiplicative-models --do-not-obfuscate -p 10 Cancer}
+  \item \label{cmdlongtermcomparable} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}
+  \item \label{cmdmodeledvbpus} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization -a UCODUnitedStates \ldots}
+  \item \label{cmdmodeledvbpworld} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODWorld --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx}
 \end{enumerate}
 
 \end{document}
