@@ -29,6 +29,7 @@
 \usepackage[bottom]{footmisc}
 \interfootnotelinepenalty=100 % Default 100, increase to reduce footnote splitting.
 \newcommand\nothing{}
+\usepackage{afterpage}
 
 % Inline equations: https://tex.stackexchange.com/a/78582/178803
 \makeatletter
@@ -51,6 +52,15 @@
     ~\@eqnnum
   \endgroup
 }
+
+% https://tex.stackexchange.com/a/226719/178803
+\newcommand{\oneraggedpage}{\let\mytextbottom\@textbottom
+  \let\mytexttop\@texttop
+  \raggedbottom
+  \afterpage{%
+  \global\let\@textbottom\mytextbottom
+  \global\let\@texttop\mytexttop}}
+
 \makeatother
 
 %%%%%%%%%%%%%%
@@ -513,7 +523,7 @@
 \hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue, citecolor=blue}
 
 \begin{document}
-
+\flushbottom
 \title{Value-Based Prioritization\thanks{\url{https://github.com/freeradical13/ValueBasedPrioritization}}}
 
 \author{Kevin Grigorenko\thanks{\href{mailto:kevin@myplaceonline.com}{kevin@myplaceonline.com}}}
@@ -542,6 +552,7 @@ on the desire to reduce suffering.
 
 \saythanks
 
+% Page numbers:
 \thispagestyle{plain}
 \pagestyle{plain}
 
@@ -895,6 +906,8 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
     \end{figure}
 
   % US_ICD_113_SELECTED_CAUSES_ALL
+  \pagebreak
+  \oneraggedpage
   \item ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
       \centering
