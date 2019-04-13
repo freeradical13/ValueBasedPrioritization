@@ -25,7 +25,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{bm}
-\raggedbottom
+%\raggedbottom
 \usepackage[bottom]{footmisc}
 \interfootnotelinepenalty=100 % Default 100, increase to reduce footnote splitting.
 \newcommand\nothing{}
@@ -867,7 +867,6 @@ For the longterm comparable leading causes of death for the United States, the r
 The same analysis is run on other mutually exclusive groupings of causes of death\footnote{Prefix the data source with the \texttt{-a} flag to run for all data types; for example, see Appendix command \ref{cmdmodeledvbpus}.}:
 
 \begin{enumerate}
-  \vfill\eject
   % US_ICD_113_SELECTED_CAUSES_LEAVES
   \item ICD-9 and ICD-10 113 Cause List for the United States\cite{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
@@ -892,7 +891,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Name046}}\label{fig:k2}
     \end{figure}
 
-  \vfill\eject
   % US_ICD_113_SELECTED_CAUSES_ALL
   \item ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
     \begin{table}[H]
@@ -916,7 +914,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Name117}}\label{fig:k2}
     \end{figure}
 
-  \vfill\eject
   % US_ICD_113_SELECTED_CAUSES_ROOTS
   \item ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
     \begin{table}[H]
@@ -941,7 +938,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Name117}}\label{fig:k3}
     \end{figure}
 
-  \vfill\eject
   % US_ICD10_CHAPTERS
   \item ICD-10 Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
     \begin{table}[H]
@@ -966,7 +962,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 Chapters for the United States: \textit{Name16}}\label{fig:k5}
     \end{figure}
   
-  \vfill\eject
   % US_ICD10_SUB_CHAPTERS
   \item ICD-10 Sub-Chapters for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figure \ref{fig:k6}:
     \begin{table}[H]
@@ -991,7 +986,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 Sub-Chapters for the United States: \textit{Name093}}\label{fig:k6}
     \end{figure}
     
-  \vfill\eject
   % US_ICD10_MINIMALLY_GROUPED
   \item Minimally grouped (5,264) causes of death for the United States\cite{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figure \ref{fig:k7}:
     \begin{table}[H]
@@ -1016,7 +1010,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Name0856}}\label{fig:k7}
     \end{figure}
 
-  \vfill\eject
   % WORLD_ICD10_MINIMALLY_GROUPED
   \item Minimally grouped (11,316) causes of death for the World\cite{whomortality}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
     \begin{table}[H]
@@ -1041,7 +1034,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Name01002}}\label{fig:k8}
     \end{figure}
   
-  \vfill\eject
   % WORLD_ICD10_CHAPTERS_ALL
   \item ICD-10 Chapters for the World, including subtotals\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figure \ref{fig:k9}:
     \begin{table}[H]
@@ -1066,7 +1058,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Name038}}\label{fig:k9}
     \end{figure}
   
-  \vfill\eject
   % WORLD_ICD10_CHAPTER_ROOTS
   \item ICD-10 Chapters for the World with only top-level groupings\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figure \ref{fig:k10}:
     \begin{table}[H]
@@ -1091,7 +1082,6 @@ The same analysis is run on other mutually exclusive groupings of causes of deat
       \caption{Highest priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Name038}}\label{fig:k10}
     \end{figure}
   
-  \vfill\eject
   % WORLD_ICD10_SUB_CHAPTERS
   \item ICD-10 Sub-Chapters for the World\cite{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figure \ref{fig:k11}:
     \begin{table}[H]
@@ -1177,4 +1167,4 @@ Notes on Section \ref{section-example}:
 \end{document}
 
 % Create PDF on Linux:
-% FILE=value_based_prioritization; pkill -9 -f ${FILE} &>/dev/null; rm -f ${FILE}*aux ${FILE}*bbl ${FILE}*bib ${FILE}*blg ${FILE}*log ${FILE}*out ${FILE}*pdf &>/dev/null; pdflatex -halt-on-error ${FILE}; bibtex ${FILE} && pdflatex ${FILE} && pdflatex ${FILE} && (xdg-open ${FILE}.pdf &)
+% FILE=value_based_prioritization; rm -f ${FILE}*aux ${FILE}*bbl ${FILE}*bib ${FILE}*blg ${FILE}*log ${FILE}*out ${FILE}*pdf &>/dev/null; pdflatex -halt-on-error ${FILE}; bibtex ${FILE} && pdflatex ${FILE} && pdflatex ${FILE} && (xdg-open ${FILE}.pdf &)
