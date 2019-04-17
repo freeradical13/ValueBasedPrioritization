@@ -235,6 +235,7 @@ class DataSource(abc.ABC):
       parser.add_argument("--do-not-write-spreadsheets", dest="write_spreadsheets", action="store_false", help="do not write spreadsheets")
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=5)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
+      parser.add_argument("--max-title-length", help="Maximum title length, particular for charts", type=int, default=50)
       parser.add_argument("--no-data-type-subdir", help="Do not create an output subdirectory based on the data type", dest="data_type_subdir", action="store_false")
       parser.add_argument("-o", "--output-dir", help="output directory", default=self.default_output_dir)
       parser.add_argument("-p", "--predict", help="future prediction (years)", type=int, default=10)
@@ -374,6 +375,7 @@ class DataSource(abc.ABC):
                .replace("|", "_") \
                .replace("?", "_") \
                .replace(",", "") \
+               .replace(".", "_") \
                .replace("*", "_")
     outputdir = self.options.output_dir
     if self.options.data_type is not None and self.options.data_type_subdir:
@@ -625,6 +627,20 @@ class DataSource(abc.ABC):
       result = loadfunc(*args)
       self.write_cache(name, result)
     return result
+  
+  def get_chart_title(self, title):
+    max_len = self.options.max_title_length
+    if len(title) > max_len:
+      # First save off anything in parentheses:
+      after = ""
+      if "(" in title:
+        after = " " + title[title.find("("):]
+        title = title[:title.find("(")].strip()
+        max_len = max_len - len(after) + 1
+        
+      title = title[:max_len] + after + "..."
+
+    return title
 
 class TimeSeriesDataSource(DataSource):
   def initialize_parser(self, parser):
@@ -755,14 +771,14 @@ class TimeSeriesDataSource(DataSource):
     self.write_spreadsheet(df, "{}_etsdata".format(self.get_obfuscated_name(action)))
 
     df = df[[self.get_value_column_name()]]
-    ax = df.plot(color="black", marker="o", legend=True, title=action_title, grid=True, kind="line")
+    ax = df.plot(color="black", marker="o", legend=True, title=self.get_chart_title(action_title), grid=True, kind="line")
     ax.set_ylabel(self.get_value_column_name())
     fig = matplotlib.pyplot.gcf()
     self.save_plot_image(action, "ets_nopredictions", fig, True)
     
     # Now build the plot with everything and the predictions
     df = df[[self.get_value_column_name()]]
-    ax = df.plot(color="black", marker="o", legend=True, title=action_title, grid=True, kind="line")
+    ax = df.plot(color="black", marker="o", legend=True, title=self.get_chart_title(action_title), grid=True, kind="line")
     ax.set_ylabel(self.get_value_column_name())
     fig = matplotlib.pyplot.gcf()
     
@@ -916,7 +932,7 @@ class TimeSeriesDataSource(DataSource):
     model_map["BreuschPagan"][index] = f_pvalue
 
     action_title = "{}{}".format(self.get_action_title_prefix(), self.get_obfuscated_name(action))
-    ax = df.plot("Year", self.get_value_column_name(), grid=True, title=action_title, color="black", marker="o", kind="line", legend=True)
+    ax = df.plot("Year", self.get_value_column_name(), grid=True, title=self.get_chart_title(action_title), color="black", marker="o", kind="line", legend=True)
 
     func = numpy.polynomial.Polynomial(model.params)
     matplotlib.pyplot.plot(df["Year"], func(df["ScaledYear"]), "--", color="blue", label="OLS $x^{}$".format(degree))
