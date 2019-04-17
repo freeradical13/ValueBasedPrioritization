@@ -986,8 +986,6 @@ For example, for \textit{Cancer}\footnote{See Appendix command \ref{cmdcancerdat
   \label{table:daa1}
 \end{table}
 
-\clearpage
-
 Run each comparable prediction model $R_i(D(A))$.
 For example, for \textit{Cancer}\footnote{See Appendix command \ref{cmdcancerpredict}.}, see Figure \ref{fig:fig1}:
 
@@ -1438,7 +1436,7 @@ Minimally grouped (5,264) causes of death for the United States \citep{centers20
 \subsubsection{Minimally grouped (11,316) causes of death for the World}
 
 % WORLD_ICD10_MINIMALLY_GROUPED
-Minimally grouped (11,316) causes of death for the World \citep{whomortality}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
+Minimally grouped (11,316) causes of death for the World \citep{whomortality,icd10vol1}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
 
 \begin{table}[H]
   \centering
@@ -1446,11 +1444,11 @@ Minimally grouped (11,316) causes of death for the World \citep{whomortality}\te
     \toprule
       $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
     \midrule
-      1 & C349 & 0.026866 \\
-      2 &  F03 & 0.024561 \\
-      3 & I219 & 0.022585 \\
-      4 &  R99 & 0.019871 \\
-      5 & I509 & 0.018749 \\
+      1 & \ldots neoplasm of bronchus \ldots (C34.9) & 0.026866 \\
+      2 &                 Unspecified dementia (F03) & 0.024561 \\
+      3 & Acute myocardial infarction \ldots (I21.9) & 0.022585 \\
+      4 &             Other ill-defined \ldots (R99) & 0.019871 \\
+      5 &         Heart failure, unspecified (I50.9) & 0.018749 \\
     \bottomrule
   \end{tabular}
   \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
@@ -1460,31 +1458,31 @@ Minimally grouped (11,316) causes of death for the World \citep{whomortality}\te
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/C349_ets.png}
-  \caption{First priority action from the Minimally grouped (11,316) causes of death for the World: \textit{C349}}\label{fig:k8a}
+  \caption{First priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Malignant neoplasm of bronchus and lung, unspecified (C34.9)}}\label{fig:k8a}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/F03_ets.png}
-  \caption{Second priority action from the Minimally grouped (11,316) causes of death for the World: \textit{F03}}\label{fig:k8b}
+  \caption{Second priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Unspecified dementia (F03)}}\label{fig:k8b}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/I219_ets.png}
-  \caption{Third priority action from the Minimally grouped (11,316) causes of death for the World: \textit{I219}}\label{fig:k8c}
+  \caption{Third priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Acute myocardial infarction, unspecified (I21.9)}}\label{fig:k8c}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/R99_ets.png}
-  \caption{Fourth priority action from the Minimally grouped (11,316) causes of death for the World: \textit{R99}}\label{fig:k8d}
+  \caption{Fourth priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Other ill-defined and unspecified causes of mortality (R99)}}\label{fig:k8d}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/I509_ets.png}
-  \caption{Fifth priority action from the Minimally grouped (11,316) causes of death for the World: \textit{I509}}\label{fig:k8e}
+  \caption{Fifth priority action from the Minimally grouped (11,316) causes of death for the World: \textit{Heart failure, unspecified (I50.9)}}\label{fig:k8e}
 \end{figure}
 
 \clearpage
