@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
@@ -638,7 +638,7 @@ class DataSource(abc.ABC):
         title = title[:title.find("(")].strip()
         max_len = max_len - len(after) + 1
         
-      title = title[:max_len] + after + "..."
+      title = title[:max_len] + "..." + after
 
     return title
 

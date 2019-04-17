@@ -719,6 +719,7 @@ This method is applied to the example of choosing meaningful work using an examp
       \newline
       \newline
     \end{abstract}
+    \tableofcontents
   \end{@twocolumnfalse}
 ]
 
@@ -731,6 +732,8 @@ This method is applied to the example of choosing meaningful work using an examp
 %%%%%%%%%%%
 % Article %
 %%%%%%%%%%%
+
+\clearpage
 
 \section{Background}
 
@@ -863,7 +866,9 @@ Finally, \textit{modeled value-based prioritization} $Z(t_F)$ is simply \eqref{v
   \end{gathered}
 \end{equation}
 
-\section{Choosing Meaningful Work}\label{section-example}
+\section{Choosing meaningful work}\label{section-example}
+
+\subsection{Method}
 
 The following example applies modeled value-based prioritization \eqref{modeled-vbp} to the goal of choosing meaningful work.
 Every aspect is an example and should be reconsidered.
@@ -1112,277 +1117,537 @@ For the longterm comparable leading causes of death for the United States, the t
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States}
 
 % US_ICD_113_SELECTED_CAUSES_LEAVES
-ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &                      Nontransport accidents & 0.032929 \\
-        2 &  \ldots poisoning \ldots noxious substances & 0.025236 \\
-        3 &                     Ischemic heart diseases & 0.022342 \\
-        4 &                    Cerebrovascular diseases & 0.015068 \\
-        5 &    Other chronic lower respiratory diseases & 0.013543 \\
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States}
-    \label{table:ztable2}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Nontransport_accidents_ets.png}
-    \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Nontransport accidents}}\label{fig:k2}
-  \end{figure}
+ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figures \ref{fig:k2a}-\ref{fig:k2e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &                      Nontransport accidents & 0.032929 \\
+      2 &  \ldots poisoning \ldots noxious substances & 0.025236 \\
+      3 &                     Ischemic heart diseases & 0.022342 \\
+      4 &                    Cerebrovascular diseases & 0.015068 \\
+      5 &    Other chronic lower respiratory diseases & 0.013543 \\
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States}
+  \label{table:ztable2}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Nontransport_accidents_ets.png}
+  \caption{First priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Nontransport accidents}}\label{fig:k2a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Accidental_poisoning_and_exposure_to_noxious_substances_ets.png}
+  \caption{Second priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Accidental poisoning and exposure to noxious substances}}\label{fig:k2b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Ischemic_heart_diseases_ets.png}
+  \caption{Third priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Ischemic heart diseases}}\label{fig:k2c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Cerebrovascular_diseases_ets.png}
+  \caption{Fourth priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Cerebrovascular diseases}}\label{fig:k2d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_LEAVES/Other_chronic_lower_respiratory_diseases_ets.png}
+  \caption{Fifth priority action from the ICD-9 and ICD-10 113 Cause List for the United States: \textit{Other chronic lower respiratory diseases}}\label{fig:k2e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
 
 % US_ICD_113_SELECTED_CAUSES_ALL
-ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figure \ref{fig:k2}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &      Major cardiovascular diseases & 0.049639 \\
-        2 &                  Diseases of heart & 0.031924 \\
-        3 &      All other diseases (Residual) & 0.021617 \\
-        4 &                Malignant neoplasms & 0.019465 \\
-        5 & Accidents (unintentional injuries) & 0.019337 \\
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
-    \label{table:ztable2}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Major_cardiovascular_diseases_ets.png}
-    \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Major cardiovascular diseases}}\label{fig:k2}
-  \end{figure}
+ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figures \ref{fig:k3a}-\ref{fig:k3e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &      Major cardiovascular diseases & 0.049639 \\
+      2 &                  Diseases of heart & 0.031924 \\
+      3 &      All other diseases (Residual) & 0.021617 \\
+      4 &                Malignant neoplasms & 0.019465 \\
+      5 & Accidents (unintentional injuries) & 0.019337 \\
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
+  \label{table:ztable2}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Major_cardiovascular_diseases_ets.png}
+  \caption{First priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Major cardiovascular diseases}}\label{fig:k3a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Diseases_of_heart_ets.png}
+  \caption{Second priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Diseases of heart}}\label{fig:k3b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/All_other_diseases_Residual_ets.png}
+  \caption{Third priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{All other diseases (Residual)}}\label{fig:k3c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Malignant_neoplasms_ets.png}
+  \caption{Fourth priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Malignant neoplasms}}\label{fig:k3d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Accidents_unintentional_injuries_ets.png}
+  \caption{Fifth priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Accidents (unintentional injuries)}}\label{fig:k3e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings}
 
 % US_ICD_113_SELECTED_CAUSES_ROOTS
-ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings in Table \ref{table:ztable3} and Figure \ref{fig:k3}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &      Major cardiovascular diseases & 0.131121 \\
-        2 & Accidents (unintentional injuries) & 0.050850 \\
-        3 &                Malignant neoplasms & 0.045513 \\
-        4 & Chronic lower respiratory diseases & 0.017207 \\
-        5 &                Alzheimer's disease & 0.012517 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings}
-    \label{table:ztable3}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Major_cardiovascular_diseases_ets.png}
-    \caption{Highest priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Major cardiovascular diseases}}\label{fig:k3}
-  \end{figure}
+ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings in Table \ref{table:ztable3} and Figures \ref{fig:k4a}-\ref{fig:k4e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &      Major cardiovascular diseases & 0.131121 \\
+      2 & Accidents (unintentional injuries) & 0.050850 \\
+      3 &                Malignant neoplasms & 0.045513 \\
+      4 & Chronic lower respiratory diseases & 0.017207 \\
+      5 &                Alzheimer's disease & 0.012517 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings}
+  \label{table:ztable3}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Major_cardiovascular_diseases_ets.png}
+  \caption{First priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Major cardiovascular diseases}}\label{fig:k4a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Accidents_unintentional_injuries_ets.png}
+  \caption{Second priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Accidents (unintentional injuries)}}\label{fig:k4b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Malignant_neoplasms_ets.png}
+  \caption{Third priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Malignant neoplasms}}\label{fig:k4c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Chronic_lower_respiratory_diseases_ets.png}
+  \caption{Fourth priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Chronic lower respiratory diseases}}\label{fig:k4d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ROOTS/Alzheimer_s_disease_ets.png}
+  \caption{Fifth priority action from the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings: \textit{Alzheimer's disease}}\label{fig:k4e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-10 Chapters for the United States}
 
 % US_ICD10_CHAPTERS
-ICD-10 Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figure \ref{fig:k5}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &         Diseases of the circulatory system & 0.101677 \\
-        2 &        External causes of morbidity \ldots & 0.060121 \\
-        3 &                                  Neoplasms & 0.039507 \\
-        4 &             Diseases of the nervous system & 0.037175 \\
-        5 &         Diseases of the respiratory system & 0.026494 \\
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-10 Chapters for the United States}
-    \label{table:ztable5}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Diseases_of_the_circulatory_system_ets.png}
-    \caption{Highest priority action from the ICD-10 Chapters for the United States: \textit{Diseases of the circulatory system}}\label{fig:k5}
-  \end{figure}
+ICD-10 Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figures \ref{fig:k5a}-\ref{fig:k5e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &         Diseases of the circulatory system & 0.101677 \\
+      2 &        External causes of morbidity \ldots & 0.060121 \\
+      3 &                                  Neoplasms & 0.039507 \\
+      4 &             Diseases of the nervous system & 0.037175 \\
+      5 &         Diseases of the respiratory system & 0.026494 \\
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-10 Chapters for the United States}
+  \label{table:ztable5}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Diseases_of_the_circulatory_system_ets.png}
+  \caption{First priority action from the ICD-10 Chapters for the United States: \textit{Diseases of the circulatory system}}\label{fig:k5a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/External_causes_of_morbidity_and_mortality_ets.png}
+  \caption{Second priority action from the ICD-10 Chapters for the United States: \textit{External causes of morbidity and mortality}}\label{fig:k5b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Neoplasms_ets.png}
+  \caption{Third priority action from the ICD-10 Chapters for the United States: \textit{Neoplasms}}\label{fig:k5c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Diseases_of_the_nervous_system_ets.png}
+  \caption{Fourth priority action from the ICD-10 Chapters for the United States: \textit{Diseases of the nervous system}}\label{fig:k5d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_CHAPTERS/Diseases_of_the_respiratory_system_ets.png}
+  \caption{Fifth priority action from the ICD-10 Chapters for the United States: \textit{Diseases of the respiratory system}}\label{fig:k5e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-10 Sub-Chapters for the United States}
 
 % US_ICD10_SUB_CHAPTERS
-ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figure \ref{fig:k6}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &                               Malignant neoplasms & 0.042786 \\
-        2 &        Other external causes of accidental injury & 0.036444 \\
-        3 &                      Other forms of heart disease & 0.023138 \\
-        4 &                          Ischaemic heart diseases & 0.022449 \\
-        5 &       Other \ldots diseases of the nervous system & 0.016669 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-10 Sub-Chapters for the United States}
-    \label{table:ztable6}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Malignant_neoplasms_ets.png}
-    \caption{Highest priority action from the ICD-10 Sub-Chapters for the United States: \textit{Name093}}\label{fig:k6}
-  \end{figure}
+ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figures \ref{fig:k6a}-\ref{fig:k6e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &                               Malignant neoplasms & 0.042786 \\
+      2 &        Other external causes of accidental injury & 0.036444 \\
+      3 &                      Other forms of heart disease & 0.023138 \\
+      4 &                          Ischaemic heart diseases & 0.022449 \\
+      5 &       Other \ldots diseases of the nervous system & 0.016669 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-10 Sub-Chapters for the United States}
+  \label{table:ztable6}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Malignant_neoplasms_ets.png}
+  \caption{First priority action from the ICD-10 Sub-Chapters for the United States: \textit{Malignant neoplasms}}\label{fig:k6a}
+\end{figure}
+  
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Other_external_causes_of_accidental_injury_ets.png}
+  \caption{Second priority action from the ICD-10 Sub-Chapters for the United States: \textit{Other external causes of accidental injury}}\label{fig:k6b}
+\end{figure}
+  
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Other_forms_of_heart_disease_ets.png}
+  \caption{Third priority action from the ICD-10 Sub-Chapters for the United States: \textit{Other forms of heart disease}}\label{fig:k6c}
+\end{figure}
+  
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Ischaemic_heart_diseases_ets.png}
+  \caption{Fourth priority action from the ICD-10 Sub-Chapters for the United States: \textit{Ischaemic heart diseases}}\label{fig:k6d}
+\end{figure}
+  
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_SUB_CHAPTERS/Other_degenerative_diseases_of_the_nervous_system_ets.png}
+  \caption{Fifth priority action from the ICD-10 Sub-Chapters for the United States: \textit{Other degenerative diseases of the nervous system}}\label{fig:k6e}
+\end{figure}
   
 \clearpage
 
 \subsubsection{Minimally grouped (5,264) causes of death for the United States}
 
 % US_ICD10_MINIMALLY_GROUPED
-Minimally grouped (5,264) causes of death for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figure \ref{fig:k7}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &                                Alzheimer disease, unspecified (G30.9) & 0.013730 \\
-        2 &                                 Atherosclerotic heart disease (I25.1) & 0.012711 \\
-        3 &                                     Accidental poisoning \ldots (X42) & 0.012563 \\
-        4 &                         \ldots pulmonary disease, unspecified (J44.9) & 0.011704 \\
-        5 &                              Cerebral infarction, unspecified (I63.9) & 0.007563 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the Minimally grouped (5,264) causes of death for the United States}
-    \label{table:ztable7}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Alzheimer_disease_unspecified_G30_9_ets.png}
-    \caption{Highest priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Name0856}}\label{fig:k7}
-  \end{figure}
+Minimally grouped (5,264) causes of death for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figures \ref{fig:k7a}-\ref{fig:k7e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &                                Alzheimer disease, unspecified (G30.9) & 0.013730 \\
+      2 &                                 Atherosclerotic heart disease (I25.1) & 0.012711 \\
+      3 &                                     Accidental poisoning \ldots (X42) & 0.012563 \\
+      4 &                         \ldots pulmonary disease, unspecified (J44.9) & 0.011704 \\
+      5 &                              Cerebral infarction, unspecified (I63.9) & 0.007563 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the Minimally grouped (5,264) causes of death for the United States}
+  \label{table:ztable7}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Alzheimer_disease_unspecified_G30_9_ets.png}
+  \caption{First priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Alzheimer disease, unspecified (G30.9)}}\label{fig:k7a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Atherosclerotic_heart_disease_I25_1_ets.png}
+  \caption{Second priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Atherosclerotic heart disease (I25.1)}}\label{fig:k7b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Accidental_poisoning_by_and_exposure_to_narcotics_and_psychodysleptics_hallucinogens_not_elsewhere_classified_X42_ets.png}
+  \caption{Third priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Accidental poisoning by and exposure to narcotics and psychodysleptics [hallucinogens] not elsewhere classified (X42)}}\label{fig:k7c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Chronic_obstructive_pulmonary_disease_unspecified_J44_9_ets.png}
+  \caption{Fourth priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Chronic obstructive pulmonary disease, unspecified (J44.9)}}\label{fig:k7d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Cerebral_infarction_unspecified_I63_9_ets.png}
+  \caption{Fifth priority action from the Minimally grouped (5,264) causes of death for the United States: \textit{Cerebral infarction, unspecified (I63.9)}}\label{fig:k7e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{Minimally grouped (11,316) causes of death for the World}
 
 % WORLD_ICD10_MINIMALLY_GROUPED
-Minimally grouped (11,316) causes of death for the World \citep{whomortality}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figure \ref{fig:k8}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 & C349 & 0.026866 \\
-        2 &  F03 & 0.024561 \\
-        3 & I219 & 0.022585 \\
-        4 &  R99 & 0.019871 \\
-        5 & I509 & 0.018749 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
-    \label{table:ztable8}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/C349_ets.png}
-    \caption{Highest priority action from the Minimally grouped (11,316) causes of death for the World: \textit{C349}}\label{fig:k8}
-  \end{figure}
+Minimally grouped (11,316) causes of death for the World \citep{whomortality}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 & C349 & 0.026866 \\
+      2 &  F03 & 0.024561 \\
+      3 & I219 & 0.022585 \\
+      4 &  R99 & 0.019871 \\
+      5 & I509 & 0.018749 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the Minimally grouped (11,316) causes of death for the World}
+  \label{table:ztable8}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/C349_ets.png}
+  \caption{First priority action from the Minimally grouped (11,316) causes of death for the World: \textit{C349}}\label{fig:k8a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/F03_ets.png}
+  \caption{Second priority action from the Minimally grouped (11,316) causes of death for the World: \textit{F03}}\label{fig:k8b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/I219_ets.png}
+  \caption{Third priority action from the Minimally grouped (11,316) causes of death for the World: \textit{I219}}\label{fig:k8c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/R99_ets.png}
+  \caption{Fourth priority action from the Minimally grouped (11,316) causes of death for the World: \textit{R99}}\label{fig:k8d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_MINIMALLY_GROUPED/I509_ets.png}
+  \caption{Fifth priority action from the Minimally grouped (11,316) causes of death for the World: \textit{I509}}\label{fig:k8e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-10 Chapters for the World, including subtotals}
 
 % WORLD_ICD10_CHAPTERS_ALL
-ICD-10 Chapters for the World, including subtotals \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figure \ref{fig:k9}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &          \ldots circulatory system (I00-I99) & 0.160800 \\
-        2 &                          Neoplasms (C00-D48) & 0.097424 \\
-        3 &                Malignant neoplasms (C00-C97) & 0.092250 \\
-        4 &          \ldots respiratory system (J00-J99) & 0.046399 \\
-        5 &           Ischaemic heart diseases (I20-I25) & 0.034819 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World, including subtotals}
-    \label{table:ztable9}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_circulatory_system_I00-I99_ets.png}
-    \caption{Highest priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the circulatory system}}\label{fig:k9}
-  \end{figure}
+ICD-10 Chapters for the World, including subtotals \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figures \ref{fig:k9a}-\ref{fig:k9e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &          \ldots circulatory system (I00-I99) & 0.160800 \\
+      2 &                          Neoplasms (C00-D48) & 0.097424 \\
+      3 &                Malignant neoplasms (C00-C97) & 0.092250 \\
+      4 &          \ldots respiratory system (J00-J99) & 0.046399 \\
+      5 &           Ischaemic heart diseases (I20-I25) & 0.034819 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World, including subtotals}
+  \label{table:ztable9}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_circulatory_system_I00-I99_ets.png}
+  \caption{First priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the circulatory system (I00-I99)}}\label{fig:k9a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Neoplasms_C00-D48_ets.png}
+  \caption{Second priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Neoplasms (C00-D48)}}\label{fig:k9b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Malignant_neoplasms_C00-C97_ets.png}
+  \caption{Third priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Malignant neoplasms (C00-C97)}}\label{fig:k9c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_respiratory_system_J00-J99_ets.png}
+  \caption{Fourth priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the respiratory system (J00-J99)}}\label{fig:k9d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Ischaemic_heart_diseases_I20-I25_ets.png}
+  \caption{Fifth priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Ischaemic heart diseases (I20-I25)}}\label{fig:k9e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-10 Chapters for the World with only top-level groupings}
 
 % WORLD_ICD10_CHAPTER_ROOTS
-ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figure \ref{fig:k10}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &         \ldots circulatory system (I00-I99) & 0.321104 \\
-        2 &                         Neoplasms (C00-D48) & 0.194456 \\
-        3 &         \ldots respiratory system (J00-J99) & 0.092581 \\
-        4 &             \ldots nervous system (G00-G99) & 0.043816 \\
-        5 &            External causes \ldots (V01-Y98) & 0.032951 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World with only top-level groupings}
-    \label{table:ztable10}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Diseases_of_the_circulatory_system_I00-I99_ets.png}
-    \caption{Highest priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Diseases of the circulatory system (I00-I99)}}\label{fig:k10}
-  \end{figure}
+ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figures \ref{fig:k10a}-\ref{fig:k10e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &         \ldots circulatory system (I00-I99) & 0.321104 \\
+      2 &                         Neoplasms (C00-D48) & 0.194456 \\
+      3 &         \ldots respiratory system (J00-J99) & 0.092581 \\
+      4 &             \ldots nervous system (G00-G99) & 0.043816 \\
+      5 &            External causes \ldots (V01-Y98) & 0.032951 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World with only top-level groupings}
+  \label{table:ztable10}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Diseases_of_the_circulatory_system_I00-I99_ets.png}
+  \caption{First priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Diseases of the circulatory system (I00-I99)}}\label{fig:k10a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Neoplasms_C00-D48_ets.png}
+  \caption{Second priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Neoplasms (C00-D48)}}\label{fig:k10b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Diseases_of_the_respiratory_system_J00-J99_ets.png}
+  \caption{Third priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Diseases of the respiratory system (J00-J99)}}\label{fig:k10c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/Diseases_of_the_nervous_system_G00-G99_ets.png}
+  \caption{Fourth priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{Diseases of the nervous system (G00-G99)}}\label{fig:k10d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTER_ROOTS/External_causes_of_morbidity_and_mortality_V01-Y98_ets.png}
+  \caption{Fifth priority action from the ICD-10 Chapters for the World with only top-level groupings: \textit{External causes of morbidity and mortality (V01-Y98)}}\label{fig:k10e}
+\end{figure}
 
 \clearpage
 
 \subsubsection{ICD-10 Sub-Chapters for the World}
 
 % WORLD_ICD10_SUB_CHAPTERS
-ICD-10 Sub-Chapters for the World \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figure \ref{fig:k11}:
-  \begin{table}[H]
-    \centering
-    \begin{tabular}{clc}
-      \toprule
-        $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-      \midrule
-        1 &                Malignant neoplasms (C00-C97) & 0.216971 \\
-        2 &           Ischaemic heart diseases (I20-I25) & 0.076670 \\
-        3 &       Other forms of heart disease (I30-I52) & 0.038095 \\
-        4 &            Influenza and pneumonia (J09-J18) & 0.032015 \\
-        5 &        \ldots respiratory diseases (J40-J47) & 0.031105 \\
-      \bottomrule
-    \end{tabular}
-    \caption{$Z(t_F)$ table for the ICD-10 Sub-Chapters for the World}
-    \label{table:ztable11}
-  \end{table}
-  \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Malignant_neoplasms_C00-C97_ets.png}
-    \caption{Highest priority action from the ICD-10 Sub-Chapters for the World: \textit{Malignant neoplasms (C00-C97)}}\label{fig:k11}
-  \end{figure}
+ICD-10 Sub-Chapters for the World \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figures \ref{fig:k11a}-\ref{fig:k11e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &                Malignant neoplasms (C00-C97) & 0.216971 \\
+      2 &           Ischaemic heart diseases (I20-I25) & 0.076670 \\
+      3 &       Other forms of heart disease (I30-I52) & 0.038095 \\
+      4 &            Influenza and pneumonia (J09-J18) & 0.032015 \\
+      5 &        \ldots respiratory diseases (J40-J47) & 0.031105 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the ICD-10 Sub-Chapters for the World}
+  \label{table:ztable11}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Malignant_neoplasms_C00-C97_ets.png}
+  \caption{First priority action from the ICD-10 Sub-Chapters for the World: \textit{Malignant neoplasms (C00-C97)}}\label{fig:k11a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Ischaemic_heart_diseases_I20-I25_ets.png}
+  \caption{Second priority action from the ICD-10 Sub-Chapters for the World: \textit{Ischaemic heart diseases (I20-I25)}}\label{fig:k11b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Other_forms_of_heart_disease_I30-I52_ets.png}
+  \caption{Third priority action from the ICD-10 Sub-Chapters for the World: \textit{Other forms of heart disease (I30-I52)}}\label{fig:k11c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Influenza_and_pneumonia_J09-J18_ets.png}
+  \caption{Fourth priority action from the ICD-10 Sub-Chapters for the World: \textit{Influenza and pneumonia (J09-J18)}}\label{fig:k11d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_SUB_CHAPTERS/Chronic_lower_respiratory_diseases_J40-J47_ets.png}
+  \caption{Fifth priority action from the ICD-10 Sub-Chapters for the World: \textit{Chronic lower respiratory diseases (J40-J47)}}\label{fig:k11e}
+\end{figure}
 
 \clearpage
 
