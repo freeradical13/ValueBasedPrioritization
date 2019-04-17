@@ -933,7 +933,7 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
         stats[file_year] = year_stats
         df, scale = self.get_mortality_data(csv, file_year)
         for icd_range, trash in icd_codes_map.items():
-          if icd_range != "Residual":
+          if icd_range != "Residual" and icd_range != "NaN":
             ages = df.query(self.icd_query(icd_range))["AgeMinutes"]
             if type(ages) is numpy.float64:
               year_stats[icd_range] = {"Sum": ages, "Max": ages, "Count": 1, "Scale": scale}
