@@ -818,7 +818,7 @@ Example scale functions include implementation time, cost, risk, and other judgm
 Ideally, scale functions should be defined before running the model to reduce bias.
 The set $S$ always includes the element $S_1(A(t)) = 1$.
 
-A \textit{value-based prioritization} $Z(t)$ is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
+A \textit{value-based prioritization} (VBP) $Z(t)$ is a sequence of actions ordered by prioritization score \eqref{prioritization-score} in descending order:
 
 \begin{equation}\label{vbp}
   \begin{gathered}
@@ -857,7 +857,7 @@ For each action, $L(R(D(A)))$ produces the \textit{best fitting model} $M(A(t))$
 
 Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
-Finally, \textit{modeled value-based prioritization} $Z(t_F)$ is simply \eqref{vbp} with $t_F$:
+Finally, \textit{modeled value-based prioritization} (MVBP) $Z(t_F)$ is simply \eqref{vbp} with $t_F$:
 
 \begin{equation}\label{modeled-vbp}
   \begin{gathered}
@@ -1060,7 +1060,7 @@ This analysis is run on all mutually exclusive groupings of causes of death\foot
 
 \subsubsection{Longterm comparable leading causes of death for the United States}
 
-For the longterm comparable leading causes of death for the United States, the top 5 results\footnote{See Appendix command \ref{cmdlongtermcomparable}.} are in Table \ref{table:ztable1} and Figures \ref{fig:k1a}-\ref{fig:k1e}:
+Top 5 MVBP results for the longterm comparable leading causes of death for the United States\footnote{See Appendix command \ref{cmdlongtermcomparable}.} in Table \ref{table:ztable1} and Figures \ref{fig:k1a}-\ref{fig:k1e}:
 
 % US_ICD_LONGTERM_COMPARABLE_LEADING
 \begin{table}[H]
@@ -1115,7 +1115,7 @@ For the longterm comparable leading causes of death for the United States, the t
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States}
 
 % US_ICD_113_SELECTED_CAUSES_LEAVES
-ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figures \ref{fig:k2a}-\ref{fig:k2e}:
+Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figures \ref{fig:k2a}-\ref{fig:k2e}:
 
 \begin{table}[H]
   \centering
@@ -1168,7 +1168,7 @@ ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,ander
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
 
 % US_ICD_113_SELECTED_CAUSES_ALL
-ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figures \ref{fig:k3a}-\ref{fig:k3e}:
+Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figures \ref{fig:k3a}-\ref{fig:k3e}:
 
 \begin{table}[H]
   \centering
@@ -1221,7 +1221,7 @@ ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Ta
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings}
 
 % US_ICD_113_SELECTED_CAUSES_ROOTS
-ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings in Table \ref{table:ztable3} and Figures \ref{fig:k4a}-\ref{fig:k4e}:
+Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings in Table \ref{table:ztable3} and Figures \ref{fig:k4a}-\ref{fig:k4e}:
 
 \begin{table}[H]
   \centering
@@ -1275,7 +1275,7 @@ ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupi
 \subsubsection{ICD-10 Chapters for the United States}
 
 % US_ICD10_CHAPTERS
-ICD-10 Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figures \ref{fig:k5a}-\ref{fig:k5e}:
+Top 5 MVBP results for the ICD-10 Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figures \ref{fig:k5a}-\ref{fig:k5e}:
 
 \begin{table}[H]
   \centering
@@ -1328,7 +1328,7 @@ ICD-10 Chapters for the United States \citep{centers2017underlying}\textsuperscr
 \subsubsection{ICD-10 Sub-Chapters for the United States}
 
 % US_ICD10_SUB_CHAPTERS
-ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figures \ref{fig:k6a}-\ref{fig:k6e}:
+Top 5 MVBP results for the ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figures \ref{fig:k6a}-\ref{fig:k6e}:
 
 \begin{table}[H]
   \centering
@@ -1382,7 +1382,7 @@ ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\textsupe
 \subsubsection{Minimally grouped (5,264) causes of death for the United States}
 
 % US_ICD10_MINIMALLY_GROUPED
-Minimally grouped (5,264) causes of death for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figures \ref{fig:k7a}-\ref{fig:k7e}:
+Top 5 MVBP results for the minimally grouped (5,264) causes of death for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figures \ref{fig:k7a}-\ref{fig:k7e}:
 
 \begin{table}[H]
   \centering
@@ -1436,7 +1436,7 @@ Minimally grouped (5,264) causes of death for the United States \citep{centers20
 \subsubsection{Minimally grouped (11,316) causes of death for the World}
 
 % WORLD_ICD10_MINIMALLY_GROUPED
-Minimally grouped (11,316) causes of death for the World \citep{whomortality,icd10vol1}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
+Top 5 MVBP results for the minimally grouped (11,316) causes of death for the World \citep{whomortality,icd10vol1}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
 
 \begin{table}[H]
   \centering
@@ -1490,7 +1490,7 @@ Minimally grouped (11,316) causes of death for the World \citep{whomortality,icd
 \subsubsection{ICD-10 Chapters for the World, including subtotals}
 
 % WORLD_ICD10_CHAPTERS_ALL
-ICD-10 Chapters for the World, including subtotals \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figures \ref{fig:k9a}-\ref{fig:k9e}:
+Top 5 MVBP results for the ICD-10 Chapters for the World, including subtotals \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figures \ref{fig:k9a}-\ref{fig:k9e}:
 
 \begin{table}[H]
   \centering
@@ -1544,7 +1544,7 @@ ICD-10 Chapters for the World, including subtotals \citep{whomortality}\textsupe
 \subsubsection{ICD-10 Chapters for the World with only top-level groupings}
 
 % WORLD_ICD10_CHAPTER_ROOTS
-ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figures \ref{fig:k10a}-\ref{fig:k10e}:
+Top 5 MVBP results for the ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figures \ref{fig:k10a}-\ref{fig:k10e}:
 
 \begin{table}[H]
   \centering
@@ -1598,7 +1598,7 @@ ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}
 \subsubsection{ICD-10 Sub-Chapters for the World}
 
 % WORLD_ICD10_SUB_CHAPTERS
-ICD-10 Sub-Chapters for the World \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figures \ref{fig:k11a}-\ref{fig:k11e}:
+Top 5 MVBP results for the ICD-10 Sub-Chapters for the World \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figures \ref{fig:k11a}-\ref{fig:k11e}:
 
 \begin{table}[H]
   \centering

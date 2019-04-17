@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.3.3"
+VERSION = "0.3.4"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
@@ -375,8 +375,12 @@ class DataSource(abc.ABC):
                .replace("|", "_") \
                .replace("?", "_") \
                .replace(",", "") \
-               .replace(".", "_") \
                .replace("*", "_")
+
+    # Remove any periods from the part before an extension
+    if len(name) > 4 and name[len(name)-4] == "." and name.find(".") < (len(name) - 4):
+      name = name[:name.rfind(".")].replace(".", "_") + name[name.rfind("."):]
+
     outputdir = self.options.output_dir
     if self.options.data_type is not None and self.options.data_type_subdir:
       outputdir = os.path.join(outputdir, self.options.data_type.name)
