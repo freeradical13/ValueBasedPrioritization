@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.3.4"
+VERSION = "0.3.5"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
@@ -307,6 +307,8 @@ class DataSource(abc.ABC):
     
     b = b.reindex(columns=sorted(b.columns))
     
+    b = self.post_process_b(b)
+    
     self.write_spreadsheet(b, self.prefix_all("b2"))
     
     z = b.prod(axis="columns").sort_values(ascending=False)
@@ -321,6 +323,9 @@ class DataSource(abc.ABC):
     z = z.head(self.options.top_actions)
 
     return z
+
+  def post_process_b(self, df):
+    return df
 
   def run_get_possible_actions(self):
     df = self.data[self.get_action_column_name()]

@@ -896,6 +896,10 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
   def print_processing_csv(self, i, csv, csvs):
     print("Processing {} ({} of {})".format(csv, i+1, len(csvs)))
     
+  def post_process_b(self, df):
+    df.drop("All other diseases (Residual)", inplace=True)
+    return df
+
   def get_calculated_scale_function_values(self):
     self.check_raw_files_directory()
     average_range = self.options.average_age_range
