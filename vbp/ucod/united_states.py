@@ -896,8 +896,13 @@ class UCODUnitedStates(vbp.ucod.icd.ICDDataSource):
   def print_processing_csv(self, i, csv, csvs):
     print("Processing {} ({} of {})".format(csv, i+1, len(csvs)))
     
+  def run_filter(self):
+    self.data["icdint"] = self.data[self.get_code_column_name()].apply(ICD.toint)
+    self.data["icdfloat"] = self.data[self.get_code_column_name()].apply(ICD.tofloat)
+    self.data = self.data.query(self.icd_query(self.options.filter))
+
   def post_process_b(self, df):
-    df.drop("All other diseases (Residual)", inplace=True)
+    df.drop(df[df.index == "All other diseases (Residual)"].index, inplace=True)
     return df
 
   def get_calculated_scale_function_values(self):

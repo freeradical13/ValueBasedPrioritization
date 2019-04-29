@@ -1649,6 +1649,59 @@ Top 5 MVBP results for the ICD-10 Sub-Chapters for the World \citep{whomortality
 
 \clearpage
 
+\subsubsection{Sub-selection}
+
+Further sub-selection may be done by filtering by ICD codes\citep{icd10vol1}\textsuperscript{,}\footnote{See Appendix command \ref{cmdfilter}.}. For example, the top 5 MVBP results for the minimally grouped causes of death for the United States for heart diseases (codes I00-I99) in Table \ref{table:ztable12} and Figures \ref{fig:k12a}-\ref{fig:k12e}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{clc}
+    \toprule
+      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+    \midrule
+      1 &        Atherosclerotic heart disease (I25.1) & 0.037527 \\
+      2 & Atherosclerotic cardiovascular\ldots (I25.0) & 0.022493 \\
+      3 &     Cerebral infarction, unspecified (I63.9) & 0.022395 \\
+      4 &             Congestive heart failure (I50.0) & 0.015612 \\
+      5 &    Hypertensive heart disease \ldots (I11.9) & 0.012890 \\
+    \bottomrule
+  \end{tabular}
+  \caption{$Z(t_F)$ table for the minimally grouped causes of death for the United States for heart diseases (codes I00-I99)}
+  \label{table:ztable12}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Atherosclerotic_heart_disease_I25_1_ets.png}
+  \caption{First priority action from the ICD-10 Sub-Chapters for the World: \textit{Atherosclerotic heart disease (I25.1)}}\label{fig:k12a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Atherosclerotic_cardiovascular_disease_so_described_I25_0_ets.png}
+  \caption{Second priority action from the ICD-10 Sub-Chapters for the World: \textit{Atherosclerotic cardiovascular disease, so described (I25.0)}}\label{fig:k12b}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Cerebral_infarction_unspecified_I63_9_ets.png}
+  \caption{Third priority action from the ICD-10 Sub-Chapters for the World: \textit{Cerebral infarction, unspecified (I63.9)}}\label{fig:k12c}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Congestive_heart_failure_I50_0_ets.png}
+  \caption{Fourth priority action from the ICD-10 Sub-Chapters for the World: \textit{Congestive heart failure (I50.0)}}\label{fig:k12d}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{results/US_ICD10_MINIMALLY_GROUPED/Hypertensive_heart_disease_without_congestive_heart_failure_I11_9_ets.png}
+  \caption{Fifth priority action from the ICD-10 Sub-Chapters for the World: \textit{Hypertensive heart disease without (congestive) heart failure (I11.9)}}\label{fig:k12e}
+\end{figure}
+
+\clearpage
+
 \section{Discussion}
 
 This article proposes a method called value based prioritization which uses value theory to establish a goal and the set of known actions to accomplish said goal.
@@ -1721,6 +1774,7 @@ Notes on Section \ref{section-example}:
   \item \label{cmdlongtermcomparable} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODUnitedStates --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}
   \item \label{cmdmodeledvbpus} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization -a UCODUnitedStates \ldots}
   \item \label{cmdmodeledvbpworld} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODWorld --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx}
+  \item \label{cmdfilter} \texttt{python3 -m vbp.run modeled\char`_value\char`_based\char`_prioritization UCODUnitedStates --filter "I00.0-I99.9" --do-not-obfuscate --data-type US\char`_ICD10\char`_MINIMALLY\char`_GROUPED --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual\char`_scale\char`_functions.xlsx --average-ages S2 --average-age-range 5}
 \end{enumerate}
 
 \end{document}

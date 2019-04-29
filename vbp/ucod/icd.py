@@ -269,6 +269,7 @@ class ICD:
   @staticmethod
   def toint(x, addone=False):
     x = x.replace("-", "")
+    x = x.replace(".", "")
     if len(x) == 4:
       x = x[0:3]
     normalized_x = ICD.normalize(x)

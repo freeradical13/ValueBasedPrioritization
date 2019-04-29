@@ -50,7 +50,7 @@ import matplotlib.offsetbox
 import statsmodels.tools
 import statsmodels.formula.api
 
-VERSION = "0.3.5"
+VERSION = "0.3.6"
 numpy.seterr("raise")
 
 def linear_regression_formula(degree=1):
@@ -233,6 +233,7 @@ class DataSource(abc.ABC):
       parser.add_argument("--do-not-exit-on-warning", dest="exit_on_warning", action="store_false", help="Do not exit on a warning")
       parser.add_argument("--do-not-obfuscate", action="store_true", help="do not obfuscate action names", default=False)
       parser.add_argument("--do-not-write-spreadsheets", dest="write_spreadsheets", action="store_false", help="do not write spreadsheets")
+      parser.add_argument("--filter", help="filter", default="")
       parser.add_argument("-k", "--top-actions", help="Number of top actions to report", type=int, default=5)
       parser.add_argument("--manual-scales", help="manually calculated scale functions")
       parser.add_argument("--max-title-length", help="Maximum title length, particular for charts", type=int, default=50)
@@ -264,8 +265,13 @@ class DataSource(abc.ABC):
   def ensure_loaded(self):
     if not hasattr(self, "data"):
       self.data = self.run_load()
+      if self.options.filter != "":
+        self.run_filter()
       self.post_process()
       
+  def run_filter(self):
+    raise NotImplementedError()
+
   def check_action_exists(self, action):
     if action not in self.get_possible_actions():
       raise ValueError("Could not find action: {}".format(action))
