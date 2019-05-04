@@ -9,8 +9,16 @@
 \usepackage{csquotes}
 \usepackage{xurl}
 \urlstyle{rm}
-\usepackage[super,comma,sort&compress]{natbib}
-%\usepackage[authoryear,comma,sort&compress]{natbib}
+
+% Citations in APA format, sorted.
+\usepackage[authoryear,semicolon,sort&compress]{natbib}
+\newcommand\footnotesstartsep{}
+
+% Citations with superscript numbers, unsorted.
+% \usepackage[super,comma,sort&compress]{natbib}
+% \newcommand\footnotesstartsep{\textsuperscript{,}}
+
+\newcommand\footnotescontinue{\textsuperscript{,}}
 \bibliographystyle{unsrtnat}
 \usepackage{abstract}
 \renewcommand{\abstractnamefont}{\normalfont\bfseries}
@@ -237,14 +245,15 @@
 
 @misc{centers2017underlying,
   title        = {{Underlying Cause of Death 1999-2017}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics}},
+  author       = {{U.S. CDC}},
+  year         = {2017},
   howpublished = {\url{https://wonder.cdc.gov/ucd-icd10.html}},
   note         = {Accessed: 2019-03-01},
 }
 
 @book{icd10vol1,
   title        = {International statistical classification of diseases and related health problems},
-  author       = {World Health Organization},
+  author       = {{U.N. WHO}},
   year         = {2016},
   publisher    = {World Health Organization},
   edition      = {10th},
@@ -254,7 +263,7 @@
 
 @book{icd10vol2,
   title        = {International statistical classification of diseases and related health problems},
-  author       = {World Health Organization},
+  author       = {{U.N. WHO}},
   year         = {2010},
   publisher    = {World Health Organization},
   edition      = {10th},
@@ -264,7 +273,7 @@
 
 @book{icd10vol3,
   title        = {International statistical classification of diseases and related health problems},
-  author       = {World Health Organization},
+  author       = {{U.N. WHO}},
   year         = {2016},
   publisher    = {World Health Organization},
   edition      = {10th},
@@ -347,6 +356,7 @@
 @misc{censusestimates19001999,
   title        = {{Historical National Population Estimates}},
   author       = {{U.S. Census Bureau}},
+  year         = {1999},
   howpublished = {\url{https://www2.census.gov/programs-surveys/popest/tables/1900-1980/national/totals/popclockest.txt}},
   note         = {Accessed: 2019-03-01},
 }
@@ -354,20 +364,23 @@
 @misc{worldbankopendata,
   title        = {{World Bank Open Data: United States SP.POP.TOTL}},
   author       = {{World Bank}},
+  year         = {2019},
   howpublished = {\url{http://api.worldbank.org/v2/en/country/USA?downloadformat=csv}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{nbermortality,
   title        = {{Mortality Data: Vital Statistics NCHS' Multiple Cause of Death Data, 1959-2017}},
-  author       = {{The National Bureau of Economic Research}},
+  author       = {{NBER}},
+  year         = {2018},
   howpublished = {\url{https://www.nber.org/data/vital-statistics-mortality-data-multiple-cause-of-death.html}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{icdcomparabilityratios,
   title        = {{A Guide to State Implementation of ICD-10 for Mortality; Part II: Applying Comparability Ratios}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\nothing}},
+  author       = {{U.S. CDC}},
+  year         = {2000},
   howpublished = {\url{https://www.cdc.gov/nchs/data/statab/document-for-the-states.pdf}},
   note         = {Accessed: 2019-03-01},
 }
@@ -386,14 +399,16 @@
 
 @misc{uspopulation19002001,
   title        = {{United States Population by Age, Race, and Sex, 1900-90, and 1991-2001}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\nothing\nothing}},
+  author       = {{U.S. CDC}},
+  year         = {2001},
   howpublished = {\url{https://www.cdc.gov/nchs/nvss/mortality/historical_population.htm}},
   note         = {Accessed: 2019-03-01},
 }
 
 @misc{uslcod19001998,
   title        = {{Leading Causes of Death, 1900-1998}},
-  author       = {{Centers for Disease Control and Prevention and National Center for Health Statistics\nothing\nothing\nothing}},
+  author       = {{U.S. CDC}},
+  year         = {1998},
   howpublished = {\url{https://www.cdc.gov/nchs/nvss/mortality_historical_data.htm}},
   note         = {Accessed: 2019-03-01},
 }
@@ -408,7 +423,7 @@
 
 @article{world2009guide,
   title        = {{WHO guide to identifying the economic consequences of disease and injury}},
-  author       = {World Health Organization and others},
+  author       = {{U.N. WHO}},
   year         = {2009},
   publisher    = {World Health Organization},
   note         = {\url{https://www.who.int/choice/publications/d_economic_impact_guide.pdf}},
@@ -418,6 +433,7 @@
   title        = {{Some considerations against more investment in cost-effectiveness estimates}},
   author       = {{GiveWell.org}},
   howpublished = {\url{https://blog.givewell.org/2011/11/04/some-considerations-against-more-investment-in-cost-effectiveness-estimates/}},
+  year         = {2011},
   note         = {Accessed: 2019-03-01},
 }
 
@@ -430,7 +446,7 @@
 }
 
 @article{neumann2018comparing,
-  title        = {Comparing the cost-per-QALYs gained and cost-per-DALYs averted literatures},
+  title        = {{Comparing the cost-per-QALYs gained and cost-per-DALYs averted literatures}},
   author       = {Neumann, Peter J and Anderson, Jordan E and Panzer, Ari D and Pope, Elle F and D'Cruz, Brittany N and Kim, David D and Cohen, Joshua T},
   journal      = {Gates open research},
   volume       = {2},
@@ -460,7 +476,8 @@
 
 @misc{whomortality,
   title        = {{WHO Mortality Database}},
-  author       = {{World Health Organization}},
+  author       = {{U.N. WHO}},
+  year         = {2019},
   howpublished = {\url{https://www.who.int/healthinfo/statistics/mortality_rawdata/en/}},
   note         = {Accessed: 2019-03-01},
 }
@@ -516,7 +533,7 @@
 }
 
 @article{anderson2001comparability,
-  title        = {Comparability of Cause of Death between ICD-9 and ICD-10: Preliminary Estimates},
+  title        = {{Comparability of Cause of Death between ICD-9 and ICD-10: Preliminary Estimates}},
   author       = {Anderson, Robert N and Mini{\~n}o, Arialdi M and Hoyert, Donna L and Rosenberg, Harry M},
   year         = {2001},
   note         = {\url{https://www.cdc.gov/nchs/data/nvsr/nvsr49/nvsr49_02.pdf}},
@@ -619,7 +636,7 @@
 }
 
 @article{george2013meaning,
-  title        = {Are meaning and purpose distinct? An examination of correlates and predictors},
+  title        = {{Are meaning and purpose distinct? An examination of correlates and predictors}},
   author       = {George, Login S and Park, Crystal L},
   journal      = {The Journal of Positive Psychology},
   volume       = {8},
@@ -745,7 +762,7 @@ Given an action, how should that action be pursued (\enquote{How})?
 
 To exemplify these questions, the issue of choosing meaningful work is selected. One field that investigates the question of meaningful work is psychology, largely in specialties such as positive and vocational psychology.
 
-Although there are significant efforts to establish the importance of a meaningful life \citep{martela2016three,baumeister1991meanings,frankl1985man,baumeister2013some,park2013assessing,allan2015meaning,heintzelman2013knowing} and meaningful work \citep{steger2013experiencing,dik2009calling,oades2017wiley,steger2009if}, calling \citep{dik2012make}, or purpose \citep{george2013meaning}, and survey perceptions of meaningful work \citep{steger2006meaning}, efforts to provide detailed methods of choosing such meaningful work are largely confined to vague techniques such as evaluations of psychological profiles for signature strengths \citep{seligman2006learned}, career counseling \citep{dik2009calling} or therapy \citep{wong2010meaning}, and job search training \citep{zikic2009job}. These approaches are important prerequisites but their less quantitative and less explicit nature make them difficult to evaluate, generalize, and improve.
+Although there are significant efforts to establish the importance of a meaningful life \citep{martela2016three,baumeister1991meanings,frankl1985man,baumeister2013some,park2013assessing,allan2015meaning,heintzelman2013knowing} and meaningful work \citep{steger2013experiencing,dik2009calling,oades2017wiley,steger2009if}, calling \citep{dik2012make}, or purpose \citep{george2013meaning}, and surveying perceptions of meaningful work \citep{steger2006meaning}, efforts to provide detailed methods of choosing such meaningful work are largely confined to vague techniques such as evaluations of psychological profiles for signature strengths \citep{seligman2006learned}, career counseling \citep{dik2009calling} or therapy \citep{wong2010meaning}, and job search training \citep{zikic2009job}. These approaches are important prerequisites but their less quantitative and less explicit nature make them difficult to evaluate, generalize, and improve.
 
 \section{Value-Based Prioritization}
 
@@ -842,7 +859,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textit{comparable prediction models} (or forecasting models) \citep{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing \citep{hyndman2018forecasting,hyndman2008forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM] \citep{taylor2018forecasting}, ARIMA \citep{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression \citep{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning \citep{makridakis2018m4}, seasonal algorithms such as TBATS \citep{hyndman2018forecasting}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression \citep{mathers2006projections}, etc.):
+Then, a set of \textit{comparable prediction models} (or forecasting models) \citep{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all} $R(D(A))$ is applied to each $D(A)$ (e.g. exponential smoothing \citep{hyndman2018forecasting,hyndman2008forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model [GAM] \citep{taylor2018forecasting}, ARIMA \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning \citep{makridakis2018m4}, seasonal algorithms such as TBATS \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression \citep{mathers2006projections}, etc.):
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -853,7 +870,7 @@ Then, a set of \textit{comparable prediction models} (or forecasting models) \ci
 
 The models are compared using a \textit{model selection} algorithm\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} \inlineequation[model-selection]{L(R(D(A)))} (e.g. smallest Akaike's Information Criterion [AIC], smallest Corrected AIC [AICc], smallest Bayesian Information Criterion [BIC], smallest cross-validation, largest adjusted coefficient of determination [$\bar{R^2}$], etc.).
 
-For each action, $L(R(D(A)))$ produces the \textit{best fitting model} $M(A(t))$ (or a model that's an average of multiple models \citep{clemen1989combining}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
+For each action, $L(R(D(A)))$ produces the \textit{best fitting model} $M(A(t))$ (or a model that's an average of multiple models \citep{clemen1989combining}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}).
 
 Each action's $M(A(t_F))$ is used to predict $B(A(t_F))$.
 
@@ -883,7 +900,7 @@ First, outline the parameters:
   \item \eqref{how-many-actions} $k = $ 1 for a single person (or 2 to hedge the failure of the first action or to add a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
   \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\scriptsize{\url{https://www.who.int/topics/mortality/en/}}}.
-  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}} ($ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.):
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\footnotescontinue\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\footnotescontinue\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}} ($ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.):
     \begin{equation*}
       \begin{gathered}
         \{ETS(A,A,N),ETS(A,A_d,N)\},\\
@@ -894,10 +911,10 @@ First, outline the parameters:
   \item \eqref{model-selection} $L(R(D(A))) = $ lowest AICc.
 \end{itemize}
 
-$A(t)$ is a set of actions which would eliminate the groups of Underlying Causes of Death (UCOD) as classified by the International Classification of Diseases (ICD) \citep{icd10vol1,icd10vol2,icd10vol3}\textsuperscript{,}\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2 \citep{icd10vol2}.
+$A(t)$ is a set of actions which would eliminate the groups of Underlying Causes of Death (UCOD) as classified by the International Classification of Diseases (ICD) \citep{icd10vol1,icd10vol2,icd10vol3}\footnotesstartsep\footnote{For a discussion of chapters, sub-chapters, and codes, see pages 13-17 of ICD-10 Volume 2 \citep{icd10vol2}.
 For a discussion of the definition of underlying cause of death, see page 31 of ICD-10 Volume 2 \citep{icd10vol2}.}.
 
-This example starts by looking at the longterm comparable leading causes of death for the United States \citep{uslcod19001998,nbermortality,centers2017underlying,uspopulation19002001,censusestimates19001999}\textsuperscript{,}\footnote{See Appendix command \ref{cmdlist}.}\textsuperscript{,}\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
+This example starts by looking at the longterm comparable leading causes of death for the United States \citep{uslcod19001998,uspopulation19002001,centers2017underlying,nbermortality,censusestimates19001999}\footnotesstartsep\footnote{See Appendix command \ref{cmdlist}.}\footnotescontinue\footnote{See Appendix note \ref{generateuslongterm} on how the data was generated.}:
 
 \begin{equation*}
   \begin{gathered}
@@ -931,7 +948,7 @@ Review the list of actions and hypothesize scale functions. Examples:
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
 The inverse of existing market investment might be interesting to consider.
 
-Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmanualscales}.}:
+Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\footnotescontinue\footnote{See Appendix command \ref{cmdmanualscales}.}:
 
 \begin{table}[H]
   \centering
@@ -1052,7 +1069,7 @@ For example, see Table \ref{table:btablewithall}:
 
 Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions.
 
-This analysis is run on all mutually exclusive groupings of causes of death\footnote{See Appendix command \ref{cmdmodeledvbpus}.}:
+This analysis is run on various mutually exclusive groupings of causes of death\footnote{See Appendix command \ref{cmdmodeledvbpus}.}:
 
 \clearpage
 
@@ -1115,7 +1132,7 @@ Top 5 MVBP results for the longterm comparable leading causes of death for the U
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States}
 
 % US_ICD_113_SELECTED_CAUSES_LEAVES
-Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,anderson2001comparability,icdcomparabilityratios,centers2017underlying}\textsuperscript{,}\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\textsuperscript{,}\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figures \ref{fig:k2a}-\ref{fig:k2e}:
+Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States \citep{nbermortality,anderson2001comparability,centers2017underlying,icdcomparabilityratios}\footnotesstartsep\footnote{\scriptsize{\url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/Comparability/icd9_icd10/Comparability_Ratio_tables.xls}}}\footnotescontinue\footnote{\scriptsize{\url{https://wonder.cdc.gov/wonder/help/ucd.html\#ICD-10\%20113\%20Cause\%20List}}}\footnotescontinue\footnote{\scriptsize{\url{https://www.cdc.gov/nchs/data/dvs/Multiple_Cause_Record_Layout_2016.pdf}, page 19; The list actually has 118 mututally exclusive groups instead of 113.}} in Table \ref{table:ztable2} and Figures \ref{fig:k2a}-\ref{fig:k2e}:
 
 \begin{table}[H]
   \centering
@@ -1165,58 +1182,59 @@ Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States
 
 \clearpage
 
-\subsubsection{ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
-
+% Not mutually exclusive as required by VBP.
+%\subsubsection{ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
+% 
 % US_ICD_113_SELECTED_CAUSES_ALL
-Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figures \ref{fig:k3a}-\ref{fig:k3e}:
+%Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals in Table \ref{table:ztable2} and Figures \ref{fig:k3a}-\ref{fig:k3e}:
+% 
+%\begin{table}[H]
+%  \centering
+%   \begin{tabular}{clc}
+%     \toprule
+%       $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+%     \midrule
+%       1 &      Major cardiovascular diseases & 0.049639 \\
+%       2 &                  Diseases of heart & 0.031924 \\
+%       3 &                Malignant neoplasms & 0.019465 \\
+%       4 & Accidents (unintentional injuries) & 0.019337 \\
+%       5 &             Nontransport accidents & 0.014394 \\
+%   \end{tabular}
+%   \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
+%   \label{table:ztable2}
+% \end{table}
 
-\begin{table}[H]
-  \centering
-  \begin{tabular}{clc}
-    \toprule
-      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-    \midrule
-      1 &      Major cardiovascular diseases & 0.049639 \\
-      2 &                  Diseases of heart & 0.031924 \\
-      3 &                Malignant neoplasms & 0.019465 \\
-      4 & Accidents (unintentional injuries) & 0.019337 \\
-      5 &             Nontransport accidents & 0.014394 \\
-  \end{tabular}
-  \caption{$Z(t_F)$ table for the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals}
-  \label{table:ztable2}
-\end{table}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Major_cardiovascular_diseases_ets.png}
-  \caption{First priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Major cardiovascular diseases}}\label{fig:k3a}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Diseases_of_heart_ets.png}
-  \caption{Second priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Diseases of heart}}\label{fig:k3b}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Malignant_neoplasms_ets.png}
-  \caption{Third priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Malignant neoplasms}}\label{fig:k3d}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Accidents_unintentional_injuries_ets.png}
-  \caption{Fourth priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Accidents (unintentional injuries)}}\label{fig:k3e}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Nontransport_accidents_ets.png}
-  \caption{Fifth priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Nontransport accidents}}\label{fig:k3c}
-\end{figure}
-
-\clearpage
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Major_cardiovascular_diseases_ets.png}
+%   \caption{First priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Major cardiovascular diseases}}\label{fig:k3a}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Diseases_of_heart_ets.png}
+%   \caption{Second priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Diseases of heart}}\label{fig:k3b}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Malignant_neoplasms_ets.png}
+%   \caption{Third priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Malignant neoplasms}}\label{fig:k3d}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Accidents_unintentional_injuries_ets.png}
+%   \caption{Fourth priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Accidents (unintentional injuries)}}\label{fig:k3e}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/US_ICD_113_SELECTED_CAUSES_ALL/Nontransport_accidents_ets.png}
+%   \caption{Fifth priority action from the ICD-9 and ICD-10 113 Cause List for the United States, including subtotals: \textit{Nontransport accidents}}\label{fig:k3c}
+% \end{figure}
+% 
+% \clearpage
 
 \subsubsection{ICD-9 and ICD-10 113 Cause List for the United States with only top-level groupings}
 
@@ -1275,7 +1293,7 @@ Top 5 MVBP results for the ICD-9 and ICD-10 113 Cause List for the United States
 \subsubsection{ICD-10 Chapters for the United States}
 
 % US_ICD10_CHAPTERS
-Top 5 MVBP results for the ICD-10 Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figures \ref{fig:k5a}-\ref{fig:k5e}:
+Top 5 MVBP results for the ICD-10 Chapters for the United States \citep{centers2017underlying}\footnotesstartsep\footnote{Group Results By \enquote{Year} And By \enquote{ICD Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable5} and Figures \ref{fig:k5a}-\ref{fig:k5e}:
 
 \begin{table}[H]
   \centering
@@ -1328,7 +1346,7 @@ Top 5 MVBP results for the ICD-10 Chapters for the United States \citep{centers2
 \subsubsection{ICD-10 Sub-Chapters for the United States}
 
 % US_ICD10_SUB_CHAPTERS
-Top 5 MVBP results for the ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figures \ref{fig:k6a}-\ref{fig:k6e}:
+Top 5 MVBP results for the ICD-10 Sub-Chapters for the United States \citep{centers2017underlying}\footnotesstartsep\footnote{Group Results By \enquote{Year} And By \enquote{ICD Sub-Chapter}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}} in Table \ref{table:ztable6} and Figures \ref{fig:k6a}-\ref{fig:k6e}:
 
 \begin{table}[H]
   \centering
@@ -1379,10 +1397,13 @@ Top 5 MVBP results for the ICD-10 Sub-Chapters for the United States \citep{cent
   
 \clearpage
 
+% Unclear if these are mutually exclusive or not; for example, if a coder
+% chooses I25.1, does that imply I25.0, and are the data normalized as such?
+% We assume mutual exclusivity.
 \subsubsection{Minimally grouped (5,264) causes of death for the United States}
 
 % US_ICD10_MINIMALLY_GROUPED
-Top 5 MVBP results for the minimally grouped (5,264) causes of death for the United States \citep{centers2017underlying}\textsuperscript{,}\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figures \ref{fig:k7a}-\ref{fig:k7e}:
+Top 5 MVBP results for the minimally grouped (5,264) causes of death for the United States \citep{centers2017underlying}\footnotesstartsep\footnote{Group Results By \enquote{Year} And By \enquote{Cause of death}; Check \enquote{Export Results}; Uncheck \enquote{Show Totals}}\footnotescontinue\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable7} and Figures \ref{fig:k7a}-\ref{fig:k7e}:
 
 \begin{table}[H]
   \centering
@@ -1433,10 +1454,13 @@ Top 5 MVBP results for the minimally grouped (5,264) causes of death for the Uni
 
 \clearpage
 
+% Unclear if these are mutually exclusive or not; for example, if a coder
+% chooses I25.1, does that imply I25.0, and are the data normalized as such?
+% We assume mutual exclusivity.
 \subsubsection{Minimally grouped (11,316) causes of death for the World}
 
 % WORLD_ICD10_MINIMALLY_GROUPED
-Top 5 MVBP results for the minimally grouped (11,316) causes of death for the World \citep{whomortality,icd10vol1}\textsuperscript{,}\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\textsuperscript{,}\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\textsuperscript{,}\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
+Top 5 MVBP results for the minimally grouped (11,316) causes of death for the World \citep{whomortality,icd10vol1}\footnotesstartsep\footnote{See Appendix command \ref{cmdmodeledvbpworld}.}\footnotescontinue\footnote{\label{no_s3}Without $S_3$ because comprehensive granular age data doesn't exist.}\footnotescontinue\footnote{Without $S_4$ due to the sheer number of causes.} in Table \ref{table:ztable8} and Figures \ref{fig:k8a}-\ref{fig:k8e}:
 
 \begin{table}[H]
   \centering
@@ -1487,64 +1511,65 @@ Top 5 MVBP results for the minimally grouped (11,316) causes of death for the Wo
 
 \clearpage
 
-\subsubsection{ICD-10 Chapters for the World, including subtotals}
-
-% WORLD_ICD10_CHAPTERS_ALL
-Top 5 MVBP results for the ICD-10 Chapters for the World, including subtotals \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figures \ref{fig:k9a}-\ref{fig:k9e}:
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{clc}
-    \toprule
-      $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
-    \midrule
-      1 &          \ldots circulatory system (I00-I99) & 0.160800 \\
-      2 &                          Neoplasms (C00-D48) & 0.097424 \\
-      3 &                Malignant neoplasms (C00-C97) & 0.092250 \\
-      4 &          \ldots respiratory system (J00-J99) & 0.046399 \\
-      5 &           Ischaemic heart diseases (I20-I25) & 0.034819 \\
-    \bottomrule
-  \end{tabular}
-  \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World, including subtotals}
-  \label{table:ztable9}
-\end{table}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_circulatory_system_I00-I99_ets.png}
-  \caption{First priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the circulatory system (I00-I99)}}\label{fig:k9a}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Neoplasms_C00-D48_ets.png}
-  \caption{Second priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Neoplasms (C00-D48)}}\label{fig:k9b}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Malignant_neoplasms_C00-C97_ets.png}
-  \caption{Third priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Malignant neoplasms (C00-C97)}}\label{fig:k9c}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_respiratory_system_J00-J99_ets.png}
-  \caption{Fourth priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the respiratory system (J00-J99)}}\label{fig:k9d}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Ischaemic_heart_diseases_I20-I25_ets.png}
-  \caption{Fifth priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Ischaemic heart diseases (I20-I25)}}\label{fig:k9e}
-\end{figure}
-
-\clearpage
+% Not mutually exclusive as required by VBP.
+% \subsubsection{ICD-10 Chapters for the World, including subtotals}
+% 
+% % WORLD_ICD10_CHAPTERS_ALL
+% Top 5 MVBP results for the ICD-10 Chapters for the World, including subtotals \citep{whomortality}\footnotesstartsep\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable9} and Figures \ref{fig:k9a}-\ref{fig:k9e}:
+% 
+% \begin{table}[H]
+%   \centering
+%   \begin{tabular}{clc}
+%     \toprule
+%       $k$ & Action (Eliminate: \ldots) & $Z(t_F)$ \\
+%     \midrule
+%       1 &          \ldots circulatory system (I00-I99) & 0.160800 \\
+%       2 &                          Neoplasms (C00-D48) & 0.097424 \\
+%       3 &                Malignant neoplasms (C00-C97) & 0.092250 \\
+%       4 &          \ldots respiratory system (J00-J99) & 0.046399 \\
+%       5 &           Ischaemic heart diseases (I20-I25) & 0.034819 \\
+%     \bottomrule
+%   \end{tabular}
+%   \caption{$Z(t_F)$ table for the ICD-10 Chapters for the World, including subtotals}
+%   \label{table:ztable9}
+% \end{table}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_circulatory_system_I00-I99_ets.png}
+%   \caption{First priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the circulatory system (I00-I99)}}\label{fig:k9a}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Neoplasms_C00-D48_ets.png}
+%   \caption{Second priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Neoplasms (C00-D48)}}\label{fig:k9b}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Malignant_neoplasms_C00-C97_ets.png}
+%   \caption{Third priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Malignant neoplasms (C00-C97)}}\label{fig:k9c}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Diseases_of_the_respiratory_system_J00-J99_ets.png}
+%   \caption{Fourth priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Diseases of the respiratory system (J00-J99)}}\label{fig:k9d}
+% \end{figure}
+% 
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[width=0.5\textwidth]{results/WORLD_ICD10_CHAPTERS_ALL/Ischaemic_heart_diseases_I20-I25_ets.png}
+%   \caption{Fifth priority action from the ICD-10 Chapters for the World, including subtotals: \textit{Ischaemic heart diseases (I20-I25)}}\label{fig:k9e}
+% \end{figure}
+% 
+% \clearpage
 
 \subsubsection{ICD-10 Chapters for the World with only top-level groupings}
 
 % WORLD_ICD10_CHAPTER_ROOTS
-Top 5 MVBP results for the ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figures \ref{fig:k10a}-\ref{fig:k10e}:
+Top 5 MVBP results for the ICD-10 Chapters for the World with only top-level groupings \citep{whomortality}\footnotesstartsep\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable10} and Figures \ref{fig:k10a}-\ref{fig:k10e}:
 
 \begin{table}[H]
   \centering
@@ -1598,7 +1623,7 @@ Top 5 MVBP results for the ICD-10 Chapters for the World with only top-level gro
 \subsubsection{ICD-10 Sub-Chapters for the World}
 
 % WORLD_ICD10_SUB_CHAPTERS
-Top 5 MVBP results for the ICD-10 Sub-Chapters for the World \citep{whomortality}\textsuperscript{,}\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figures \ref{fig:k11a}-\ref{fig:k11e}:
+Top 5 MVBP results for the ICD-10 Sub-Chapters for the World \citep{whomortality}\footnotesstartsep\footnote{See footnote \ref{no_s3}.} in Table \ref{table:ztable11} and Figures \ref{fig:k11a}-\ref{fig:k11e}:
 
 \begin{table}[H]
   \centering
@@ -1651,7 +1676,7 @@ Top 5 MVBP results for the ICD-10 Sub-Chapters for the World \citep{whomortality
 
 \subsubsection{Sub-selection}
 
-Further sub-selection may be done by filtering by ICD codes\citep{icd10vol1}\textsuperscript{,}\footnote{See Appendix command \ref{cmdfilter}.}. For example, the top 5 MVBP results for the minimally grouped causes of death for the United States for heart diseases (codes I00-I99) in Table \ref{table:ztable12} and Figures \ref{fig:k12a}-\ref{fig:k12e}:
+Further sub-selection may be done by filtering by ICD codes \citep{icd10vol1}\footnotesstartsep\footnote{See Appendix command \ref{cmdfilter}.}. For example, the top 5 MVBP results for the minimally grouped causes of death for the United States for heart diseases (codes I00-I99) in Table \ref{table:ztable12} and Figures \ref{fig:k12a}-\ref{fig:k12e}:
 
 \begin{table}[H]
   \centering
@@ -1781,3 +1806,5 @@ Notes on Section \ref{section-example}:
 
 % Create PDF on Linux:
 % FILE=value_based_prioritization; rm -f ${FILE}*aux ${FILE}*bbl ${FILE}*bib ${FILE}*blg ${FILE}*log ${FILE}*out ${FILE}*pdf &>/dev/null; pdflatex -halt-on-error ${FILE}; bibtex ${FILE} && pdflatex ${FILE} && pdflatex ${FILE} && (xdg-open ${FILE}.pdf &)
+%
+% python3 -m vbp.run modeled_value_based_prioritization -a UCODUnitedStates --do-not-obfuscate --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual_scale_functions.xlsx --average-ages S2 --average-age-range 5; mv vbpoutput/ vbpoutput_all/; python3 -m vbp.run modeled_value_based_prioritization -a UCODWorld --do-not-obfuscate --ets-no-multiplicative-models -k 5 -p 10 --manual-scales manual_scale_functions.xlsx; mv vbpoutput/* vbpoutput_all/
