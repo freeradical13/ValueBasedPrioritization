@@ -723,6 +723,42 @@
   publisher    = {Routledge},
 }
 
+@article{breiman2001statistical,
+  title        = {Statistical modeling: The two cultures (with comments and a rejoinder by the author)},
+  author       = {Breiman, Leo and others},
+  journal      = {Statistical science},
+  volume       = {16},
+  number       = {3},
+  pages        = {199--231},
+  year         = {2001},
+  publisher    = {Institute of Mathematical Statistics},
+  note         = {\url{https://projecteuclid.org/euclid.ss/1009213726}},
+}
+
+@article{aho2014model,
+  title        = {Model selection for ecologists: the worldviews of AIC and BIC},
+  author       = {Aho, Ken and Derryberry, DeWayne and Peterson, Teri},
+  journal      = {Ecology},
+  volume       = {95},
+  number       = {3},
+  pages        = {631--636},
+  year         = {2014},
+  publisher    = {Wiley Online Library},
+  note         = {\url{https://doi.org/10.1890/13-1452.1}},
+}
+
+@article{shmueli2010explain,
+  title        = {To explain or to predict?},
+  author       = {Shmueli, Galit and others},
+  journal      = {Statistical science},
+  volume       = {25},
+  number       = {3},
+  pages        = {289--310},
+  year         = {2010},
+  publisher    = {Institute of Mathematical Statistics},
+  note         = {\url{https://projecteuclid.org/euclid.ss/1294167961}},
+}
+
 \end{filecontents}
 
 \usepackage{hyperref}
@@ -880,7 +916,7 @@ If each action has historical data $D(A)$:
   \end{multlined}
 \end{equation}
 
-Then, a set of \textit{comparable prediction models} (or forecasting models) \citep{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all} $R(D(A))$ is applied to each $D(A)$; for example, exponential smoothing \citep{hyndman2018forecasting,hyndman2008forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model (GAM) \citep{taylor2018forecasting}, ARIMA \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning \citep{makridakis2018m4}, seasonal algorithms such as TBATS \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression \citep{mathers2006projections}, etc.:
+Then, a set of \textit{comparable prediction models} (or forecasting models) \citep{de200625,tashman1991automatic,hyndman2018forecasting,taylor2018forecasting,wit2012all} $R(D(A))$ is applied to each $D(A)$; for example, exponential smoothing \citep{hyndman2018forecasting,hyndman2008forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/expsmooth.html}}}, a generalized additive model (GAM) \citep{taylor2018forecasting}, ARIMA \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/arima.html}}}, linear regression \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/regression.html}}}, machine learning \citep{makridakis2018m4}, seasonal algorithms such as TBATS \citep{hyndman2018forecasting}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/advanced.html}}}, poisson log-bilinear regression \citep{mathers2006projections}, etc.\footnote{See also: \cite{breiman2001statistical,shmueli2010explain}}:
 
 \begin{equation}\label{prediction-models}
   \begin{multlined}
@@ -889,7 +925,7 @@ Then, a set of \textit{comparable prediction models} (or forecasting models) \ci
   \end{multlined}
 \end{equation}
 
-The models are compared using a \textit{model selection} algorithm\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} \inlineequation[model-selection]{L(R(D(A)))}; for example, smallest Akaike's Information Criterion (AIC), smallest Corrected AIC (AICc), smallest Bayesian Information Criterion (BIC), smallest cross-validation, largest adjusted coefficient of determination ($\bar{R^2}$), etc.
+The models are compared using a \textit{model selection} algorithm\footnote{\scriptsize{\url{https://otexts.com/fpp2/selecting-predictors.html}}} \inlineequation[model-selection]{L(R(D(A)))}; for example, smallest Akaike's Information Criterion (AIC), smallest Corrected AIC (AICc), smallest Bayesian Information Criterion (BIC), smallest cross-validation, largest adjusted coefficient of determination ($\bar{R^2}$), etc.\footnote{See also: \cite{aho2014model}}
 
 For each action, $L(R(D(A)))$ produces the \textit{best fitting model} $M(A(t))$, or a model that's an average of multiple models \citep{clemen1989combining}\footnotesstartsep\footnote{\scriptsize{\url{https://otexts.com/fpp2/combinations.html}}}.
 
