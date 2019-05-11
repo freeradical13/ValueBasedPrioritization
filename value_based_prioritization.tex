@@ -970,7 +970,7 @@ First, outline the parameters:
   \item \eqref{how-many-actions} $k = $ 1 for a single person (or 2 to hedge the failure of the first action or to add a volunteer activity).
   \item \eqref{modeled-future-time} $t_F = $ 10 years; an average amount of time under normal conditions to integrate into a new career to work on some subset of $A(t)$ (including learning, certification, building experience, networking, etc.).
   \item \eqref{action-predictors} $D(A) = $ time-series data on human death by underlying cause\footnote{\scriptsize{\url{https://www.who.int/topics/mortality/en/}}}.
-  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\footnotescontinue\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\footnotescontinue\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}} ($ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers.):
+  \item \eqref{prediction-models} $R(D(A)) = $ exponential smoothing functions using Holt's linear trend method as aggregate models\footnote{\scriptsize{\url{https://otexts.com/fpp2/holt.html}}}\footnotescontinue\footnote{\scriptsize{\url{https://otexts.com/fpp2/ets.html}}}\footnotescontinue\footnote{\scriptsize{\url{https://www.statsmodels.org/dev/examples/notebooks/generated/exponential_smoothing.html}}} ($ETS(A,M,N)$ and $ETS(A,M_d,N)$ were tested but had bad failure modes, particularly with outliers):
     \begin{equation*}
       \begin{gathered}
         \{ETS(A,A,N),ETS(A,A_d,N)\},\\
@@ -1016,7 +1016,7 @@ Review the list of actions and hypothesize scale functions. Examples:
 \end{itemize}
 
 The list does not include common scale functions such as implementation time, cost, risk, playing into strengths, piquing interest, market demand, return on investment, ramp-up time, interest, etc. because they are either considered irrelevant\footnote{The irrelevance of some common scale functions rests on the privilege of having the flexibility to pursue options independent of immediate primal concerns.} or moot after applying $S_4$.
-The inverse of existing market investment might be interesting to consider.
+The inverse of existing investment might be interesting to consider.
 
 Create a table listing all actions as rows and all \textit{manually calculated} scale functions as columns\footnote{For the longterm comparable leading causes of death for the United States, this is only $S_4(A_i)$.}\footnotescontinue\footnote{See Appendix command \ref{cmdmanualscales}.}:
 
