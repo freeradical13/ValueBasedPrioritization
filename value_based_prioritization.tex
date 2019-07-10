@@ -11,15 +11,15 @@
 \urlstyle{rm}
 
 % Citations in APA format, sorted.
-\usepackage[authoryear,semicolon,sort&compress]{natbib} % Use semicolons to separate multiple citations because commas might be used when one author has multiple citations.
-\newcommand\footnotesstartsep{}
-\bibliographystyle{plainnat}
-%\setcitestyle{aysep={}} % No comma between author and year
+%\usepackage[authoryear,semicolon,sort&compress]{natbib} % Use semicolons to separate multiple citations because commas might be used when one author has multiple citations.
+%\newcommand\footnotesstartsep{}
+%\bibliographystyle{plainnat}
+%%\setcitestyle{aysep={}} % No comma between author and year
 
 % Citations with superscript numbers, unsorted.
-% \usepackage[super,comma,sort&compress]{natbib}
-% \newcommand\footnotesstartsep{\textsuperscript{,}}
-% \bibliographystyle{unsrtnat}
+\usepackage[super,comma,sort&compress]{natbib}
+\newcommand\footnotesstartsep{\textsuperscript{,}}
+\bibliographystyle{unsrtnat}
 
 \newcommand\footnotescontinue{\textsuperscript{,}}
 \usepackage{abstract}
@@ -133,6 +133,17 @@
   edition      = {Fall 2016},
   publisher    = {Metaphysics Research Lab, Stanford University},
   note         = {\url{https://plato.stanford.edu/archives/fall2016/entries/value-theory/}},
+}
+
+@InCollection{sep-decision-theory,
+  author       = {Steele, Katie and Stefánsson, H. Orri},
+  title        = {Decision Theory},
+  booktitle    = {The Stanford Encyclopedia of Philosophy},
+  editor       = {Edward N. Zalta},
+  year         = {2016},
+  edition      = {Winter 2016},
+  publisher    = {Metaphysics Research Lab, Stanford University},
+  note         = {\url{https://plato.stanford.edu/archives/win2016/entries/decision-theory/}},
 }
 
 @InCollection{consequentialism,
@@ -737,7 +748,7 @@
 }
 
 @article{aho2014model,
-  title        = {Model selection for ecologists: the worldviews of AIC and BIC},
+  title        = {Model selection for ecologists: the worldviews of {AIC} and {BIC}},
   author       = {Aho, Ken and Derryberry, DeWayne and Peterson, Teri},
   journal      = {Ecology},
   volume       = {95},
@@ -806,7 +817,7 @@ This method is applied to the example of choosing meaningful work using an examp
       \newline
       \newline
     \end{abstract}
-    \tableofcontents
+    %\tableofcontents
   \end{@twocolumnfalse}
 ]
 
@@ -820,7 +831,8 @@ This method is applied to the example of choosing meaningful work using an examp
 % Article %
 %%%%%%%%%%%
 
-\clearpage
+% This is used with \tableofcontents
+%\clearpage
 
 \section{Background}
 
@@ -852,7 +864,7 @@ A method called Value-Based Prioritization is developed to answer the \enquote{W
 \subsection{Why a Goal?}
 
 \enquote{Why a Goal?} is usually best scoped using value systems because they are evaluative by nature \citep{value-theory}.
-Comparing value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include intuitionism \citep{huemer2007ethical}, consequentialism \citep{consequentialism}, evolutionary biology \citep{morality-biology}, religion \citep{religion-morality}, epicureanism \citep{epicurus}, stoicism \citep{stoicism}, political liberalism \citep{rawls}, anarcho-capitalism \citep{huemer2013problem}, communitarianism \citep{communitarianism}, objectivism \citep{ayn-rand}, etc.}.
+Comparing value systems is left as an (lifelong) exercise for the reader\footnote{Example value systems include decision theory \citep{sep-decision-theory}, intuitionism \citep{huemer2007ethical}, consequentialism \citep{consequentialism}, evolutionary biology \citep{morality-biology}, religion \citep{religion-morality}, epicureanism \citep{epicurus}, stoicism \citep{stoicism}, political liberalism \citep{rawls}, anarcho-capitalism \citep{huemer2013problem}, communitarianism \citep{communitarianism}, objectivism \citep{ayn-rand}, etc.}.
 
 \subsection{What Actions?}
 
@@ -1140,6 +1152,8 @@ For example, see Table \ref{table:btablewithall}:
 Calculate the product of each action's $B(t_F)$ and its scale function values to produce the final $Z(t_F)$ table and then sort by the values in descending order and choose the top $k$ actions.
 
 This analysis is run on various mutually exclusive groupings of causes of death\footnote{See Appendix command \ref{cmdmodeledvbpus}.}:
+
+\textit{\scriptsize{The rest of this page left intentionally blank. Results on the next page.}}
 
 \clearpage
 
