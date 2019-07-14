@@ -783,6 +783,50 @@
   doi          = {10.1080/10618600.2017.1384734},
 }
 
+@article{kochanek2017deaths,
+  title        = {Deaths: Final Data for 2017},
+  author       = {Kochanek, Kenneth D and Murphy, Sherry L and Xu, Jiaquan and Arias, Elizabeth},
+  publisher    = {{U.S. CDC}},
+  year         = {2019},
+  note         = {\url{https://www.cdc.gov/nchs/data/nvsr/nvsr68/nvsr68_09-508.pdf}},
+}
+
+@article{kyu2018global,
+  title        = {{Global, regional, and national disability-adjusted life-years (DALYs) for 359 diseases and injuries and healthy life expectancy (HALE) for 195 countries and territories, 1990--2017: a systematic analysis for the Global Burden of Disease Study 2017}},
+  author       = {Kyu, Hmwe Hmwe and Abate, Degu and Abate, Kalkidan Hassen and Abay, Solomon M and Abbafati, Cristiana and Abbasi, Nooshin and Abbastabar, Hedayat and Abd-Allah, Foad and Abdela, Jemal and Abdelalim, Ahmed and others},
+  journal      = {The Lancet},
+  volume       = {392},
+  number       = {10159},
+  pages        = {1859--1922},
+  year         = {2018},
+  publisher    = {Elsevier},
+  note         = {\url{https://www.thelancet.com/pdfs/journals/lancet/PIIS0140-6736(18)32335-3.pdf}},
+}
+
+@article{bassat2018global,
+  title        = {Global, regional, and national age-sex-specific mortality and life expectancy, 1950-2017: a systematic analysis for the Global Burden of Disease Study 2017},
+  author       = {Bassat Orellana, Quique and Garc{\'\i}a-Basteiro, Alberto L and Lazarus, Jeffrey V and Haro Abad, Josep Maria and others},
+  journal      = {The Lancet},
+  volume       = {392},
+  number       = {10159},
+  pages        = {1684--1735},
+  year         = {2018},
+  publisher    = {Elsevier},
+  note         = {\url{https://www.thelancet.com/pdfs/journals/lancet/PIIS0140-6736(18)31891-9.pdf}},
+}
+
+@article{monasta2018global,
+  title        = {{Global, regional, and national age-sex-specific mortality for 282 causes of death in 195 countries and territories, 1980-2017: a systematic analysis for the Global Burden of Disease Study 2017}},
+  author       = {Monasta, Lorenzo and Ronfani, Luca and others},
+  journal      = {The Lancet},
+  volume       = {392},
+  number       = {10159},
+  pages        = {1736--1788},
+  year         = {2018},
+  publisher    = {Elsevier},
+  note         = {\url{https://www.thelancet.com/pdfs/journals/lancet/PIIS0140-6736(18)32203-7.pdf}},
+}
+
 \end{filecontents}
 
 \usepackage{hyperref}
@@ -975,8 +1019,8 @@ Every aspect is an example and should be reconsidered.
 First, outline the parameters:
 
 \begin{itemize}
-  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce human suffering} which is defined as maximal human suffering: death (more precisely, something like the lack of a potential of life).
-  Alternatives include morbidity and disease burden using Quality-Adjusted Life Years (QALYs) \citep{weinstein2009qalys,lopez2006global}, non-human suffering \citep{huemer2019dialogues}, cost effectiveness \citep{jamison2017disease,neumann2018comparing,givewellcosteffectiveness}, economic impact \citep{world2009guide}, existential risks \citep{bostrom2013existential}, pre-birth potential \citep{zane2015abortion}, working to give \citep{macaskill2015doing}, etc.
+  \item \eqref{value-system} $V = $ a value system which answers \enquote{Why work?} with \enquote{To reduce human suffering} which is defined as maximal human suffering: death\footnote{As of the early 21st century, approximately 8,000 people die every day in the United States \citep{kochanek2017deaths}, and approximately 150,000 people die every in the world \citep{monasta2018global,bassat2018global}.} (more precisely, something like the lack of a potential of life).
+  Alternatives include morbidity and disease burden using Quality-Adjusted Life Years (QALYs) \citep{weinstein2009qalys,lopez2006global,kyu2018global}, non-human suffering \citep{huemer2019dialogues}, cost effectiveness \citep{jamison2017disease,neumann2018comparing,givewellcosteffectiveness}, economic impact \citep{world2009guide}, existential risks \citep{bostrom2013existential}, pre-birth potential \citep{zane2015abortion}, working to give \citep{macaskill2015doing}, etc.
   \item \eqref{goal} $G(t) = $ eliminate human death.
   \item \eqref{potential-actions} $A(t) = $ the set of actions which would eliminate human death.
   \item \eqref{how-many-actions} $k = $ 1 for a single person (or 2 to hedge the failure of the first action or to add a volunteer activity).
