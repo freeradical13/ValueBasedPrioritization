@@ -827,6 +827,30 @@
   note         = {\url{https://www.thelancet.com/pdfs/journals/lancet/PIIS0140-6736(18)32203-7.pdf}},
 }
 
+@article{turing1936computable,
+  title        = {On computable numbers, with an application to the Entscheidungsproblem},
+  author       = {Turing, Alan Mathison},
+  journal      = {J. of Math},
+  volume       = {58},
+  number       = {345-363},
+  pages        = {5},
+  year         = {1936}
+}
+
+@book{van2002frege,
+  title        = {From Frege to G{\"o}del: a source book in mathematical logic, 1879-1931},
+  author       = {Van Heijenoort, Jean},
+  year         = {2002},
+  publisher    = {Harvard University Press},
+}
+
+@book{wolfram2002,
+  title        = {A New Kind of Science},
+  author       = {Wolfram, S.},
+  year         = {2002},
+  publisher    = {Wolfram Media},
+}
+
 \end{filecontents}
 
 \usepackage{hyperref}
@@ -920,7 +944,7 @@ Raw prioritization scores are further scaled by contextual factors such as imple
 
 \subsection{How to do an Action?}
 
-Given answers to \enquote{Why?} and \enquote{What?}, how to implement actions is usually best answered with the scientific method \citep{scientific-method,sep-rationalism-empiricism}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results.
+Given answers to \enquote{Why?} and \enquote{What?}, how to implement actions is usually best answered with the scientific method \citep{scientific-method,sep-rationalism-empiricism}: observations are made and rational thought is used to generate hypotheses, hypotheses are tested with experiments, and successful experiments lead to theories and results\footnote{Notwithstanding G{\"o}del's incompleteness theorem\citep{van2002frege}, the halting problem\citep{turing1936computable}, and computational irreducibility\citep{wolfram2002}.}.
 
 \subsection{Method}
 
@@ -1131,6 +1155,10 @@ For example, for \textit{Cancer}\footnote{See Appendix command \ref{cmdcancerdat
 
 Run each comparable prediction model $R_i(D(A))$.
 For example, for \textit{Cancer}\footnote{See Appendix command \ref{cmdcancerpredict}.}, see Figure \ref{fig:fig1}:
+
+\textit{\scriptsize{The rest of this page left intentionally blank. Continues on the next page.}}
+
+\clearpage
 
 \begin{figure}[H]
   \centering
@@ -1932,6 +1960,9 @@ Notes on Section \ref{section-example}:
 
 \end{document}
 
+% LaTeX pre-reqs:
+% Fedora: dnf install texlive-collection-publishers texlive-xurl texlive-abstract
+%
 % Create PDF on Linux:
 % FILE=value_based_prioritization; rm -f ${FILE}*aux ${FILE}*bbl ${FILE}*bib ${FILE}*blg ${FILE}*log ${FILE}*out ${FILE}*pdf &>/dev/null; pdflatex -halt-on-error ${FILE}; bibtex ${FILE} && pdflatex ${FILE} && pdflatex ${FILE} && (xdg-open ${FILE}.pdf &)
 %
